@@ -1,0 +1,5 @@
+<resources>
+    <string name="levelup_service_label">LevelUp Reel Counter</string>
+    <string name="levelup_service_description">LevelUp counts how many Reels and Shorts you view. It only receives events from Instagram, YouTube and Facebook. It reads screen-structure metadata (view IDs, scroll positions, and whether a Reels or Shorts tab is selected) to decide whether a short-form feed is on screen and when a new item appears. It never reads typed text, messages, passwords or OTPs, never takes screenshots or recordings, and never sends anything off your phone. Counts are stored only on this device.</string>
+    <string name="levelup_overlay_today">TODAY %1$d/%2$d</string>
+</resources>

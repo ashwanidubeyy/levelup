@@ -1,0 +1,72 @@
+import { TIME } from '../constants/common';
+
+const pad = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
+
+export const toDayKey = (date: Date): string =>
+  `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+export const todayKey = (): string => toDayKey(new Date());
+
+export const parseDayKey = (key: string): Date => {
+  const [year, month, day] = key?.split('-')?.map((part: string) => Number(part)) ?? [];
+  return new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1);
+};
+
+export const addDays = (key: string, amount: number): string => {
+  const date = parseDayKey(key);
+  date.setDate(date.getDate() + amount);
+  return toDayKey(date);
+};
+
+export const compareDayKeys = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+
+export const daysBetween = (from: string, to: string): string[] => {
+  const days: string[] = [];
+  let cursor = from;
+  while (compareDayKeys(cursor, to) <= 0) {
+    days.push(cursor);
+    cursor = addDays(cursor, 1);
+  }
+  return days;
+};
+
+export const formatDayLabel = (key: string, locale?: string): string =>
+  parseDayKey(key).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
+
+export const formatShortDay = (key: string): string => `${parseDayKey(key).getDate()}`;
+
+export const formatMonthLabel = (year: number, month: number, locale?: string): string =>
+  new Date(year, month - 1, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+export const formatTime = (timestamp: number, locale?: string): string =>
+  new Date(timestamp).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+
+export const formatDateTime = (timestamp: number, locale?: string): string =>
+  new Date(timestamp).toLocaleString(locale, {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+export const splitDuration = (ms: number): { hours: number; minutes: number } => {
+  const totalMinutes = Math.round((ms ?? 0) / TIME.MINUTE_MS);
+  return { hours: Math.floor(totalMinutes / 60), minutes: totalMinutes % 60 };
+};
+
+export const hourOf = (timestamp: number): number => new Date(timestamp).getHours();
+
+export const monthOf = (key: string): { year: number; month: number } => {
+  const date = parseDayKey(key);
+  return { year: date.getFullYear(), month: date.getMonth() + 1 };
+};
+
+export const shiftMonth = (year: number, month: number, delta: number): { year: number; month: number } => {
+  const date = new Date(year, month - 1 + delta, 1);
+  return { year: date.getFullYear(), month: date.getMonth() + 1 };
+};
+
+export const dayOfYear = (date: Date): number => {
+  const start = new Date(date.getFullYear(), 0, 0);
+  return Math.floor((date.getTime() - start.getTime()) / TIME.DAY_MS);
+};

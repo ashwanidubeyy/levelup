@@ -1,0 +1,19 @@
+{
+  "name": "levelup-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LevelUp short-form feed tracking engine (Android AccessibilityService, iOS capability reporting)",
+  "main": "src/index.ts",
+  "react-native": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "src",
+    "android",
+    "ios",
+    "levelup-tracker.podspec",
+    "react-native.config.js"
+  ],
+  "peerDependencies": {
+    "react-native": "*"
+  }
+}

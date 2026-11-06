@@ -1,0 +1,4 @@
+<resources>
+    <color name="levelup_background">#05060A</color>
+    <color name="levelup_surface">#0D0F17</color>
+</resources>

@@ -1,0 +1,25 @@
+import styled from 'styled-components/native';
+import { COLORS } from '../../theme/colors';
+import { FONTS, FONT_SIZES } from '../../theme/typography';
+import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
+
+const Container = styled.View<{ $color: string }>`
+  align-self: flex-start;
+  padding: ${V_SPACING.XS / 2}px ${SPACING.SM}px;
+  border-radius: ${RADIUS.SM}px;
+  border-width: ${BORDER.HAIRLINE}px;
+  border-color: ${({ $color }) => $color};
+  background-color: ${COLORS.PANEL};
+`;
+
+const Label = styled.Text<{ $color: string }>`
+  font-family: ${FONTS.DISPLAY_BOLD};
+  font-size: ${FONT_SIZES.XXS}px;
+  letter-spacing: ${SPACING.XXS / 2}px;
+  color: ${({ $color }) => $color};
+`;
+
+export const StatusChipStyles = {
+  Container,
+  Label,
+};
