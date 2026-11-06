@@ -2,51 +2,61 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TabScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
-import AnimeHeroCard from '../../components/AnimeHeroCard';
-import RankBadge from '../../components/RankBadge';
-import StatBar from '../../components/StatBar';
+import QuoteCard from '../../components/QuoteCard';
+import LevelCard from '../../components/LevelCard';
+import HubTile from '../../components/HubTile';
 import SystemPanel from '../../components/SystemPanel';
+import StatBar from '../../components/StatBar';
 import StatTile from '../../components/StatTile';
 import AppCountRow from '../../components/AppCountRow';
-import QuestCard from '../../components/QuestCard';
-import QuoteCard from '../../components/QuoteCard';
 import Banner from '../../components/Banner';
-import NavRow from '../../components/NavRow';
 import ComingSoonCard from '../../components/ComingSoonCard';
 import { HomeStyles } from './styles';
-import type { QuestProgress, TrackedAppId } from '../../types';
+import type { Challenge, TrackedAppId } from '../../types';
 import { HOME_CONSTANTS, ONBOARDING_CONSTANTS } from '../../constants/screens';
+import { HUB_CONSTANTS } from '../../constants/hub';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
+import { FOCUS_RULES } from '../../constants/focus';
 import { TRACKED_APP_IDS } from '../../constants/common';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
-import { useQuestBoard } from '../../hooks/useQuestBoard';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
-import { heroForToday, quoteAt, quoteIndexForToday, ratio } from '../../utils/helpers';
+import { quoteAt, quoteIndexForToday, ratio } from '../../utils/helpers';
 import { QUOTES } from '../../constants/quotes';
 import { resultData } from '../../utils/trackerResult';
-import { appLabel, formatDuration, limitMessage, toQuestCardProps } from '../../utils/format';
+import { appLabel, formatDuration, limitMessage } from '../../utils/format';
+import { buildLevelInfo } from '../../utils/level';
+import { canCheckIn } from '../../utils/challenges';
+import { nextReminderAt } from '../../utils/reminders';
+import { expensesForMonth, formatAmount, monthKeyFromDay, sumExpenses } from '../../utils/money';
+import { formatClock, todayKey } from '../../utils/date';
 
 type Props = TabScreenProps<'Home'>;
-
-const PREVIEW_QUESTS = 2;
 
 const Home = ({ navigation }: Props) => {
   const { t } = useTranslation();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
-  const { today, todayUsage, live, status } = useTrackerState();
-  const { quests, levelInfo } = useQuestBoard();
+  const xp = useAppSelector(state => state?.quests?.xp) ?? 0;
+  const challenges = useAppSelector(state => state?.challenges?.items) ?? [];
+  const reminders = useAppSelector(state => state?.reminders?.items) ?? [];
+  const budget = useAppSelector(state => state?.budget);
+  const { today: todayResult, todayUsage, live, status } = useTrackerState();
   const { openPermission, changeTracking } = useSettingsActions();
-
-  const counts = resultData(today);
+  const levelInfo = useMemo(() => buildLevelInfo(xp), [xp]);
+  const [quoteIndex, setQuoteIndex] = useState(quoteIndexForToday);
+  const quote = quoteAt(quoteIndex);
+  const counts = resultData(todayResult);
   const usage = resultData(todayUsage);
   const total = counts?.total ?? 0;
   const danger = ratio(total, dailyLimit) >= TRACKER_CONSTANTS.WARNING_RATIO;
   const isIos = status === 'comingSoon';
-  const hero = useMemo(() => heroForToday(), []);
-  const [quoteIndex, setQuoteIndex] = useState(quoteIndexForToday);
-  const quote = quoteAt(quoteIndex);
-  const previewQuests = quests?.slice(0, PREVIEW_QUESTS) ?? [];
+  const day = todayKey();
+  const openChallenges = challenges?.filter((item: Challenge) => !item?.completedAt) ?? [];
+  const pendingCheckIns = openChallenges.filter((item: Challenge) => canCheckIn(item, day)).length;
+  const upcoming = nextReminderAt(reminders, Date.now());
+  const spent = sumExpenses(expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)));
+  const monthly = budget?.monthlyBudget ?? 0;
+  const remaining = monthly - spent;
 
   const liveLabel = live?.inFeed
     ? t(TRACKER_CONSTANTS.LIVE.IN_FEED, { app: appLabel(live?.app, t), count: live?.sessionCount ?? 0 })
@@ -117,30 +127,6 @@ const Home = ({ navigation }: Props) => {
 
   return (
     <PageContainer>
-      <AnimeHeroCard image={hero} size="medium">
-        <HomeStyles.PlayerRow>
-          <RankBadge rank={levelInfo.rank} image={levelInfo.rankImage} size="large" />
-          <HomeStyles.PlayerInfo>
-            <HomeStyles.PlayerLabel>{t(HOME_CONSTANTS.PLAYER)}</HomeStyles.PlayerLabel>
-            <HomeStyles.RankName>{t(levelInfo.rankNameKey)}</HomeStyles.RankName>
-            <HomeStyles.LevelRow>
-              <HomeStyles.LevelText>{t(HOME_CONSTANTS.LEVEL, { level: levelInfo.level })}</HomeStyles.LevelText>
-              <HomeStyles.XpText>
-                {t(HOME_CONSTANTS.XP, { current: levelInfo.currentXp, next: levelInfo.nextLevelXp })}
-              </HomeStyles.XpText>
-            </HomeStyles.LevelRow>
-            <StatBar progress={levelInfo.progress} variant="monarch" thin />
-          </HomeStyles.PlayerInfo>
-        </HomeStyles.PlayerRow>
-      </AnimeHeroCard>
-      {renderBanner()}
-      {renderTracker()}
-      <SystemPanel title={t(HOME_CONSTANTS.QUESTS_TITLE)} variant="monarch">
-        {previewQuests.map((quest: QuestProgress) => (
-          <QuestCard key={quest?.id} image={quest?.image} {...toQuestCardProps(quest, dailyLimit, t)} />
-        ))}
-        <NavRow label={t(HOME_CONSTANTS.VIEW_ALL)} onPress={() => navigation.navigate('Quests')} />
-      </SystemPanel>
       <QuoteCard
         title={t(HOME_CONSTANTS.QUOTE_TITLE)}
         text={t(quote.textKey)}
@@ -149,6 +135,48 @@ const Home = ({ navigation }: Props) => {
         hint={t(HOME_CONSTANTS.QUOTE_HINT, { current: quoteIndex % QUOTES.length + 1, total: QUOTES.length })}
         onPress={() => setQuoteIndex((prev: number) => prev + 1)}
       />
+      <LevelCard
+        title={t(HUB_CONSTANTS.LEVEL_TITLE)}
+        levelLabel={t(HOME_CONSTANTS.LEVEL, { level: levelInfo.level })}
+        xpLabel={t(HOME_CONSTANTS.XP, { current: levelInfo.currentXp, next: levelInfo.nextLevelXp })}
+        progress={levelInfo.progress}
+      />
+      <HomeStyles.Hub>
+        <HubTile
+          label={t(HUB_CONSTANTS.FOCUS)}
+          value={t(HOME_CONSTANTS.FOCUS_VALUE, { minutes: FOCUS_RULES.DEFAULT_MINUTES })}
+          hint={t(HUB_CONSTANTS.FOCUS_HINT)}
+          accent="monarch"
+          onPress={() => navigation.navigate('Focus')}
+        />
+        <HubTile
+          label={t(HUB_CONSTANTS.CHALLENGES)}
+          value={`${openChallenges.length}`}
+          hint={t(pendingCheckIns > 0 ? HUB_CONSTANTS.CHALLENGE_CHECK : HUB_CONSTANTS.CHALLENGE_HINT, {
+            count: pendingCheckIns,
+          })}
+          accent="system"
+          onPress={() => navigation.navigate('Challenges')}
+        />
+        <HubTile
+          label={t(HUB_CONSTANTS.CALENDAR)}
+          value={upcoming ? formatClock(upcoming.reminder.hour, upcoming.reminder.minute) : t(HUB_CONSTANTS.CALENDAR_EMPTY)}
+          hint={upcoming?.reminder?.title ?? t(HUB_CONSTANTS.CALENDAR_EMPTY)}
+          accent="system"
+          onPress={() => navigation.navigate('Calendar')}
+        />
+        <HubTile
+          label={t(HUB_CONSTANTS.BUDGET)}
+          value={formatAmount(monthly > 0 ? remaining : spent)}
+          hint={t(monthly > 0 ? HUB_CONSTANTS.BUDGET_HINT : HUB_CONSTANTS.BUDGET_EMPTY, {
+            spent: formatAmount(spent),
+          })}
+          accent={monthly > 0 && remaining < 0 ? 'danger' : 'monarch'}
+          onPress={() => navigation.navigate('Budget')}
+        />
+      </HomeStyles.Hub>
+      {renderBanner()}
+      {renderTracker()}
     </PageContainer>
   );
 };

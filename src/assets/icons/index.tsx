@@ -129,6 +129,48 @@ const BoltIcon = (props: any) => (
   </Svg>
 );
 
+const FocusIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Circle cx="12" cy="12" r="8" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+    <Path d="M12 8v5l3 2" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} strokeLinecap="round" />
+  </Svg>
+);
+
+const ChallengeIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M6 4h9l3 3v13H6V4z"
+      stroke={props?.color ?? COLORS.TEXT}
+      strokeWidth={STROKE}
+      strokeLinejoin="round"
+    />
+    <Path d="M9 12l2 2 4-4" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} strokeLinecap="round" />
+  </Svg>
+);
+
+const BudgetIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Rect x="3" y="6" width="18" height="12" rx="2" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+    <Path d="M3 10h18" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+  </Svg>
+);
+
+const CalendarIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Rect x="4" y="5" width="16" height="15" rx="2" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+    <Path d="M8 3v4M16 3v4M4 10h16" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} strokeLinecap="round" />
+  </Svg>
+);
+
+const MoreIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Rect x="4" y="4" width="6" height="6" rx="1" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+    <Rect x="14" y="4" width="6" height="6" rx="1" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+    <Rect x="4" y="14" width="6" height="6" rx="1" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+    <Rect x="14" y="14" width="6" height="6" rx="1" stroke={props?.color ?? COLORS.TEXT} strokeWidth={STROKE} />
+  </Svg>
+);
+
 export const Icons = {
   HomeIcon,
   StatsIcon,
@@ -145,4 +187,9 @@ export const Icons = {
   ShieldIcon,
   EyeOffIcon,
   BoltIcon,
+  FocusIcon,
+  ChallengeIcon,
+  BudgetIcon,
+  CalendarIcon,
+  MoreIcon,
 };

@@ -11,6 +11,7 @@ const InputField = ({
   error,
   multiline = false,
   maxLength,
+  keyboardType = 'default',
 }: InputFieldProps) => (
   <InputFieldStyles.Container>
     <InputFieldStyles.Label>{label?.toUpperCase()}</InputFieldStyles.Label>
@@ -23,6 +24,7 @@ const InputField = ({
       multiline={multiline}
       textAlignVertical={multiline ? 'top' : 'center'}
       maxLength={maxLength}
+      keyboardType={keyboardType}
       accessibilityLabel={label}
       $multiline={multiline}
       $error={!!error}

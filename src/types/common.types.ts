@@ -90,6 +90,7 @@ export interface InputFieldProps {
   error?: string;
   multiline?: boolean;
   maxLength?: number;
+  keyboardType?: 'default' | 'numeric' | 'decimal-pad';
 }
 
 export interface KeybordViewProps {
@@ -233,6 +234,45 @@ export interface DateNavigatorProps {
   nextDisabled: boolean;
   previousLabel: string;
   nextLabel: string;
+}
+
+export interface HubTileProps {
+  label: string;
+  value: string;
+  hint: string;
+  accent?: PanelVariant;
+  onPress: () => void;
+}
+
+export interface LevelCardProps {
+  title: string;
+  levelLabel: string;
+  xpLabel: string;
+  progress: number;
+}
+
+export interface MonthGridProps {
+  weeks: Array<Array<string | null>>;
+  weekdayLabels: string[];
+  selected: string;
+  today: string;
+  marked: string[];
+  onSelect: (day: string) => void;
+}
+
+export interface ChallengeCardProps {
+  title: string;
+  rangeLabel: string;
+  progressLabel: string;
+  progress: number;
+  xpLabel: string;
+  checkInLabel: string;
+  deleteLabel: string;
+  doneLabel: string;
+  canCheckIn: boolean;
+  completed: boolean;
+  onCheckIn: () => void;
+  onDelete: () => void;
 }
 
 export interface BulletListProps {

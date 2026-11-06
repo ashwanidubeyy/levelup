@@ -14,28 +14,37 @@ import {
 import TabBar from '../components/TabBar';
 import Onboarding from '../screens/Onboarding';
 import Home from '../screens/Home';
+import Focus from '../screens/Focus';
+import Challenges from '../screens/Challenges';
+import Budget from '../screens/Budget';
+import More from '../screens/More';
 import Stats from '../screens/Stats';
-import Quests from '../screens/Quests';
+import Calendar from '../screens/Calendar';
 import Journal from '../screens/Journal';
 import JournalEditor from '../screens/JournalEditor';
 import Settings from '../screens/Settings';
 import Diagnostics from '../screens/Diagnostics';
 import { useTrackerLive } from '../hooks/useTrackerLive';
+import { useNotificationSync } from '../hooks/useNotificationSync';
 import { COLORS } from '../theme/colors';
 
 export type RootStackParamList = {
   Onboarding: undefined;
   MainTabs: undefined;
+  Journal: undefined;
   JournalEditor: { entryId?: string } | undefined;
+  Stats: undefined;
+  Calendar: undefined;
+  Settings: undefined;
   Diagnostics: undefined;
 };
 
 export type MainTabParamList = {
   Home: undefined;
-  Stats: undefined;
-  Quests: undefined;
-  Journal: undefined;
-  Settings: undefined;
+  Focus: undefined;
+  Challenges: undefined;
+  Budget: undefined;
+  More: undefined;
 };
 
 export type RootScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, T>;
@@ -77,14 +86,15 @@ const renderTabBar = (props: BottomTabBarProps) => <TabBar {...props} />;
 
 const MainTabs = () => {
   useTrackerLive();
+  useNotificationSync();
 
   return (
     <Tab.Navigator screenOptions={TAB_OPTIONS} tabBar={renderTabBar}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Stats" component={Stats} />
-      <Tab.Screen name="Quests" component={Quests} />
-      <Tab.Screen name="Journal" component={Journal} />
-      <Tab.Screen name="Settings" component={Settings} />
+      <Tab.Screen name="Focus" component={Focus} />
+      <Tab.Screen name="Challenges" component={Challenges} />
+      <Tab.Screen name="Budget" component={Budget} />
+      <Tab.Screen name="More" component={More} />
     </Tab.Navigator>
   );
 };
@@ -94,7 +104,11 @@ const AppNavigator = ({ initialRoute }: AppNavigatorProps) => (
     <Stack.Navigator initialRouteName={initialRoute} screenOptions={STACK_OPTIONS}>
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
+      <Stack.Screen name="Journal" component={Journal} />
       <Stack.Screen name="JournalEditor" component={JournalEditor} />
+      <Stack.Screen name="Stats" component={Stats} />
+      <Stack.Screen name="Calendar" component={Calendar} />
+      <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Diagnostics" component={Diagnostics} />
     </Stack.Navigator>
   </NavigationContainer>

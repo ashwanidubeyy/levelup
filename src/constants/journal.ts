@@ -29,7 +29,7 @@ export const JOURNAL_CONSTANTS = {
     { value: 'radiant', labelKey: 'journal.moods.radiant', color: COLORS.GOLD },
     { value: 'focused', labelKey: 'journal.moods.focused', color: COLORS.BLUE_LIGHT },
     { value: 'neutral', labelKey: 'journal.moods.neutral', color: COLORS.TEXT_MUTED },
-    { value: 'drained', labelKey: 'journal.moods.drained', color: COLORS.VIOLET_GLOW },
+    { value: 'drained', labelKey: 'journal.moods.drained', color: COLORS.BLUE },
     { value: 'defeated', labelKey: 'journal.moods.defeated', color: COLORS.RED_BRIGHT },
   ],
   DEFAULT_MOOD: 'focused',

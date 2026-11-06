@@ -4,13 +4,13 @@ import type { ButtonVariant, ChipVariant, PanelVariant } from '../types';
 const PANEL_ACCENTS: Record<PanelVariant, string> = {
   system: COLORS.BLUE,
   danger: COLORS.RED_BRIGHT,
-  monarch: COLORS.VIOLET_GLOW,
+  monarch: COLORS.YELLOW,
 };
 
 const PANEL_TINTS: Record<PanelVariant, string> = {
   system: COLORS.BLUE_TINT,
   danger: COLORS.RED_TINT,
-  monarch: COLORS.VIOLET_TINT,
+  monarch: COLORS.YELLOW_TINT,
 };
 
 const CHIP_COLORS: Record<ChipVariant, string> = {
@@ -19,7 +19,7 @@ const CHIP_COLORS: Record<ChipVariant, string> = {
   danger: COLORS.RED_BRIGHT,
   info: COLORS.BLUE_LIGHT,
   muted: COLORS.TEXT_MUTED,
-  monarch: COLORS.VIOLET_GLOW,
+  monarch: COLORS.YELLOW,
 };
 
 const BUTTON_GRADIENTS: Record<ButtonVariant, readonly string[]> = {

@@ -56,6 +56,29 @@ export const splitDuration = (ms: number): { hours: number; minutes: number } =>
 
 export const hourOf = (timestamp: number): number => new Date(timestamp).getHours();
 
+export const formatClock = (hour: number, minute: number): string => `${pad(hour)}:${pad(minute)}`;
+
+export const timestampFor = (day: string, hour: number, minute: number): number => {
+  const date = parseDayKey(day);
+  date.setHours(hour, minute, 0, 0);
+  return date.getTime();
+};
+
+export const upcomingDays = (count: number, from: string = todayKey()): string[] => {
+  const days: string[] = [];
+  for (let index = 0; index < count; index += 1) {
+    days.push(addDays(from, index));
+  }
+  return days;
+};
+
+export const formatCountdown = (ms: number): { minutes: string; seconds: string } => {
+  const totalSeconds = Math.max(0, Math.ceil((ms ?? 0) / TIME.SECOND_MS));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return { minutes: pad(minutes), seconds: pad(seconds) };
+};
+
 export const monthOf = (key: string): { year: number; month: number } => {
   const date = parseDayKey(key);
   return { year: date.getFullYear(), month: date.getMonth() + 1 };

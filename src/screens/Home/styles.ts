@@ -2,44 +2,13 @@ import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
-import { mutedText, sectionTitleText } from '../../utils/commonStyles';
+import { mutedText } from '../../utils/commonStyles';
 
-const PlayerRow = styled.View`
+const Hub = styled.View`
   flex-direction: row;
-  align-items: center;
-`;
-
-const PlayerInfo = styled.View`
-  flex: 1;
-  margin-left: ${SPACING.MD}px;
-`;
-
-const PlayerLabel = styled.Text`
-  ${sectionTitleText}
-`;
-
-const RankName = styled.Text`
-  margin-top: ${V_SPACING.XS / 2}px;
-  font-family: ${FONTS.DISPLAY_BLACK};
-  font-size: ${FONT_SIZES.LG}px;
-  color: ${COLORS.WHITE};
-`;
-
-const LevelRow = styled.View`
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
-  margin-top: ${V_SPACING.XS}px;
-  margin-bottom: ${V_SPACING.XS}px;
-`;
-
-const LevelText = styled.Text`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XS}px;
-  color: ${COLORS.BLUE_LIGHT};
-`;
-
-const XpText = styled.Text`
-  ${mutedText}
+  margin-bottom: ${V_SPACING.SM}px;
 `;
 
 const CountRow = styled.View`
@@ -48,9 +17,9 @@ const CountRow = styled.View`
 `;
 
 const Count = styled.Text<{ $danger: boolean }>`
-  font-family: ${FONTS.DISPLAY_BLACK};
+  font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.GIANT}px;
-  line-height: ${FONT_SIZES.GIANT * 1.1}px;
+  line-height: ${FONT_SIZES.GIANT * 1.05}px;
   color: ${({ $danger }) => ($danger ? COLORS.RED_BRIGHT : COLORS.WHITE)};
 `;
 
@@ -84,13 +53,7 @@ const Tiles = styled.View`
 `;
 
 export const HomeStyles = {
-  PlayerRow,
-  PlayerInfo,
-  PlayerLabel,
-  RankName,
-  LevelRow,
-  LevelText,
-  XpText,
+  Hub,
   CountRow,
   Count,
   Limit,

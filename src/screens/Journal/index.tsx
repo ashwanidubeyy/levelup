@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TabScreenProps } from '../../navigation/AppNavigator';
+import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import AnimeHeroCard from '../../components/AnimeHeroCard';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -16,7 +16,7 @@ import { useAppSelector } from '../../store';
 import { formatDateTime } from '../../utils/date';
 import { previewText } from '../../utils/helpers';
 
-type Props = TabScreenProps<'Journal'>;
+type Props = RootScreenProps<'Journal'>;
 
 const PREVIEW_LENGTH = 180;
 
@@ -37,7 +37,12 @@ const Journal = ({ navigation }: Props) => {
   return (
     <PageContainer>
       <AnimeHeroCard image={SCREEN_IMAGES.JOURNAL_BANNER} size="short">
-        <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
+        <ScreenHeader
+          title={t(JOURNAL_CONSTANTS.TITLE)}
+          subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)}
+          onBack={navigation.goBack}
+          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
+        />
       </AnimeHeroCard>
       <JournalStyles.Actions>
         <PrimaryButton label={t(JOURNAL_CONSTANTS.NEW_TITLE)} onPress={handleNew} />

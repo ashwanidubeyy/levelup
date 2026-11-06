@@ -10,6 +10,10 @@ export const STORAGE_KEYS = {
   SETTINGS: 'levelup.settings.v1',
   JOURNAL: 'levelup.journal.v1',
   QUESTS: 'levelup.quests.v1',
+  CHALLENGES: 'levelup.challenges.v1',
+  REMINDERS: 'levelup.reminders.v1',
+  BUDGET: 'levelup.budget.v1',
+  FOCUS: 'levelup.focus.v1',
 } as const;
 
 export const COMMON_CONSTANTS = {
@@ -28,6 +32,7 @@ export const COMMON_CONSTANTS = {
     RETRY: 'common.actions.retry',
     ENABLE: 'common.actions.enable',
     NEW_ENTRY: 'common.actions.newEntry',
+    ADD: 'common.actions.add',
     ARISE: 'common.actions.arise',
     PREVIOUS: 'common.actions.previous',
     NEXT: 'common.actions.next',

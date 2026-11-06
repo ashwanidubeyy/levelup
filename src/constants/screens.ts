@@ -100,6 +100,7 @@ export const HOME_CONSTANTS = {
   VIEW_ALL: 'home.viewAll',
   QUOTE_TITLE: 'home.quoteTitle',
   QUOTE_HINT: 'home.quoteHint',
+  FOCUS_VALUE: 'home.focusValue',
   PERMISSION_BANNER: 'home.permissionBanner',
   FIX: 'home.fix',
   PAUSED_BANNER: 'home.pausedBanner',
@@ -224,8 +225,8 @@ export const DIAGNOSTICS_CONSTANTS = {
 
 export const TAB_CONSTANTS = {
   HOME: 'tabs.home',
-  STATS: 'tabs.stats',
-  QUESTS: 'tabs.quests',
-  JOURNAL: 'tabs.journal',
-  SETTINGS: 'tabs.settings',
+  FOCUS: 'tabs.focus',
+  CHALLENGES: 'tabs.challenges',
+  BUDGET: 'tabs.budget',
+  MORE: 'tabs.more',
 } as const;

@@ -62,8 +62,8 @@ class TrackerPrefs private constructor(context: Context) {
         const val KEY_DWELL = "dwell_ms"
         const val KEY_LOW_CONFIDENCE = "allow_low_confidence"
         const val KEY_APP_PREFIX = "app_enabled_"
-        private const val KEY_OVERLAY_X = "overlay_x"
-        private const val KEY_OVERLAY_Y = "overlay_y"
+        private const val KEY_OVERLAY_X = "overlay_x_v2"
+        private const val KEY_OVERLAY_Y = "overlay_y_v2"
         const val DEFAULT_LIMIT = 30
         const val DEFAULT_DWELL = 500L
 

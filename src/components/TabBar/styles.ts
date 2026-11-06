@@ -27,7 +27,7 @@ const Indicator = styled.View<{ $active: boolean }>`
   left: ${SPACING.LG}px;
   right: ${SPACING.LG}px;
   height: ${INDICATOR_HEIGHT}px;
-  background-color: ${({ $active }) => ($active ? COLORS.BLUE_GLOW : COLORS.TRANSPARENT)};
+  background-color: ${({ $active }) => ($active ? COLORS.YELLOW : COLORS.TRANSPARENT)};
 `;
 
 const Label = styled.Text<{ $color: string }>`

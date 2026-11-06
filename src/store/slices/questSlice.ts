@@ -38,6 +38,9 @@ const questSlice = createSlice({
       applyEntries(state, action.payload?.entries ?? []);
       state.finalizedThrough = action.payload?.finalizedThrough ?? state.finalizedThrough;
     },
+    awardXp: (state, action: PayloadAction<XpLogEntry>) => {
+      applyEntries(state, [action.payload]);
+    },
     awardJournal: (state, action: PayloadAction<XpLogEntry>) => {
       if (state.journalAwardedDays.includes(action.payload?.day)) {
         return;
@@ -51,6 +54,6 @@ const questSlice = createSlice({
   },
 });
 
-export const { hydrateQuests, applyFinalization, awardJournal } = questSlice.actions;
+export const { hydrateQuests, applyFinalization, awardXp, awardJournal } = questSlice.actions;
 
 export default questSlice.reducer;

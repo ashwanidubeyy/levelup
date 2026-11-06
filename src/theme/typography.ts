@@ -1,9 +1,9 @@
 import { moderateScale } from 'react-native-size-matters';
 
 export const FONTS = {
-  DISPLAY_BLACK: 'Orbitron-Black',
-  DISPLAY_BOLD: 'Orbitron-Bold',
-  DISPLAY_MEDIUM: 'Orbitron-Medium',
+  DISPLAY_BLACK: 'Rajdhani-Bold',
+  DISPLAY_BOLD: 'Rajdhani-Bold',
+  DISPLAY_MEDIUM: 'Rajdhani-SemiBold',
   BODY_REGULAR: 'Rajdhani-Regular',
   BODY_MEDIUM: 'Rajdhani-Medium',
   BODY_SEMIBOLD: 'Rajdhani-SemiBold',

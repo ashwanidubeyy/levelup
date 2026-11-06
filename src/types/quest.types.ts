@@ -9,7 +9,7 @@ export type RankId = 'E' | 'D' | 'C' | 'B' | 'A' | 'S';
 export interface XpLogEntry {
   id: string;
   day: string;
-  questId: QuestId;
+  questId: string;
   xp: number;
   at: number;
 }

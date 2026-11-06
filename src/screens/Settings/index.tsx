@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TabScreenProps } from '../../navigation/AppNavigator';
+import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import AnimeHeroCard from '../../components/AnimeHeroCard';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -22,7 +22,7 @@ import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
 import { appLabel } from '../../utils/format';
 
-type Props = TabScreenProps<'Settings'>;
+type Props = RootScreenProps<'Settings'>;
 
 const Settings = ({ navigation }: Props) => {
   const { t } = useTranslation();
@@ -140,7 +140,12 @@ const Settings = ({ navigation }: Props) => {
   return (
     <PageContainer>
       <AnimeHeroCard image={SCREEN_IMAGES.SETTINGS_BANNER} size="short">
-        <ScreenHeader title={t(SETTINGS_CONSTANTS.TITLE)} subtitle={t(SETTINGS_CONSTANTS.SUBTITLE)} />
+        <ScreenHeader
+          title={t(SETTINGS_CONSTANTS.TITLE)}
+          subtitle={t(SETTINGS_CONSTANTS.SUBTITLE)}
+          onBack={navigation.goBack}
+          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
+        />
       </AnimeHeroCard>
       {isIos ? (
         <ComingSoonCard
