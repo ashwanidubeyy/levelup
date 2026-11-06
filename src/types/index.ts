@@ -7,3 +7,4 @@ export * from './challenge.types';
 export * from './reminder.types';
 export * from './budget.types';
 export * from './focus.types';
+export * from './calendar.types';

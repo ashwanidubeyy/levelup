@@ -41,9 +41,19 @@ const budgetSlice = createSlice({
     removeExpense: (state, action: PayloadAction<string>) => {
       state.expenses = state.expenses?.filter((item: Expense) => item?.id !== action.payload) ?? [];
     },
+    updateExpense: (state, action: PayloadAction<Expense>) => {
+      const list = state.expenses ?? [];
+      const next = list.map((item: Expense) => (item?.id === action.payload?.id ? action.payload : item));
+      state.expenses = next;
+    },
+    clearMonthExpenses: (state, action: PayloadAction<string>) => {
+      const prefix = action.payload ?? '';
+      state.expenses = state.expenses?.filter((item: Expense) => !item?.day?.startsWith(prefix)) ?? [];
+    },
   },
 });
 
-export const { hydrateBudget, setMonthlyBudget, setNightReminder, addExpense, removeExpense } = budgetSlice.actions;
+export const { hydrateBudget, setMonthlyBudget, setNightReminder, addExpense, removeExpense, updateExpense, clearMonthExpenses } =
+  budgetSlice.actions;
 
 export default budgetSlice.reducer;

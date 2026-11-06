@@ -9,14 +9,17 @@ export const HUB_CONSTANTS = {
   CALENDAR_EMPTY: 'hub.calendarEmpty',
   BUDGET_HINT: 'hub.budgetHint',
   BUDGET_EMPTY: 'hub.budgetEmpty',
+  JOURNAL: 'hub.journal',
+  JOURNAL_HINT: 'hub.journalHint',
+  JOURNAL_EMPTY: 'hub.journalEmpty',
   LEVEL_TITLE: 'hub.levelTitle',
 } as const;
 
 export const MORE_CONSTANTS = {
   TITLE: 'more.title',
   SUBTITLE: 'more.subtitle',
-  JOURNAL: 'more.journal',
-  JOURNAL_HINT: 'more.journalHint',
+  FOCUS: 'more.focus',
+  FOCUS_HINT: 'more.focusHint',
   STATS: 'more.stats',
   STATS_HINT: 'more.statsHint',
   CALENDAR: 'more.calendar',

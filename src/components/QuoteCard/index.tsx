@@ -10,19 +10,25 @@ const { BoltIcon } = Icons;
 
 const ICON_SIZE = moderateScale(30, 0.9);
 
-const QuoteCard = ({ text, author, image, title, hint, onPress }: QuoteCardProps) => (
-  <QuoteCardStyles.Container activeOpacity={0.85} onPress={onPress} disabled={!onPress} accessibilityRole="button">
+const QuoteCard = ({ text, author, image, title, hint, variant = 'default', onPress }: QuoteCardProps) => (
+  <QuoteCardStyles.Container
+    $variant={variant}
+    activeOpacity={0.85}
+    onPress={onPress}
+    disabled={!onPress}
+    accessibilityRole="button"
+  >
     {image ? (
-      <QuoteCardStyles.Thumb source={image} resizeMode="cover" />
+      <QuoteCardStyles.Thumb $variant={variant} source={image} resizeMode="cover" />
     ) : (
-      <QuoteCardStyles.Placeholder>
+      <QuoteCardStyles.Placeholder $variant={variant}>
         <GradientView colors={GRADIENTS.MONARCH} fill />
-        <BoltIcon size={ICON_SIZE} color={COLORS.WHITE} />
+        <BoltIcon size={variant === 'hero' ? moderateScale(44, 0.9) : ICON_SIZE} color={COLORS.WHITE} />
       </QuoteCardStyles.Placeholder>
     )}
-    <QuoteCardStyles.Body>
-      <QuoteCardStyles.Title>{title}</QuoteCardStyles.Title>
-      <QuoteCardStyles.Quote>{text}</QuoteCardStyles.Quote>
+    <QuoteCardStyles.Body $variant={variant}>
+      {title ? <QuoteCardStyles.Title>{title}</QuoteCardStyles.Title> : null}
+      <QuoteCardStyles.Quote $variant={variant}>{text}</QuoteCardStyles.Quote>
       <QuoteCardStyles.Author>{author?.toUpperCase()}</QuoteCardStyles.Author>
       {hint ? <QuoteCardStyles.Hint>{hint}</QuoteCardStyles.Hint> : null}
     </QuoteCardStyles.Body>

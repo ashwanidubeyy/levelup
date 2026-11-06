@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import type { NavigationProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import type { TabScreenProps } from '../../navigation/AppNavigator';
+import type { RootStackParamList, TabScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import QuoteCard from '../../components/QuoteCard';
-import LevelCard from '../../components/LevelCard';
 import HubTile from '../../components/HubTile';
+import AppShortcut from '../../components/AppShortcut';
 import SystemPanel from '../../components/SystemPanel';
 import StatBar from '../../components/StatBar';
 import StatTile from '../../components/StatTile';
@@ -12,37 +13,48 @@ import AppCountRow from '../../components/AppCountRow';
 import Banner from '../../components/Banner';
 import ComingSoonCard from '../../components/ComingSoonCard';
 import { HomeStyles } from './styles';
-import type { Challenge, TrackedAppId } from '../../types';
+import type { AgendaItem, JournalEntry, TrackedAppId } from '../../types';
 import { HOME_CONSTANTS, ONBOARDING_CONSTANTS } from '../../constants/screens';
 import { HUB_CONSTANTS } from '../../constants/hub';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
 import { FOCUS_RULES } from '../../constants/focus';
+import { JOURNAL_CONSTANTS } from '../../constants/journal';
 import { TRACKED_APP_IDS } from '../../constants/common';
+import { HOME_RULES, SHORTCUT_TARGETS } from '../../constants/shortcuts';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
-import { quoteAt, quoteIndexForToday, ratio } from '../../utils/helpers';
+import { previewText, quoteAt, quoteIndexForToday, ratio } from '../../utils/helpers';
 import { QUOTES } from '../../constants/quotes';
 import { resultData } from '../../utils/trackerResult';
 import { appLabel, formatDuration, limitMessage } from '../../utils/format';
-import { buildLevelInfo } from '../../utils/level';
-import { canCheckIn } from '../../utils/challenges';
-import { nextReminderAt } from '../../utils/reminders';
 import { expensesForMonth, formatAmount, monthKeyFromDay, sumExpenses } from '../../utils/money';
-import { formatClock, todayKey } from '../../utils/date';
+import { formatDayLabel, formatTime, todayKey } from '../../utils/date';
+import { buildAgenda } from '../../utils/agenda';
+import { openShortcut } from '../../utils/appLinks';
 
 type Props = TabScreenProps<'Home'>;
 
+const agendaLabel = (item: AgendaItem, translate: (key: string) => string): string =>
+  item?.kind === 'holiday' ? translate(item?.titleKey ?? '') : item?.title ?? '';
+
+const agendaMeta = (item: AgendaItem, translate: (key: string, options?: Record<string, string>) => string): string =>
+  item?.kind === 'holiday'
+    ? translate(HOME_CONSTANTS.AGENDA_HOLIDAY, { day: formatDayLabel(item?.day ?? '') })
+    : translate(HOME_CONSTANTS.AGENDA_REMINDER, {
+        day: formatDayLabel(item?.day ?? ''),
+        time: formatTime(item?.at ?? 0),
+      });
+
 const Home = ({ navigation }: Props) => {
   const { t } = useTranslation();
+  const rootNavigation = navigation.getParent<NavigationProp<RootStackParamList>>();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
-  const xp = useAppSelector(state => state?.quests?.xp) ?? 0;
-  const challenges = useAppSelector(state => state?.challenges?.items) ?? [];
   const reminders = useAppSelector(state => state?.reminders?.items) ?? [];
   const budget = useAppSelector(state => state?.budget);
+  const entries = useAppSelector(state => state?.journal?.entries) ?? [];
   const { today: todayResult, todayUsage, live, status } = useTrackerState();
   const { openPermission, changeTracking } = useSettingsActions();
-  const levelInfo = useMemo(() => buildLevelInfo(xp), [xp]);
   const [quoteIndex, setQuoteIndex] = useState(quoteIndexForToday);
   const quote = quoteAt(quoteIndex);
   const counts = resultData(todayResult);
@@ -51,9 +63,9 @@ const Home = ({ navigation }: Props) => {
   const danger = ratio(total, dailyLimit) >= TRACKER_CONSTANTS.WARNING_RATIO;
   const isIos = status === 'comingSoon';
   const day = todayKey();
-  const openChallenges = challenges?.filter((item: Challenge) => !item?.completedAt) ?? [];
-  const pendingCheckIns = openChallenges.filter((item: Challenge) => canCheckIn(item, day)).length;
-  const upcoming = nextReminderAt(reminders, Date.now());
+  const agenda = buildAgenda(reminders, Date.now(), HOME_RULES.UPCOMING_LIMIT);
+  const next = agenda?.[0];
+  const latest = entries?.[0] as JournalEntry | undefined;
   const spent = sumExpenses(expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)));
   const monthly = budget?.monthlyBudget ?? 0;
   const remaining = monthly - spent;
@@ -126,44 +138,47 @@ const Home = ({ navigation }: Props) => {
     );
 
   return (
-    <PageContainer>
+    <PageContainer animatedBackground>
       <QuoteCard
-        title={t(HOME_CONSTANTS.QUOTE_TITLE)}
+        variant="hero"
         text={t(quote.textKey)}
         author={t(quote.authorKey)}
         image={quote.image}
         hint={t(HOME_CONSTANTS.QUOTE_HINT, { current: quoteIndex % QUOTES.length + 1, total: QUOTES.length })}
         onPress={() => setQuoteIndex((prev: number) => prev + 1)}
       />
-      <LevelCard
-        title={t(HUB_CONSTANTS.LEVEL_TITLE)}
-        levelLabel={t(HOME_CONSTANTS.LEVEL, { level: levelInfo.level })}
-        xpLabel={t(HOME_CONSTANTS.XP, { current: levelInfo.currentXp, next: levelInfo.nextLevelXp })}
-        progress={levelInfo.progress}
-      />
+      <HomeStyles.Shortcuts>
+        {SHORTCUT_TARGETS.map((target: (typeof SHORTCUT_TARGETS)[number]) => (
+          <AppShortcut
+            key={target.id}
+            label={t(target.labelKey)}
+            onPress={() => {
+              openShortcut(target.app, target.web).catch(() => undefined);
+            }}
+          />
+        ))}
+      </HomeStyles.Shortcuts>
+      <SystemPanel title={t(HOME_CONSTANTS.UPCOMING)} variant="monarch">
+        {agenda.length === 0 ? <HomeStyles.Empty>{t(HOME_CONSTANTS.UPCOMING_EMPTY)}</HomeStyles.Empty> : null}
+        {agenda.map((item: AgendaItem) => (
+          <HomeStyles.AgendaRow
+            key={item?.id}
+            onPress={() => navigation.navigate('Calendar', { day: item?.day })}
+            accessibilityRole="button"
+            accessibilityLabel={agendaLabel(item, t)}
+          >
+            <HomeStyles.AgendaTitle numberOfLines={1}>{agendaLabel(item, t)}</HomeStyles.AgendaTitle>
+            <HomeStyles.AgendaMeta>{agendaMeta(item, t)}</HomeStyles.AgendaMeta>
+          </HomeStyles.AgendaRow>
+        ))}
+      </SystemPanel>
       <HomeStyles.Hub>
         <HubTile
-          label={t(HUB_CONSTANTS.FOCUS)}
-          value={t(HOME_CONSTANTS.FOCUS_VALUE, { minutes: FOCUS_RULES.DEFAULT_MINUTES })}
-          hint={t(HUB_CONSTANTS.FOCUS_HINT)}
-          accent="monarch"
-          onPress={() => navigation.navigate('Focus')}
-        />
-        <HubTile
-          label={t(HUB_CONSTANTS.CHALLENGES)}
-          value={`${openChallenges.length}`}
-          hint={t(pendingCheckIns > 0 ? HUB_CONSTANTS.CHALLENGE_CHECK : HUB_CONSTANTS.CHALLENGE_HINT, {
-            count: pendingCheckIns,
-          })}
-          accent="system"
-          onPress={() => navigation.navigate('Challenges')}
-        />
-        <HubTile
           label={t(HUB_CONSTANTS.CALENDAR)}
-          value={upcoming ? formatClock(upcoming.reminder.hour, upcoming.reminder.minute) : t(HUB_CONSTANTS.CALENDAR_EMPTY)}
-          hint={upcoming?.reminder?.title ?? t(HUB_CONSTANTS.CALENDAR_EMPTY)}
+          value={next ? agendaLabel(next, t) : t(HUB_CONSTANTS.CALENDAR_EMPTY)}
+          hint={next ? agendaMeta(next, t) : t(HUB_CONSTANTS.CALENDAR_EMPTY)}
           accent="system"
-          onPress={() => navigation.navigate('Calendar')}
+          onPress={() => navigation.navigate('Calendar', next?.day ? { day: next.day } : undefined)}
         />
         <HubTile
           label={t(HUB_CONSTANTS.BUDGET)}
@@ -173,6 +188,24 @@ const Home = ({ navigation }: Props) => {
           })}
           accent={monthly > 0 && remaining < 0 ? 'danger' : 'monarch'}
           onPress={() => navigation.navigate('Budget')}
+        />
+        <HubTile
+          label={t(HUB_CONSTANTS.JOURNAL)}
+          value={latest ? latest?.title || t(JOURNAL_CONSTANTS.UNTITLED) : t(HUB_CONSTANTS.JOURNAL_EMPTY)}
+          hint={latest ? previewText(latest?.body ?? '', HOME_RULES.JOURNAL_PREVIEW) : t(HUB_CONSTANTS.JOURNAL_HINT)}
+          accent="system"
+          onPress={() =>
+            latest?.id
+              ? navigation.navigate('JournalEditor', { entryId: latest.id })
+              : navigation.navigate('Journal')
+          }
+        />
+        <HubTile
+          label={t(HUB_CONSTANTS.FOCUS)}
+          value={t(HOME_CONSTANTS.FOCUS_VALUE, { minutes: FOCUS_RULES.DEFAULT_MINUTES })}
+          hint={t(HUB_CONSTANTS.FOCUS_HINT)}
+          accent="monarch"
+          onPress={() => rootNavigation?.navigate('Focus')}
         />
       </HomeStyles.Hub>
       {renderBanner()}

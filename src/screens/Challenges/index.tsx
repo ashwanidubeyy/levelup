@@ -82,17 +82,13 @@ const Challenges = () => {
     if (!canCheckIn(challenge, day)) {
       return;
     }
-    const willFinish = (challenge?.checkIns?.length ?? 0) + 1 >= (challenge?.days ?? 0);
     dispatch(checkInChallenge({ id: challenge.id, day }));
     dispatch(awardXp(makeXp(day, XP_SOURCES.CHECK_IN, CHALLENGE_RULES.CHECK_IN_XP)));
-    if (willFinish) {
-      dispatch(awardXp(makeXp(day, XP_SOURCES.COMPLETE, CHALLENGE_RULES.COMPLETE_XP)));
-    }
   };
 
   return (
     <KeybordView>
-      <PageContainer>
+      <PageContainer animatedBackground>
         <ScreenHeader title={t(CHALLENGE_CONSTANTS.TITLE)} subtitle={t(CHALLENGE_CONSTANTS.SUBTITLE)} />
         <LevelCard
           title={t(CHALLENGE_CONSTANTS.LEVEL_TITLE)}

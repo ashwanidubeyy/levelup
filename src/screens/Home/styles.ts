@@ -4,11 +4,40 @@ import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText } from '../../utils/commonStyles';
 
+const Shortcuts = styled.View`
+  flex-direction: row;
+  gap: ${SPACING.MD}px;
+  margin-top: ${V_SPACING.LG}px;
+`;
+
 const Hub = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
+  gap: ${SPACING.MD}px;
+  margin-top: ${V_SPACING.LG}px;
+`;
+
+const AgendaRow = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: ${V_SPACING.SM}px;
+  padding: ${V_SPACING.SM}px 0;
+`;
+
+const AgendaTitle = styled.Text`
+  flex: 1;
+  margin-right: ${SPACING.SM}px;
+  font-family: ${FONTS.BODY_SEMIBOLD};
+  font-size: ${FONT_SIZES.MD}px;
+  color: ${COLORS.TEXT};
+`;
+
+const AgendaMeta = styled.Text`
+  ${mutedText}
+`;
+
+const Empty = styled.Text`
+  ${mutedText}
 `;
 
 const CountRow = styled.View`
@@ -53,7 +82,12 @@ const Tiles = styled.View`
 `;
 
 export const HomeStyles = {
+  Shortcuts,
   Hub,
+  AgendaRow,
+  AgendaTitle,
+  AgendaMeta,
+  Empty,
   CountRow,
   Count,
   Limit,

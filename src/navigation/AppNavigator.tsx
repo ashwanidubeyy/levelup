@@ -31,17 +31,17 @@ import { COLORS } from '../theme/colors';
 export type RootStackParamList = {
   Onboarding: undefined;
   MainTabs: undefined;
-  Journal: undefined;
+  Focus: undefined;
   JournalEditor: { entryId?: string } | undefined;
   Stats: undefined;
-  Calendar: undefined;
+  Calendar: { day?: string } | undefined;
   Settings: undefined;
   Diagnostics: undefined;
 };
 
 export type MainTabParamList = {
   Home: undefined;
-  Focus: undefined;
+  Journal: undefined;
   Challenges: undefined;
   Budget: undefined;
   More: undefined;
@@ -91,7 +91,7 @@ const MainTabs = () => {
   return (
     <Tab.Navigator screenOptions={TAB_OPTIONS} tabBar={renderTabBar}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Focus" component={Focus} />
+      <Tab.Screen name="Journal" component={Journal} />
       <Tab.Screen name="Challenges" component={Challenges} />
       <Tab.Screen name="Budget" component={Budget} />
       <Tab.Screen name="More" component={More} />
@@ -104,7 +104,7 @@ const AppNavigator = ({ initialRoute }: AppNavigatorProps) => (
     <Stack.Navigator initialRouteName={initialRoute} screenOptions={STACK_OPTIONS}>
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
-      <Stack.Screen name="Journal" component={Journal} />
+      <Stack.Screen name="Focus" component={Focus} />
       <Stack.Screen name="JournalEditor" component={JournalEditor} />
       <Stack.Screen name="Stats" component={Stats} />
       <Stack.Screen name="Calendar" component={Calendar} />

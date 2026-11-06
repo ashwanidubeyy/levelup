@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GradientView from '../GradientView';
+import AnimatedScreenBackdrop from '../AnimatedScreenBackdrop';
 import type { PageContainerProps } from '../../types';
 import { PageContainerStyles } from './styles';
 import { GRADIENTS } from '../../theme/colors';
@@ -10,6 +11,7 @@ const PageContainer = ({
   scrollable = true,
   withTopInset = true,
   withBottomInset = false,
+  animatedBackground = false,
 }: PageContainerProps) => {
   const insets = useSafeAreaInsets();
 
@@ -26,6 +28,7 @@ const PageContainer = ({
   return (
     <PageContainerStyles.Container>
       <GradientView colors={GRADIENTS.SCREEN} fill />
+      {animatedBackground ? <AnimatedScreenBackdrop /> : null}
       {scrollable ? (
         <PageContainerStyles.Scroll keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           {content}

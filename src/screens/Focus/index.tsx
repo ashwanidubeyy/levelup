@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import ScreenHeader from '../../components/ScreenHeader';
 import SystemPanel from '../../components/SystemPanel';
@@ -9,10 +10,13 @@ import PrimaryButton from '../../components/PrimaryButton';
 import { FocusStyles } from './styles';
 import type { SegmentOption } from '../../types';
 import { FOCUS_CONSTANTS, FOCUS_PRESETS, FOCUS_RULES } from '../../constants/focus';
+import { COMMON_CONSTANTS } from '../../constants/common';
 import { useFocusTimer } from '../../hooks/useFocusTimer';
 import { formatCountdown } from '../../utils/date';
 
-const Focus = () => {
+type Props = RootScreenProps<'Focus'>;
+
+const Focus = ({ navigation }: Props) => {
   const { t } = useTranslation();
   const timer = useFocusTimer();
   const clock = formatCountdown(timer.remainingMs);
@@ -26,13 +30,17 @@ const Focus = () => {
   );
 
   return (
-    <PageContainer>
-      <ScreenHeader title={t(FOCUS_CONSTANTS.TITLE)} subtitle={t(FOCUS_CONSTANTS.SUBTITLE)} />
+    <PageContainer animatedBackground>
+      <ScreenHeader
+        title={t(FOCUS_CONSTANTS.TITLE)}
+        subtitle={t(FOCUS_CONSTANTS.SUBTITLE)}
+        onBack={navigation.goBack}
+        backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
+      />
       <SystemPanel variant="monarch">
         <FocusStyles.Clock>
           {clock.minutes}:{clock.seconds}
         </FocusStyles.Clock>
-        <FocusStyles.Hint>{t(FOCUS_CONSTANTS.XP_HINT, { xp: FOCUS_RULES.XP })}</FocusStyles.Hint>
         <SegmentedControl options={options} value={timer.preset} onChange={timer.handlePreset} />
         {timer.preset === FOCUS_RULES.CUSTOM ? (
           <FocusStyles.Block>

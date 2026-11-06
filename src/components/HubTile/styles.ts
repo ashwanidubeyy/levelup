@@ -1,5 +1,5 @@
+import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
-import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
@@ -7,11 +7,11 @@ import type { PanelVariant } from '../../types';
 import { accentFor } from '../../utils/variant';
 import { mutedText } from '../../utils/commonStyles';
 
-const TILE_WIDTH = moderateScale(150, 0.9);
+const COLUMN_GAP = SPACING.MD;
+const TILE_WIDTH = (Dimensions.get('window').width - SPACING.LG * 2 - COLUMN_GAP) / 2;
 
 const Tile = styled.TouchableOpacity`
   width: ${TILE_WIDTH}px;
-  margin-bottom: ${V_SPACING.MD}px;
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
   background-color: ${COLORS.PANEL};
   border-radius: ${RADIUS.MD}px;

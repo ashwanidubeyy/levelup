@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { RootScreenProps } from '../../navigation/AppNavigator';
+import type { TabScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import AnimeHeroCard from '../../components/AnimeHeroCard';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -16,7 +16,7 @@ import { useAppSelector } from '../../store';
 import { formatDateTime } from '../../utils/date';
 import { previewText } from '../../utils/helpers';
 
-type Props = RootScreenProps<'Journal'>;
+type Props = TabScreenProps<'Journal'>;
 
 const PREVIEW_LENGTH = 180;
 
@@ -32,17 +32,12 @@ const Journal = ({ navigation }: Props) => {
     return map;
   }, [t]);
 
-  const handleNew = () => navigation.navigate('JournalEditor');
+  const handleNew = () => navigation.navigate('JournalEditor', undefined);
 
   return (
-    <PageContainer>
+    <PageContainer animatedBackground>
       <AnimeHeroCard image={SCREEN_IMAGES.JOURNAL_BANNER} size="short">
-        <ScreenHeader
-          title={t(JOURNAL_CONSTANTS.TITLE)}
-          subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)}
-          onBack={navigation.goBack}
-          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
-        />
+        <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
       </AnimeHeroCard>
       <JournalStyles.Actions>
         <PrimaryButton label={t(JOURNAL_CONSTANTS.NEW_TITLE)} onPress={handleNew} />

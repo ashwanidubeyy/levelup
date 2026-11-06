@@ -8,13 +8,13 @@ import { Icons } from '../../assets/icons';
 import { TAB_CONSTANTS } from '../../constants/screens';
 import { COLORS } from '../../theme/colors';
 
-const { HomeIcon, FocusIcon, ChallengeIcon, BudgetIcon, MoreIcon } = Icons;
+const { HomeIcon, JournalIcon, ChallengeIcon, BudgetIcon, MoreIcon } = Icons;
 
 const ICON_SIZE = moderateScale(22, 0.9);
 
 const TAB_ITEMS: Record<string, { Icon: (props: any) => React.JSX.Element; labelKey: string }> = {
   Home: { Icon: HomeIcon, labelKey: TAB_CONSTANTS.HOME },
-  Focus: { Icon: FocusIcon, labelKey: TAB_CONSTANTS.FOCUS },
+  Journal: { Icon: JournalIcon, labelKey: TAB_CONSTANTS.JOURNAL },
   Challenges: { Icon: ChallengeIcon, labelKey: TAB_CONSTANTS.CHALLENGES },
   Budget: { Icon: BudgetIcon, labelKey: TAB_CONSTANTS.BUDGET },
   More: { Icon: MoreIcon, labelKey: TAB_CONSTANTS.MORE },

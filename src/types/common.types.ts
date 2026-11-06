@@ -15,6 +15,7 @@ export interface PageContainerProps {
   scrollable?: boolean;
   withTopInset?: boolean;
   withBottomInset?: boolean;
+  animatedBackground?: boolean;
 }
 
 export interface SystemPanelProps {
@@ -57,8 +58,9 @@ export interface QuoteCardProps {
   text: string;
   author: string;
   image: ImageSourcePropType | null;
-  title: string;
+  title?: string;
   hint?: string;
+  variant?: 'default' | 'hero';
   onPress?: () => void;
 }
 
@@ -241,6 +243,11 @@ export interface HubTileProps {
   value: string;
   hint: string;
   accent?: PanelVariant;
+  onPress: () => void;
+}
+
+export interface AppShortcutProps {
+  label: string;
   onPress: () => void;
 }
 

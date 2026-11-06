@@ -12,6 +12,8 @@ const Scroll = styled.ScrollView`
 `;
 
 const Content = styled.View<{ $top: number; $bottom: number; $grow: boolean }>`
+  position: relative;
+  z-index: 1;
   ${({ $grow }) => ($grow ? 'flex: 1;' : '')}
   padding-left: ${SPACING.LG}px;
   padding-right: ${SPACING.LG}px;

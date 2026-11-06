@@ -16,12 +16,24 @@ const Summary = styled.Text<{ $danger: boolean }>`
   color: ${({ $danger }) => ($danger ? COLORS.RED_BRIGHT : COLORS.YELLOW)};
 `;
 
-const Row = styled.View`
-  ${rowBetween}
+const ExpenseBlock = styled.View`
   margin-top: ${V_SPACING.MD}px;
   padding-bottom: ${V_SPACING.SM}px;
   border-bottom-width: ${BORDER.HAIRLINE}px;
   border-bottom-color: ${COLORS.PANEL_BORDER};
+`;
+
+const Row = styled.View`
+  ${rowBetween}
+  align-items: flex-start;
+`;
+
+const Actions = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${SPACING.XS}px;
+  margin-top: ${V_SPACING.SM}px;
+  justify-content: flex-end;
 `;
 
 const Note = styled.Text`
@@ -50,4 +62,4 @@ const Status = styled.View`
   background-color: ${COLORS.PANEL_ALT};
 `;
 
-export const BudgetStyles = { Block, Summary, Row, Note, Amount, Empty, Status };
+export const BudgetStyles = { Block, Summary, ExpenseBlock, Row, Actions, Note, Amount, Empty, Status };

@@ -1,16 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { FOCUS_CONSTANTS, FOCUS_RULES } from '../constants/focus';
-import { NOTIFICATION_CONSTANTS } from '../constants/notifications';
-import { XP_SOURCES } from '../constants/challenges';
+import { FOCUS_RULES } from '../constants/focus';
 import { TIME } from '../constants/common';
 import { useAppDispatch, useAppSelector } from '../store';
 import { addFocusLog, clearActiveFocus, setActiveFocus } from '../store/slices/focusSlice';
-import { awardXp } from '../store/slices/questSlice';
 import notificationService from '../services/notification.service';
-import { makeXp } from '../utils/progress';
 import { todayKey } from '../utils/date';
 import { generateId } from '../utils/helpers';
-import i18n from '../i18n';
 import type { FocusLog } from '../types';
 
 const presetFor = (value: number): string => {
@@ -58,7 +53,7 @@ export const useFocusTimer = () => {
         completedAt: Date.now(),
       }),
     );
-    dispatch(awardXp(makeXp(day, XP_SOURCES.FOCUS, FOCUS_RULES.XP)));
+    dispatch(clearActiveFocus());
     notificationService.cancelFocusEnd().catch(() => undefined);
   }, [active, dispatch, now]);
 
@@ -95,9 +90,6 @@ export const useFocusTimer = () => {
     finishing.current = false;
     setPausedMs(null);
     dispatch(setActiveFocus({ endsAt, minutes }));
-    notificationService
-      .scheduleFocusEnd(endsAt, i18n.t(FOCUS_CONSTANTS.DONE), i18n.t(NOTIFICATION_CONSTANTS.FOCUS_BODY))
-      .catch(() => undefined);
   };
 
   const handlePause = () => {

@@ -24,6 +24,7 @@ export const CALENDAR_CONSTANTS = {
   MINUTE: 'calendar.minute',
   REPEAT: 'calendar.repeat',
   EMPTY: 'calendar.empty',
+  HOLIDAY: 'calendar.holiday',
   AT: 'calendar.at',
   WHEN: 'calendar.when',
   WHEN_DAILY: 'calendar.whenDaily',

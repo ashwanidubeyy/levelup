@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
@@ -12,26 +12,28 @@ import SegmentedControl from '../../components/SegmentedControl';
 import Stepper from '../../components/Stepper';
 import PrimaryButton from '../../components/PrimaryButton';
 import { CalendarStyles } from './styles';
-import type { Reminder, SegmentOption } from '../../types';
+import type { IndiaCalendarEvent, Reminder, SegmentOption } from '../../types';
 import { CALENDAR_CONSTANTS, REMINDER_REPEAT_OPTIONS, REMINDER_RULES } from '../../constants/reminders';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addReminder, removeReminder } from '../../store/slices/reminderSlice';
 import { formatClock, formatMonthLabel, monthOf, shiftMonth, todayKey } from '../../utils/date';
 import { markedDaysInMonth, monthWeeks } from '../../utils/calendar';
+import { holidaysInMonth, holidaysOnDay } from '../../utils/indiaCalendar';
 import { remindersOnDay } from '../../utils/reminders';
 import { generateId } from '../../utils/helpers';
 
 type Props = RootScreenProps<'Calendar'>;
 
-const Calendar = ({ navigation }: Props) => {
+const Calendar = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const items = useAppSelector(state => state?.reminders?.items);
-  const initial = monthOf(todayKey());
+  const requested = route?.params?.day ?? todayKey();
+  const initial = monthOf(requested);
   const [year, setYear] = useState(initial.year);
   const [month, setMonth] = useState(initial.month);
-  const [selected, setSelected] = useState(todayKey());
+  const [selected, setSelected] = useState(requested);
   const [title, setTitle] = useState('');
   const [hour, setHour] = useState<number>(REMINDER_RULES.DEFAULT_HOUR);
   const [minute, setMinute] = useState<number>(REMINDER_RULES.DEFAULT_MINUTE);
@@ -39,8 +41,13 @@ const Calendar = ({ navigation }: Props) => {
   const [error, setError] = useState('');
 
   const weeks = useMemo(() => monthWeeks(year, month), [year, month]);
-  const marked = useMemo(() => markedDaysInMonth(items ?? [], year, month), [items, year, month]);
+  const marked = useMemo(() => {
+    const reminderDays = markedDaysInMonth(items ?? [], year, month);
+    const holidayDays = holidaysInMonth(year, month).map((event: IndiaCalendarEvent) => event?.day ?? '');
+    return Array.from(new Set([...reminderDays, ...holidayDays]));
+  }, [items, year, month]);
   const dayItems = remindersOnDay(items ?? [], selected);
+  const dayHolidays = holidaysOnDay(selected);
   const weekdays = CALENDAR_CONSTANTS.WEEKDAYS.map((key: string) => t(key));
   const repeatOptions: SegmentOption[] = REMINDER_REPEAT_OPTIONS.map(
     (option: (typeof REMINDER_REPEAT_OPTIONS)[number]) => ({
@@ -48,6 +55,17 @@ const Calendar = ({ navigation }: Props) => {
       value: option.value,
     }),
   );
+
+  useEffect(() => {
+    const day = route?.params?.day;
+    if (!day) {
+      return;
+    }
+    const next = monthOf(day);
+    setSelected(day);
+    setYear(next.year);
+    setMonth(next.month);
+  }, [route?.params?.day]);
 
   const handleMonth = (delta: number) => {
     const next = shiftMonth(year, month, delta);
@@ -134,7 +152,15 @@ const Calendar = ({ navigation }: Props) => {
           <CalendarStyles.Block>
             <PrimaryButton label={t(COMMON_CONSTANTS.ACTIONS.SAVE)} onPress={handleSave} />
           </CalendarStyles.Block>
-          {dayItems.length === 0 ? <CalendarStyles.Empty>{t(CALENDAR_CONSTANTS.EMPTY)}</CalendarStyles.Empty> : null}
+          {dayHolidays.map((event: IndiaCalendarEvent) => (
+            <CalendarStyles.Row key={event?.id}>
+              <CalendarStyles.Title numberOfLines={1}>{t(event?.nameKey ?? '')}</CalendarStyles.Title>
+              <CalendarStyles.When>{t(CALENDAR_CONSTANTS.HOLIDAY)}</CalendarStyles.When>
+            </CalendarStyles.Row>
+          ))}
+          {dayItems.length === 0 && dayHolidays.length === 0 ? (
+            <CalendarStyles.Empty>{t(CALENDAR_CONSTANTS.EMPTY)}</CalendarStyles.Empty>
+          ) : null}
           {dayItems.map((reminder: Reminder) => (
             <CalendarStyles.Row key={reminder?.id}>
               <CalendarStyles.Title numberOfLines={1}>{reminder?.title}</CalendarStyles.Title>

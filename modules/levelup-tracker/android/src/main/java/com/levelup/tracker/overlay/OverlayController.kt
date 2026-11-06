@@ -13,10 +13,8 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.levelup.tracker.R
 import com.levelup.tracker.data.TrackerPrefs
 import kotlin.math.abs
 
@@ -56,48 +54,45 @@ class OverlayController(private val context: Context, private val prefs: Tracker
     fun update(sessionCount: Int, todayTotal: Int, dailyLimit: Int) {
         fractionView?.text = "$todayTotal/$dailyLimit"
         val ratio = if (dailyLimit > 0) todayTotal.toFloat() / dailyLimit else 0f
-        val stroke = when {
-            ratio >= 1f -> COLOR_RED
-            ratio >= WARNING_RATIO -> COLOR_RED_SOFT
-            else -> COLOR_BLUE
-        }
-        background.setStroke(dp(STROKE_DP), stroke)
-        background.setColor(if (ratio >= 1f) COLOR_BG_DANGER else COLOR_BG)
-        fractionView?.setTextColor(if (ratio >= WARNING_RATIO) COLOR_RED_TEXT else COLOR_BLUE_TEXT)
+        fractionView?.setTextColor(if (ratio >= WARNING_RATIO) COLOR_RED_TEXT else COLOR_COUNT)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun buildView(): LinearLayout {
         val body = loadTypeface(FONT_BODY)
-        background.cornerRadius = dp(CORNER_DP).toFloat()
+        background.cornerRadius = dp(CIRCLE_DP / 2f).toFloat()
         background.setColor(COLOR_BG)
-        background.setStroke(dp(STROKE_DP), COLOR_BLUE)
+        background.setStroke(dp(STROKE_DP), COLOR_RIM)
 
-        val icon = ImageView(context).apply {
-            setImageResource(R.drawable.levelup_overlay_luffy)
-            scaleType = ImageView.ScaleType.FIT_CENTER
+        val icon = OverlayGifView(context).apply {
             layoutParams = LinearLayout.LayoutParams(dp(ICON_DP), dp(ICON_DP)).apply {
                 gravity = Gravity.CENTER_HORIZONTAL
             }
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         }
 
         val fraction = TextView(context).apply {
             typeface = body
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FRACTION_SP)
-            setTextColor(COLOR_BLUE_TEXT)
+            setTextColor(COLOR_COUNT)
             gravity = Gravity.CENTER_HORIZONTAL
             includeFontPadding = false
             letterSpacing = 0.02f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            ).apply {
+                topMargin = dp(TEXT_GAP_DP)
+                gravity = Gravity.CENTER_HORIZONTAL
+            }
         }
         fractionView = fraction
 
         return LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(dp(PAD_H_DP), dp(PAD_V_DP), dp(PAD_H_DP), dp(PAD_V_DP))
+            gravity = Gravity.CENTER
+            setPadding(dp(PAD_DP), dp(PAD_DP), dp(PAD_DP), dp(PAD_DP))
             setBackground(background)
-            alpha = 0.94f
+            clipToOutline = true
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
             addView(icon)
             addView(fraction)
@@ -106,8 +101,8 @@ class OverlayController(private val context: Context, private val prefs: Tracker
     }
 
     private fun buildParams(type: Int) = WindowManager.LayoutParams(
-        WindowManager.LayoutParams.WRAP_CONTENT,
-        WindowManager.LayoutParams.WRAP_CONTENT,
+        dp(CIRCLE_DP),
+        dp(CIRCLE_DP),
         type,
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
@@ -177,19 +172,16 @@ class OverlayController(private val context: Context, private val prefs: Tracker
     companion object {
         private const val FONT_BODY = "fonts/Rajdhani-Bold.ttf"
         private const val WARNING_RATIO = 0.8f
-        private const val ICON_DP = 20f
-        private const val FRACTION_SP = 9f
-        private const val PAD_H_DP = 5f
-        private const val PAD_V_DP = 4f
-        private const val CORNER_DP = 10f
+        private const val CIRCLE_DP = 156f
+        private const val ICON_DP = 96f
+        private const val FRACTION_SP = 18f
+        private const val PAD_DP = 12f
+        private const val TEXT_GAP_DP = 4f
         private const val STROKE_DP = 1.5f
         private const val DEFAULT_TOP_DP = 8f
-        private val COLOR_BG = Color.parseColor("#E605060A")
-        private val COLOR_BG_DANGER = Color.parseColor("#E63A0008")
-        private val COLOR_BLUE = Color.parseColor("#1E90FF")
-        private val COLOR_BLUE_TEXT = Color.parseColor("#3FA9FF")
-        private val COLOR_RED = Color.parseColor("#E5383B")
-        private val COLOR_RED_SOFT = Color.parseColor("#C1121F")
+        private val COLOR_BG = Color.BLACK
+        private val COLOR_RIM = Color.parseColor("#33FFFFFF")
+        private val COLOR_COUNT = Color.WHITE
         private val COLOR_RED_TEXT = Color.parseColor("#FF4D5E")
     }
 }

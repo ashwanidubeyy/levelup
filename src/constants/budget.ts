@@ -32,6 +32,13 @@ export const BUDGET_CONSTANTS = {
   LOGGED: 'budget.logged',
   MISSING: 'budget.missing',
   AMOUNT_VALUE: 'budget.amountValue',
+  PLAN_TITLE: 'budget.planTitle',
+  PLAN_DAILY: 'budget.planDaily',
+  PLAN_PROJECTED: 'budget.planProjected',
+  RESET_MONTH: 'budget.resetMonth',
+  RESET_TITLE: 'budget.resetTitle',
+  RESET_MESSAGE: 'budget.resetMessage',
+  EDIT: 'budget.edit',
   VALIDATION: {
     AMOUNT: 'budget.validation.amount',
     BUDGET: 'budget.validation.budget',

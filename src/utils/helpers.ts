@@ -1,5 +1,6 @@
 import type { ImageSourcePropType } from 'react-native';
-import { HERO_ROTATION } from '../constants/images';
+import { HERO_ROTATION, QUOTE_FALLBACK_ART } from '../constants/images';
+import type { QuoteEntry } from '../constants/quotes';
 import { QUOTES } from '../constants/quotes';
 import { dayOfYear } from './date';
 
@@ -22,9 +23,22 @@ const greatestCommonDivisor = (a: number, b: number): number => (b === 0 ? a : g
 
 const quoteStride = greatestCommonDivisor(QUOTE_STRIDE, QUOTES.length) === 1 ? QUOTE_STRIDE : 1;
 
-export const quoteAt = (index: number) => {
+const hashToIndex = (value: string, modulo: number): number => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) >>> 0;
+  }
+  return modulo > 0 ? hash % modulo : 0;
+};
+
+const fallbackArtForQuote = (id: string): ImageSourcePropType =>
+  QUOTE_FALLBACK_ART[hashToIndex(id, QUOTE_FALLBACK_ART.length)] ?? QUOTE_FALLBACK_ART[0];
+
+export const quoteAt = (index: number): QuoteEntry => {
   const position = ((index % QUOTES.length) + QUOTES.length) % QUOTES.length;
-  return QUOTES[(position * quoteStride) % QUOTES.length];
+  const entry = QUOTES[(position * quoteStride) % QUOTES.length];
+  const image = entry.image ?? fallbackArtForQuote(entry.id);
+  return { ...entry, image };
 };
 
 export const previewText = (text: string, maxLength: number): string => {

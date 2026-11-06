@@ -6,36 +6,41 @@ import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { sectionTitleText } from '../../utils/commonStyles';
 
 const THUMB = moderateScale(72, 0.9);
+const THUMB_HERO_W = moderateScale(300, 0.9);
+const THUMB_HERO_H = moderateScale(152, 0.9);
 
-const Container = styled.TouchableOpacity`
-  margin-top: ${V_SPACING.LG}px;
-  flex-direction: row;
-  align-items: center;
+const Container = styled.TouchableOpacity<{ $variant: 'default' | 'hero' }>`
+  flex-direction: ${({ $variant }) => ($variant === 'hero' ? 'column' : 'row')};
+  align-items: ${({ $variant }) => ($variant === 'hero' ? 'stretch' : 'center')};
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
   background-color: ${COLORS.PANEL_ALT};
   border-left-width: ${BORDER.THICK}px;
   border-left-color: ${COLORS.RED_BRIGHT};
   border-radius: ${RADIUS.MD}px;
+  overflow: hidden;
 `;
 
-const Thumb = styled.Image`
-  width: ${THUMB}px;
-  height: ${THUMB}px;
+const Thumb = styled.Image<{ $variant: 'default' | 'hero' }>`
+  width: ${({ $variant }) => ($variant === 'hero' ? THUMB_HERO_W : THUMB)}px;
+  height: ${({ $variant }) => ($variant === 'hero' ? THUMB_HERO_H : THUMB)}px;
   border-radius: ${RADIUS.MD}px;
+  align-self: ${({ $variant }) => ($variant === 'hero' ? 'center' : 'auto')};
 `;
 
-const Placeholder = styled.View`
-  width: ${THUMB}px;
-  height: ${THUMB}px;
+const Placeholder = styled.View<{ $variant: 'default' | 'hero' }>`
+  width: ${({ $variant }) => ($variant === 'hero' ? THUMB_HERO_W : THUMB)}px;
+  height: ${({ $variant }) => ($variant === 'hero' ? THUMB_HERO_H : THUMB)}px;
   border-radius: ${RADIUS.MD}px;
   overflow: hidden;
   align-items: center;
   justify-content: center;
+  align-self: ${({ $variant }) => ($variant === 'hero' ? 'center' : 'auto')};
 `;
 
-const Body = styled.View`
+const Body = styled.View<{ $variant: 'default' | 'hero' }>`
   flex: 1;
-  margin-left: ${SPACING.MD}px;
+  margin-left: ${({ $variant }) => ($variant === 'hero' ? 0 : SPACING.MD)}px;
+  margin-top: ${({ $variant }) => ($variant === 'hero' ? V_SPACING.MD : 0)}px;
 `;
 
 const Title = styled.Text`
@@ -43,11 +48,11 @@ const Title = styled.Text`
   color: ${COLORS.RED_BRIGHT};
 `;
 
-const Quote = styled.Text`
+const Quote = styled.Text<{ $variant: 'default' | 'hero' }>`
   margin-top: ${V_SPACING.XS}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.MD}px;
-  line-height: ${FONT_SIZES.MD * 1.3}px;
+  font-size: ${({ $variant }) => ($variant === 'hero' ? FONT_SIZES.LG : FONT_SIZES.MD)}px;
+  line-height: ${({ $variant }) => ($variant === 'hero' ? FONT_SIZES.LG * 1.35 : FONT_SIZES.MD * 1.3)}px;
   color: ${COLORS.TEXT};
 `;
 
@@ -60,7 +65,7 @@ const Author = styled.Text`
 `;
 
 const Hint = styled.Text`
-  margin-top: ${V_SPACING.XS}px;
+  margin-top: ${V_SPACING.SM}px;
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
   color: ${COLORS.TEXT_DIM};
