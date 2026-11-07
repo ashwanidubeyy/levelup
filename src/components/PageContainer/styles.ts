@@ -4,7 +4,7 @@ import { SPACING, V_SPACING } from '../../theme/spacing';
 
 const Container = styled.View`
   flex: 1;
-  background-color: ${COLORS.BACKGROUND};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND};
 `;
 
 const Scroll = styled.ScrollView`

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   DarkTheme,
   NavigationContainer,
@@ -28,7 +28,8 @@ import Planner from '../screens/Planner';
 import { useTrackerLive } from '../hooks/useTrackerLive';
 import { useNotificationSync } from '../hooks/useNotificationSync';
 import { useTrackingSnooze } from '../hooks/useTrackingSnooze';
-import { COLORS } from '../theme/colors';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../theme/types';
 
 export type RootStackParamList = {
   Onboarding: undefined;
@@ -64,24 +65,6 @@ interface AppNavigatorProps {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-const NAVIGATION_THEME: Theme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: COLORS.BLUE,
-    background: COLORS.BACKGROUND,
-    card: COLORS.BACKGROUND_ELEVATED,
-    text: COLORS.TEXT,
-    border: COLORS.PANEL_BORDER,
-    notification: COLORS.RED_BRIGHT,
-  },
-};
-
-const STACK_OPTIONS = {
-  headerShown: false,
-  animation: 'fade_from_bottom' as const,
-  contentStyle: { backgroundColor: COLORS.BACKGROUND },
-};
 
 const TAB_OPTIONS = { headerShown: false, lazy: true };
 
@@ -103,9 +86,35 @@ const MainTabs = () => {
   );
 };
 
-const AppNavigator = ({ initialRoute }: AppNavigatorProps) => (
-  <NavigationContainer theme={NAVIGATION_THEME}>
-    <Stack.Navigator initialRouteName={initialRoute} screenOptions={STACK_OPTIONS}>
+const AppNavigator = ({ initialRoute }: AppNavigatorProps) => {
+  const theme = useTheme() as AppTheme;
+  const navigationTheme: Theme = useMemo(
+    () => ({
+      ...DarkTheme,
+      colors: {
+        ...DarkTheme.colors,
+        primary: theme.colors.BLUE,
+        background: theme.colors.BACKGROUND,
+        card: theme.colors.BACKGROUND_ELEVATED,
+        text: theme.colors.TEXT,
+        border: theme.colors.PANEL_BORDER,
+        notification: theme.colors.RED_BRIGHT,
+      },
+    }),
+    [theme],
+  );
+  const stackOptions = useMemo(
+    () => ({
+      headerShown: false,
+      animation: 'fade_from_bottom' as const,
+      contentStyle: { backgroundColor: theme.colors.BACKGROUND },
+    }),
+    [theme],
+  );
+
+  return (
+  <NavigationContainer theme={navigationTheme}>
+    <Stack.Navigator initialRouteName={initialRoute} screenOptions={stackOptions}>
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
       <Stack.Screen name="Focus" component={Focus} />
@@ -117,6 +126,7 @@ const AppNavigator = ({ initialRoute }: AppNavigatorProps) => (
       <Stack.Screen name="Planner" component={Planner} />
     </Stack.Navigator>
   </NavigationContainer>
-);
+  );
+};
 
 export default AppNavigator;

@@ -17,7 +17,7 @@ const Text = styled.Text`
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.MD}px;
   line-height: ${FONT_SIZES.MD * 1.3}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 export const BulletListStyles = {

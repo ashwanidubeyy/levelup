@@ -13,9 +13,9 @@ const Container = styled.TouchableOpacity<{ $variant: 'default' | 'hero' }>`
   flex-direction: ${({ $variant }) => ($variant === 'hero' ? 'column' : 'row')};
   align-items: ${({ $variant }) => ($variant === 'hero' ? 'stretch' : 'center')};
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
-  background-color: ${COLORS.PANEL_ALT};
+  background-color: ${({ theme }) => theme.colors.PANEL_ALT};
   border-left-width: ${BORDER.THICK}px;
-  border-left-color: ${COLORS.RED_BRIGHT};
+  border-left-color: ${({ theme }) => theme.colors.RED_BRIGHT};
   border-radius: ${RADIUS.MD}px;
   overflow: hidden;
 `;
@@ -45,7 +45,7 @@ const Body = styled.View<{ $variant: 'default' | 'hero' }>`
 
 const Title = styled.Text`
   ${sectionTitleText}
-  color: ${COLORS.RED_BRIGHT};
+  color: ${({ theme }) => theme.colors.RED_BRIGHT};
 `;
 
 const Quote = styled.Text<{ $variant: 'default' | 'hero' }>`
@@ -53,7 +53,7 @@ const Quote = styled.Text<{ $variant: 'default' | 'hero' }>`
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${({ $variant }) => ($variant === 'hero' ? FONT_SIZES.LG : FONT_SIZES.MD)}px;
   line-height: ${({ $variant }) => ($variant === 'hero' ? FONT_SIZES.LG * 1.35 : FONT_SIZES.MD * 1.3)}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Author = styled.Text`
@@ -61,14 +61,14 @@ const Author = styled.Text`
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
   letter-spacing: ${SPACING.XXS}px;
-  color: ${COLORS.TEXT_MUTED};
+  color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 
 const Hint = styled.Text`
   margin-top: ${V_SPACING.SM}px;
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
-  color: ${COLORS.TEXT_DIM};
+  color: ${({ theme }) => theme.colors.TEXT_DIM};
 `;
 
 export const QuoteCardStyles = {

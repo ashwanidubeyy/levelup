@@ -1,19 +1,17 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
-import { COLORS } from '../../theme/colors';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import type { PanelVariant } from '../../types';
-import { accentFor } from '../../utils/variant';
 
 const CORNER = moderateScale(14, 0.9);
 
 const Container = styled.View<{ $variant: PanelVariant }>`
   margin-top: ${V_SPACING.LG}px;
   padding: ${V_SPACING.LG}px ${SPACING.LG}px;
-  background-color: ${COLORS.PANEL_ALT};
+  background-color: ${({ theme }) => theme.colors.PANEL_ALT};
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
   border-radius: ${RADIUS.MD}px;
   overflow: hidden;
 `;
@@ -24,7 +22,7 @@ const TopGlow = styled.View<{ $variant: PanelVariant }>`
   left: ${SPACING.XL}px;
   right: ${SPACING.XL}px;
   height: ${BORDER.THICK}px;
-  background-color: ${({ $variant }) => accentFor($variant)};
+  background-color: ${({ $variant, theme }) => theme.accents[$variant]};
 `;
 
 const CornerTopLeft = styled.View<{ $variant: PanelVariant }>`
@@ -35,7 +33,7 @@ const CornerTopLeft = styled.View<{ $variant: PanelVariant }>`
   height: ${CORNER}px;
   border-top-width: ${BORDER.THICK}px;
   border-left-width: ${BORDER.THICK}px;
-  border-color: ${({ $variant }) => accentFor($variant)};
+  border-color: ${({ $variant, theme }) => theme.accents[$variant]};
   border-top-left-radius: ${RADIUS.MD}px;
 `;
 
@@ -47,7 +45,7 @@ const CornerBottomRight = styled.View<{ $variant: PanelVariant }>`
   height: ${CORNER}px;
   border-bottom-width: ${BORDER.THICK}px;
   border-right-width: ${BORDER.THICK}px;
-  border-color: ${({ $variant }) => accentFor($variant)};
+  border-color: ${({ $variant, theme }) => theme.accents[$variant]};
   border-bottom-right-radius: ${RADIUS.MD}px;
 `;
 
@@ -62,13 +60,13 @@ const Title = styled.Text<{ $variant: PanelVariant }>`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.XS}px;
   letter-spacing: ${SPACING.XXS}px;
-  color: ${({ $variant }) => accentFor($variant)};
+  color: ${({ $variant, theme }) => theme.accents[$variant]};
 `;
 
 const RightLabel = styled.Text`
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT_MUTED};
+  color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 
 export const SystemPanelStyles = {

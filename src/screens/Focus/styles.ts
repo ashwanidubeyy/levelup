@@ -10,7 +10,7 @@ const Clock = styled.Text`
   text-align: center;
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.GIANT}px;
-  color: ${COLORS.YELLOW};
+  color: ${({ theme }) => theme.colors.YELLOW};
 `;
 
 const Hint = styled.Text`
@@ -35,7 +35,7 @@ const Today = styled.Text`
   text-align: center;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.BLUE_LIGHT};
+  color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 export const FocusStyles = { Clock, Hint, Block, Actions, Today };

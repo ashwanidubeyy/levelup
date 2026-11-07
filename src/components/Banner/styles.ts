@@ -12,7 +12,7 @@ const Container = styled.View<{ $variant: PanelVariant }>`
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${({ $variant }) => accentFor($variant)};
+  border-color: ${({ $variant, theme }) => theme.accents[$variant]};
   background-color: ${({ $variant }) => tintFor($variant)};
 `;
 
@@ -20,7 +20,7 @@ const Message = styled.Text`
   flex: 1;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Action = styled.View`

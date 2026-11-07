@@ -13,23 +13,23 @@ const TILE_WIDTH = (Dimensions.get('window').width - SPACING.LG * 2 - COLUMN_GAP
 const Tile = styled.TouchableOpacity`
   width: ${TILE_WIDTH}px;
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Value = styled.Text<{ $accent: PanelVariant }>`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.LG}px;
-  color: ${({ $accent }) => accentFor($accent)};
+  color: ${({ $accent, theme }) => theme.accents[$accent]};
 `;
 
 const Label = styled.Text`
   margin-top: ${V_SPACING.XS}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Hint = styled.Text`

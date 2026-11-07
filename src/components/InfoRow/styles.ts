@@ -10,7 +10,7 @@ const Container = styled.View`
   justify-content: space-between;
   padding: ${V_SPACING.SM}px 0;
   border-bottom-width: ${BORDER.HAIRLINE}px;
-  border-bottom-color: ${COLORS.PANEL};
+  border-bottom-color: ${({ theme }) => theme.colors.PANEL};
 `;
 
 const Label = styled.Text`

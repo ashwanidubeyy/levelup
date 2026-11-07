@@ -9,16 +9,16 @@ const Button = styled.TouchableOpacity`
   justify-content: center;
   min-height: ${V_SPACING.XXL}px;
   padding: ${V_SPACING.SM}px ${SPACING.XS}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Label = styled.Text`
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
   text-align: center;
 `;
 

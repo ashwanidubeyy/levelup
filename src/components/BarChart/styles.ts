@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { COLORS } from '../../theme/colors';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { BORDER, RADIUS, V_SPACING } from '../../theme/spacing';
 
@@ -17,7 +16,7 @@ const Plot = styled.View`
   flex-direction: row;
   align-items: flex-end;
   border-bottom-width: ${BORDER.HAIRLINE}px;
-  border-bottom-color: ${COLORS.PANEL_BORDER};
+  border-bottom-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Column = styled.View`
@@ -44,7 +43,7 @@ const LimitLine = styled.View<{ $bottom: number }>`
   right: 0;
   bottom: ${({ $bottom }) => $bottom}px;
   height: ${BORDER.HAIRLINE}px;
-  background-color: ${COLORS.RED_BRIGHT};
+  background-color: ${({ theme }) => theme.colors.RED_BRIGHT};
   opacity: 0.7;
 `;
 
@@ -64,7 +63,7 @@ const Label = styled.Text`
   top: 0;
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
-  color: ${COLORS.TEXT_DIM};
+  color: ${({ theme }) => theme.colors.TEXT_DIM};
 `;
 
 export const BarChartStyles = {

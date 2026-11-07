@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { AppSettings, TrackedAppId } from '../../types';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
+import { DEFAULT_THEME_ID } from '../../theme/presets';
 
 export interface SettingsState extends AppSettings {
   hydrated: boolean;
@@ -18,6 +19,7 @@ const initialState: SettingsState = {
   appsEnabled: { instagram: true, youtube: true, facebook: true },
   trackingSnoozeUntil: null,
   trackingSnoozeRestore: true,
+  themeId: DEFAULT_THEME_ID,
 };
 
 const settingsSlice = createSlice({
@@ -31,6 +33,7 @@ const settingsSlice = createSlice({
       trackingSnoozeUntil: action.payload?.trackingSnoozeUntil ?? null,
       trackingSnoozeRestore:
         action.payload?.trackingSnoozeRestore === undefined ? true : action.payload.trackingSnoozeRestore,
+      themeId: action.payload?.themeId ?? DEFAULT_THEME_ID,
       hydrated: true,
     }),
     setInstallDay: (state, action: PayloadAction<string>) => {
@@ -76,6 +79,9 @@ const settingsSlice = createSlice({
       state.trackingSnoozeUntil = null;
       state.trackingSnoozeRestore = true;
     },
+    setThemeId: (state, action: PayloadAction<AppSettings['themeId']>) => {
+      state.themeId = action.payload;
+    },
   },
 });
 
@@ -92,6 +98,7 @@ export const {
   startTrackingSnooze,
   clearTrackingSnooze,
   expireTrackingSnooze,
+  setThemeId,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

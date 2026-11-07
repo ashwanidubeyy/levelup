@@ -7,10 +7,10 @@ import { mutedText } from '../../utils/commonStyles';
 const Container = styled.View<{ $granted: boolean }>`
   margin-top: ${V_SPACING.MD}px;
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${({ $granted }) => ($granted ? COLORS.GREEN : COLORS.PANEL_BORDER)};
+  border-color: ${({ $granted, theme }) => ($granted ? theme.colors.GREEN : theme.colors.PANEL_BORDER)};
 `;
 
 const Row = styled.View`
@@ -26,7 +26,7 @@ const Body = styled.View`
 const Title = styled.Text`
   font-family: ${FONTS.BODY_BOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Status = styled.Text<{ $granted: boolean }>`
@@ -34,7 +34,7 @@ const Status = styled.Text<{ $granted: boolean }>`
   font-size: ${FONT_SIZES.XXS}px;
   letter-spacing: ${SPACING.XXS / 2}px;
   margin-top: ${V_SPACING.XS / 2}px;
-  color: ${({ $granted }) => ($granted ? COLORS.GREEN : COLORS.RED_BRIGHT)};
+  color: ${({ $granted, theme }) => ($granted ? theme.colors.GREEN : theme.colors.RED_BRIGHT)};
 `;
 
 const Description = styled.Text`

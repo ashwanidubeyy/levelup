@@ -7,16 +7,16 @@ import { mutedText } from '../../utils/commonStyles';
 const Card = styled.View`
   margin-top: ${V_SPACING.MD}px;
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
-  background-color: ${COLORS.PANEL_ALT};
+  background-color: ${({ theme }) => theme.colors.PANEL_ALT};
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Title = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${COLORS.WHITE};
+  color: ${({ theme }) => theme.colors.WHITE};
 `;
 
 const Meta = styled.Text`
@@ -29,7 +29,7 @@ const Progress = styled.Text`
   margin-top: ${V_SPACING.SM}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.YELLOW};
+  color: ${({ theme }) => theme.colors.YELLOW};
 `;
 
 const Actions = styled.View`

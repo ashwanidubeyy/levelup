@@ -19,7 +19,7 @@ const Weekday = styled.Text`
   text-align: center;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.XS}px;
-  color: ${COLORS.TEXT_DIM};
+  color: ${({ theme }) => theme.colors.TEXT_DIM};
 `;
 
 const Week = styled.View`
@@ -34,15 +34,15 @@ const Cell = styled.TouchableOpacity<{ $selected: boolean; $today: boolean }>`
   align-items: center;
   justify-content: center;
   border-radius: ${RADIUS.PILL}px;
-  background-color: ${({ $selected }) => ($selected ? COLORS.BLUE : COLORS.TRANSPARENT)};
+  background-color: ${({ $selected, theme }) => ($selected ? theme.colors.BLUE : theme.colors.TRANSPARENT)};
   border-width: ${({ $today, $selected }) => ($today && !$selected ? BORDER.HAIRLINE : 0)}px;
-  border-color: ${COLORS.YELLOW};
+  border-color: ${({ theme }) => theme.colors.YELLOW};
 `;
 
 const Day = styled.Text<{ $selected: boolean }>`
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${({ $selected }) => ($selected ? COLORS.WHITE : COLORS.TEXT)};
+  color: ${({ $selected, theme }) => ($selected ? theme.colors.WHITE : theme.colors.TEXT)};
 `;
 
 const Dot = styled.View`
@@ -51,7 +51,7 @@ const Dot = styled.View`
   width: ${moderateScale(4, 0.9)}px;
   height: ${moderateScale(4, 0.9)}px;
   border-radius: ${RADIUS.PILL}px;
-  background-color: ${COLORS.YELLOW};
+  background-color: ${({ theme }) => theme.colors.YELLOW};
 `;
 
 const Spacer = styled.View`

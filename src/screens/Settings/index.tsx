@@ -24,11 +24,16 @@ import { useSettingsActions } from '../../hooks/useSettingsActions';
 import { appLabel, formatDuration } from '../../utils/format';
 import { isTrackingSnoozed, trackingSnoozeLabelMs } from '../../utils/trackingSnooze';
 import { TIME } from '../../constants/common';
+import { THEME_CONSTANTS, THEME_OPTIONS } from '../../constants/theme';
+import { useAppDispatch } from '../../store';
+import { setThemeId } from '../../store/slices/settingsSlice';
+import type { ThemeId } from '../../theme/types';
 
 type Props = RootScreenProps<'Settings'>;
 
 const Settings = ({ navigation }: Props) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const settings = useAppSelector(state => state?.settings);
   const { capabilities, status } = useTrackerState();
   const actions = useSettingsActions();
@@ -102,6 +107,23 @@ const Settings = ({ navigation }: Props) => {
     end.setHours(23, 59, 59, 999);
     actions.snoozeTracking(end.getTime());
   };
+
+  const renderTheme = () => (
+    <SystemPanel title={t(THEME_CONSTANTS.TITLE)} variant="monarch">
+      <SettingsStyles.Hint>{t(THEME_CONSTANTS.HINT)}</SettingsStyles.Hint>
+      {THEME_OPTIONS.map((option: (typeof THEME_OPTIONS)[number]) => {
+        const active = settings?.themeId === option.id;
+        return (
+          <NavRow
+            key={option.id}
+            label={t(option.labelKey)}
+            hint={active ? t(COMMON_CONSTANTS.ON) : t(option.hintKey)}
+            onPress={() => dispatch(setThemeId(option.id as ThemeId))}
+          />
+        );
+      })}
+    </SystemPanel>
+  );
 
   const renderSnooze = () => (
     <SystemPanel title={t(TRACKING_SNOOZE_CONSTANTS.TITLE)} variant="system">
@@ -192,6 +214,7 @@ const Settings = ({ navigation }: Props) => {
           badge={t(TRACKER_CONSTANTS.STATUS.COMING_SOON)}
         />
       ) : null}
+      {renderTheme()}
       {!isIos ? renderTracking() : null}
       {!isIos ? renderSnooze() : null}
       {!isIos ? renderApps() : null}

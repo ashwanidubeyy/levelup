@@ -8,7 +8,7 @@ const Wrap = styled.View`
 `;
 
 const Display = styled.Text`
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
   font-size: ${moderateScale(24, 0.9)}px;
   font-weight: 700;
   text-align: right;
@@ -16,7 +16,7 @@ const Display = styled.Text`
 `;
 
 const Hint = styled.Text`
-  color: ${COLORS.TEXT_DIM};
+  color: ${({ theme }) => theme.colors.TEXT_DIM};
   font-size: ${moderateScale(12, 0.9)}px;
   margin-bottom: ${V_SPACING.SM}px;
 `;
@@ -31,21 +31,21 @@ const Key = styled.TouchableOpacity<{ $wide?: boolean }>`
   width: ${(props: { $wide?: boolean }) => (props?.$wide ? `${scale(156)}px` : `${scale(74)}px`)};
   min-height: ${verticalScale(44)}px;
   border-radius: ${moderateScale(10, 0.9)}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-width: 1px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
   align-items: center;
   justify-content: center;
 `;
 
 const KeyLabel = styled.Text`
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
   font-size: ${moderateScale(16, 0.9)}px;
   font-weight: 600;
 `;
 
 const Error = styled.Text`
-  color: ${COLORS.RED_BRIGHT};
+  color: ${({ theme }) => theme.colors.RED_BRIGHT};
   font-size: ${moderateScale(12, 0.9)}px;
   margin-top: ${V_SPACING.XS}px;
 `;

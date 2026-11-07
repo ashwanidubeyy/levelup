@@ -9,16 +9,16 @@ import { mutedText } from '../../utils/commonStyles';
 const Container = styled.View<{ $accent: PanelVariant }>`
   flex: 1;
   padding: ${V_SPACING.MD}px ${SPACING.MD}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-radius: ${RADIUS.MD}px;
   border-bottom-width: ${BORDER.THICK}px;
-  border-bottom-color: ${({ $accent }) => accentFor($accent)};
+  border-bottom-color: ${({ $accent, theme }) => theme.accents[$accent]};
 `;
 
 const Value = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.LG}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Label = styled.Text`

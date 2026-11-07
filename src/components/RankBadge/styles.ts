@@ -14,9 +14,9 @@ const Container = styled.View<{ $large: boolean; $active: boolean }>`
   height: ${({ $large }) => sizeOf($large)}px;
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.THICK}px;
-  border-color: ${({ $active }) => ($active ? COLORS.BLUE_GLOW : COLORS.PANEL_BORDER)};
+  border-color: ${({ $active, theme }) => ($active ? theme.colors.BLUE_GLOW : theme.colors.PANEL_BORDER)};
   overflow: hidden;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
 `;
 
 const Portrait = styled.Image<{ $active: boolean }>`
@@ -34,8 +34,8 @@ const Letter = styled.Text<{ $large: boolean }>`
   right: ${SPACING.XS}px;
   font-family: ${FONTS.DISPLAY_BLACK};
   font-size: ${({ $large }) => ($large ? FONT_SIZES.XL : FONT_SIZES.MD)}px;
-  color: ${COLORS.WHITE};
-  text-shadow-color: ${COLORS.BLUE_GLOW};
+  color: ${({ theme }) => theme.colors.WHITE};
+  text-shadow-color: ${({ theme }) => theme.colors.BLUE_GLOW};
   text-shadow-radius: ${SPACING.SM}px;
 `;
 

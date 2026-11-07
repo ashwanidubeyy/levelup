@@ -7,7 +7,7 @@ const Xp = styled.Text`
   margin-bottom: ${V_SPACING.SM}px;
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT_MUTED};
+  color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 
 export const LevelCardStyles = { Xp };

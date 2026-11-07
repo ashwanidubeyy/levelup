@@ -13,14 +13,14 @@ const Summary = styled.Text<{ $danger: boolean }>`
   margin-bottom: ${V_SPACING.SM}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${({ $danger }) => ($danger ? COLORS.RED_BRIGHT : COLORS.YELLOW)};
+  color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.YELLOW)};
 `;
 
 const ExpenseBlock = styled.View`
   margin-top: ${V_SPACING.MD}px;
   padding-bottom: ${V_SPACING.SM}px;
   border-bottom-width: ${BORDER.HAIRLINE}px;
-  border-bottom-color: ${COLORS.PANEL_BORDER};
+  border-bottom-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Row = styled.View`
@@ -41,13 +41,13 @@ const Note = styled.Text`
   margin-right: ${SPACING.SM}px;
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Amount = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.WHITE};
+  color: ${({ theme }) => theme.colors.WHITE};
 `;
 
 const Empty = styled.Text`
@@ -59,7 +59,7 @@ const Status = styled.View`
   margin-top: ${V_SPACING.MD}px;
   padding: ${V_SPACING.SM}px ${SPACING.MD}px;
   border-radius: ${RADIUS.MD}px;
-  background-color: ${COLORS.PANEL_ALT};
+  background-color: ${({ theme }) => theme.colors.PANEL_ALT};
 `;
 
 const CategoryWrap = styled.View`
@@ -74,14 +74,14 @@ const CategoryChip = styled.TouchableOpacity<{ $active: boolean }>`
   padding: ${V_SPACING.XS}px ${SPACING.SM}px;
   border-radius: ${RADIUS.SM}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${({ $active }) => ($active ? COLORS.YELLOW : COLORS.PANEL_BORDER)};
-  background-color: ${({ $active }) => ($active ? COLORS.PANEL_ALT : COLORS.PANEL)};
+  border-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.PANEL_BORDER)};
+  background-color: ${({ $active, theme }) => ($active ? theme.colors.PANEL_ALT : theme.colors.PANEL)};
 `;
 
 const CategoryLabel = styled.Text<{ $active: boolean }>`
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.XS}px;
-  color: ${({ $active }) => ($active ? COLORS.YELLOW : COLORS.TEXT_DIM)};
+  color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TEXT_DIM)};
 `;
 
 const CategoryMeta = styled.Text`

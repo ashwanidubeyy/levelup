@@ -10,9 +10,9 @@ const Container = styled.View<{ $bottom: number }>`
   flex-direction: row;
   height: ${({ $bottom }) => V_SPACING.TAB_BAR + $bottom}px;
   padding-bottom: ${({ $bottom }) => $bottom}px;
-  background-color: ${COLORS.BACKGROUND_ELEVATED};
+  background-color: ${({ theme }) => theme.colors.BACKGROUND_ELEVATED};
   border-top-width: ${BORDER.HAIRLINE}px;
-  border-top-color: ${COLORS.PANEL_BORDER};
+  border-top-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Tab = styled.TouchableOpacity`
@@ -27,7 +27,7 @@ const Indicator = styled.View<{ $active: boolean }>`
   left: ${SPACING.LG}px;
   right: ${SPACING.LG}px;
   height: ${INDICATOR_HEIGHT}px;
-  background-color: ${({ $active }) => ($active ? COLORS.YELLOW : COLORS.TRANSPARENT)};
+  background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
 `;
 
 const Label = styled.Text<{ $color: string }>`

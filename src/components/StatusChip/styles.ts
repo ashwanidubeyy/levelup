@@ -9,7 +9,7 @@ const Container = styled.View<{ $color: string }>`
   border-radius: ${RADIUS.SM}px;
   border-width: ${BORDER.HAIRLINE}px;
   border-color: ${({ $color }) => $color};
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
 `;
 
 const Label = styled.Text<{ $color: string }>`

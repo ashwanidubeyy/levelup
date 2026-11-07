@@ -12,13 +12,13 @@ const Track = styled.View<{ $thin: boolean }>`
   flex-direction: row;
   height: ${({ $thin }) => ($thin ? THIN_HEIGHT : HEIGHT)}px;
   border-radius: ${RADIUS.PILL}px;
-  background-color: ${COLORS.PANEL_BORDER};
+  background-color: ${({ theme }) => theme.colors.PANEL_BORDER};
   overflow: hidden;
 `;
 
 const Fill = styled.View<{ $flex: number; $variant: PanelVariant }>`
   flex: ${({ $flex }) => $flex};
-  background-color: ${({ $variant }) => accentFor($variant)};
+  background-color: ${({ $variant, theme }) => theme.accents[$variant]};
   border-radius: ${RADIUS.PILL}px;
 `;
 

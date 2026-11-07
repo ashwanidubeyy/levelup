@@ -11,7 +11,7 @@ const Fullscreen = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: ${COLORS.BLACK};
+  background-color: ${({ theme }) => theme.colors.BLACK};
 `;
 
 const FullImage = styled.Image`
@@ -29,7 +29,7 @@ const Label = styled.Text`
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XS}px;
   letter-spacing: ${SPACING.XS}px;
-  color: ${COLORS.BLUE_LIGHT};
+  color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 export const LoaderStyles = {

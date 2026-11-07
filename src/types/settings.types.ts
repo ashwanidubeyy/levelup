@@ -1,4 +1,5 @@
 import type { TrackedAppId } from './tracker.types';
+import type { ThemeId } from '../theme/types';
 
 export interface AppSettings {
   onboardingComplete: boolean;
@@ -11,4 +12,5 @@ export interface AppSettings {
   appsEnabled: Record<TrackedAppId, boolean>;
   trackingSnoozeUntil: number | null;
   trackingSnoozeRestore: boolean;
+  themeId: ThemeId;
 }

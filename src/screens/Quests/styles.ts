@@ -17,7 +17,7 @@ const LevelInfo = styled.View`
 const RankName = styled.Text`
   font-family: ${FONTS.DISPLAY_BLACK};
   font-size: ${FONT_SIZES.LG}px;
-  color: ${COLORS.WHITE};
+  color: ${({ theme }) => theme.colors.WHITE};
 `;
 
 const LevelText = styled.Text`
@@ -25,7 +25,7 @@ const LevelText = styled.Text`
   margin-bottom: ${V_SPACING.SM}px;
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.XS}px;
-  color: ${COLORS.BLUE_LIGHT};
+  color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 const Note = styled.Text`
@@ -46,7 +46,7 @@ const RungLabel = styled.Text<{ $active: boolean }>`
   margin-top: ${V_SPACING.XS}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.XXS}px;
-  color: ${({ $active }) => ($active ? COLORS.BLUE_GLOW : COLORS.TEXT_DIM)};
+  color: ${({ $active, theme }) => ($active ? theme.colors.BLUE_GLOW : theme.colors.TEXT_DIM)};
 `;
 
 export const QuestsStyles = {

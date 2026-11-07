@@ -11,7 +11,7 @@ const StepLabel = styled.Text`
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
   letter-spacing: ${SPACING.XS}px;
-  color: ${COLORS.BLUE_LIGHT};
+  color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 const Title = styled.Text`
@@ -19,7 +19,7 @@ const Title = styled.Text`
   font-family: ${FONTS.DISPLAY_BLACK};
   font-size: ${FONT_SIZES.XL}px;
   letter-spacing: ${SPACING.XXS}px;
-  color: ${COLORS.WHITE};
+  color: ${({ theme }) => theme.colors.WHITE};
 `;
 
 const Body = styled.Text`
@@ -27,7 +27,7 @@ const Body = styled.Text`
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.MD}px;
   line-height: ${FONT_SIZES.MD * 1.4}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Content = styled.View`

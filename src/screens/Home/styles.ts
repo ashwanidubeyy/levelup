@@ -29,7 +29,7 @@ const AgendaTitle = styled.Text`
   margin-right: ${SPACING.SM}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const AgendaMeta = styled.Text`
@@ -49,7 +49,7 @@ const Count = styled.Text<{ $danger: boolean }>`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.GIANT}px;
   line-height: ${FONT_SIZES.GIANT * 1.05}px;
-  color: ${({ $danger }) => ($danger ? COLORS.RED_BRIGHT : COLORS.WHITE)};
+  color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.WHITE)};
 `;
 
 const Limit = styled.Text`
@@ -57,7 +57,7 @@ const Limit = styled.Text`
   margin-bottom: ${V_SPACING.SM}px;
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.LG}px;
-  color: ${COLORS.TEXT_MUTED};
+  color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 
 const Message = styled.Text<{ $danger: boolean }>`
@@ -65,7 +65,7 @@ const Message = styled.Text<{ $danger: boolean }>`
   margin-bottom: ${V_SPACING.MD}px;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${({ $danger }) => ($danger ? COLORS.RED_BRIGHT : COLORS.TEXT)};
+  color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.TEXT)};
 `;
 
 const DayHint = styled.Text`
@@ -76,7 +76,7 @@ const DayHint = styled.Text`
 const Live = styled.Text<{ $active: boolean }>`
   ${mutedText}
   margin-top: ${V_SPACING.MD}px;
-  color: ${({ $active }) => ($active ? COLORS.BLUE_GLOW : COLORS.TEXT_MUTED)};
+  color: ${({ $active, theme }) => ($active ? theme.colors.BLUE_GLOW : theme.colors.TEXT_MUTED)};
 `;
 
 const Tiles = styled.View`

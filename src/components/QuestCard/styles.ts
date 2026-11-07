@@ -12,7 +12,7 @@ const Container = styled.View<{ $accent: string }>`
   align-items: center;
   margin-bottom: ${V_SPACING.MD}px;
   padding: ${V_SPACING.SM}px ${SPACING.SM}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-radius: ${RADIUS.MD}px;
   border-left-width: ${BORDER.THICK}px;
   border-left-color: ${({ $accent }) => $accent};
@@ -33,7 +33,7 @@ const Body = styled.View`
 const Title = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Description = styled.Text`
@@ -49,7 +49,7 @@ const Footer = styled.View`
 const Xp = styled.Text<{ $negative: boolean }>`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.XS}px;
-  color: ${({ $negative }) => ($negative ? COLORS.RED_BRIGHT : COLORS.GOLD)};
+  color: ${({ $negative, theme }) => ($negative ? theme.colors.RED_BRIGHT : theme.colors.GOLD)};
 `;
 
 export const QuestCardStyles = {

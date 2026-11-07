@@ -30,8 +30,8 @@ const Button = styled.TouchableOpacity<{ $disabled: boolean }>`
   justify-content: center;
   border-radius: ${RADIUS.SM}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.BLUE};
-  background-color: ${COLORS.BLUE_TINT};
+  border-color: ${({ theme }) => theme.colors.BLUE};
+  background-color: ${({ theme }) => theme.colors.BLUE_TINT};
   opacity: ${({ $disabled }) => ($disabled ? 0.4 : 1)};
 `;
 
@@ -40,7 +40,7 @@ const Value = styled.Text`
   text-align: center;
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
   margin-left: ${SPACING.SM}px;
   margin-right: ${SPACING.SM}px;
 `;

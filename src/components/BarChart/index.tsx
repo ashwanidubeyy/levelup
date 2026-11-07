@@ -1,19 +1,14 @@
 import React, { useMemo } from 'react';
+import { useTheme } from 'styled-components/native';
 import type { BarChartProps, BarDatum } from '../../types';
 import { BarChartStyles } from './styles';
-import { COLORS } from '../../theme/colors';
 import { ratio } from '../../utils/helpers';
+import type { AppTheme } from '../../theme/types';
 
 const MIN_VISIBLE_RATIO = 0.02;
 
-const barColor = (datum: BarDatum, limit: number): string => {
-  if (datum?.muted) {
-    return COLORS.PANEL_BORDER;
-  }
-  return datum?.value > limit ? COLORS.RED_BRIGHT : COLORS.BLUE;
-};
-
 const BarChart = ({ data, limit }: BarChartProps) => {
+  const theme = useTheme() as AppTheme;
   const maxValue = useMemo(() => {
     let max = limit;
     data?.forEach((datum: BarDatum) => {
@@ -24,6 +19,13 @@ const BarChart = ({ data, limit }: BarChartProps) => {
 
   const limitRatio = ratio(limit, maxValue);
 
+  const barColor = (datum: BarDatum): string => {
+    if (datum?.muted) {
+      return theme.colors.PANEL_BORDER;
+    }
+    return datum?.value > limit ? theme.colors.RED_BRIGHT : theme.colors.BLUE;
+  };
+
   return (
     <BarChartStyles.Container>
       <BarChartStyles.Plot>
@@ -32,7 +34,7 @@ const BarChart = ({ data, limit }: BarChartProps) => {
           return (
             <BarChartStyles.Column key={datum?.key}>
               <BarChartStyles.Spacer $flex={1 - value} />
-              <BarChartStyles.Bar $flex={value} $color={barColor(datum, limit)} />
+              <BarChartStyles.Bar $flex={value} $color={barColor(datum)} />
             </BarChartStyles.Column>
           );
         })}

@@ -14,9 +14,9 @@ const Container = styled.View<{ $size: HeroSize }>`
   height: ${({ $size }) => HEIGHTS[$size]}px;
   border-radius: ${RADIUS.LG}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
   overflow: hidden;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   justify-content: flex-end;
 `;
 

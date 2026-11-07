@@ -310,6 +310,18 @@ export const en = {
     iosTitle: 'IPHONE',
     iosBody: 'Reel tracking is not available on iPhone. Screen Time usage reports are coming soon.',
     versionTagged: '{{version}} · {{tag}}',
+    theme: {
+      title: 'ANIME THEME',
+      hint: 'Colors and accents across the whole app.',
+      levelup: 'LevelUp default',
+      levelupHint: 'Blue system · gold monarch',
+      onePiece: 'One Piece',
+      onePieceHint: 'Ocean blue · straw-hat gold · crimson',
+      naruto: 'Naruto',
+      narutoHint: 'Hidden Leaf orange · flame red · navy',
+      soloLeveling: 'Solo Leveling',
+      soloLevelingHint: 'Shadow violet · neon blue · monarch glow',
+    },
     trackingSnooze: {
       title: 'Banking & other apps',
       hint: 'Pauses reel tracking so accessibility is idle. LevelUp never blocks other apps — this is a temporary pause only.',

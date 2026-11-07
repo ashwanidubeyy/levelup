@@ -10,10 +10,10 @@ const DOT = moderateScale(8, 0.9);
 const Touchable = styled.TouchableOpacity`
   margin-top: ${V_SPACING.MD}px;
   padding: ${V_SPACING.MD}px ${SPACING.LG}px;
-  background-color: ${COLORS.PANEL};
+  background-color: ${({ theme }) => theme.colors.PANEL};
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${COLORS.PANEL_BORDER};
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Header = styled.View`
@@ -24,7 +24,7 @@ const DateLabel = styled.Text`
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
   letter-spacing: ${SPACING.XXS / 2}px;
-  color: ${COLORS.BLUE_LIGHT};
+  color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 const Mood = styled.View`
@@ -48,7 +48,7 @@ const Title = styled.Text`
   margin-top: ${V_SPACING.SM}px;
   font-family: ${FONTS.BODY_BOLD};
   font-size: ${FONT_SIZES.LG}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Preview = styled.Text`

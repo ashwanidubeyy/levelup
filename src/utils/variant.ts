@@ -1,45 +1,20 @@
-import { COLORS, GRADIENTS } from '../theme/colors';
+import type { AppTheme } from '../theme/types';
 import type { ButtonVariant, ChipVariant, PanelVariant } from '../types';
+import { themeById } from '../theme/presets';
 
-const PANEL_ACCENTS: Record<PanelVariant, string> = {
-  system: COLORS.BLUE,
-  danger: COLORS.RED_BRIGHT,
-  monarch: COLORS.YELLOW,
-};
+const fallback = themeById('levelup');
 
-const PANEL_TINTS: Record<PanelVariant, string> = {
-  system: COLORS.BLUE_TINT,
-  danger: COLORS.RED_TINT,
-  monarch: COLORS.YELLOW_TINT,
-};
+export const accentFor = (variant: PanelVariant = 'system', theme?: AppTheme): string =>
+  theme?.accents[variant] ?? fallback.accents[variant];
 
-const CHIP_COLORS: Record<ChipVariant, string> = {
-  success: COLORS.GREEN,
-  warning: COLORS.GOLD,
-  danger: COLORS.RED_BRIGHT,
-  info: COLORS.BLUE_LIGHT,
-  muted: COLORS.TEXT_MUTED,
-  monarch: COLORS.YELLOW,
-};
+export const tintFor = (variant: PanelVariant = 'system', theme?: AppTheme): string =>
+  theme?.accentTints[variant] ?? fallback.accentTints[variant];
 
-const BUTTON_GRADIENTS: Record<ButtonVariant, readonly string[]> = {
-  primary: GRADIENTS.BUTTON_PRIMARY,
-  danger: GRADIENTS.BUTTON_DANGER,
-  ghost: [COLORS.TRANSPARENT, COLORS.TRANSPARENT],
-};
+export const chipColorFor = (variant: ChipVariant, theme?: AppTheme): string =>
+  theme?.chipColors[variant] ?? fallback.chipColors[variant];
 
-const PANEL_GRADIENTS: Record<PanelVariant, readonly string[]> = {
-  system: GRADIENTS.SYSTEM,
-  danger: GRADIENTS.DANGER,
-  monarch: GRADIENTS.MONARCH,
-};
+export const buttonGradientFor = (variant: ButtonVariant, theme?: AppTheme): readonly string[] =>
+  theme?.buttonGradients[variant] ?? fallback.buttonGradients[variant];
 
-export const accentFor = (variant: PanelVariant = 'system'): string => PANEL_ACCENTS[variant];
-
-export const tintFor = (variant: PanelVariant = 'system'): string => PANEL_TINTS[variant];
-
-export const chipColorFor = (variant: ChipVariant): string => CHIP_COLORS[variant];
-
-export const buttonGradientFor = (variant: ButtonVariant): readonly string[] => BUTTON_GRADIENTS[variant];
-
-export const panelGradientFor = (variant: PanelVariant): readonly string[] => PANEL_GRADIENTS[variant];
+export const panelGradientFor = (variant: PanelVariant, theme?: AppTheme): readonly string[] =>
+  theme?.panelGradients[variant] ?? fallback.panelGradients[variant];

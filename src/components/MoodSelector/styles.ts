@@ -20,8 +20,8 @@ const Chip = styled.TouchableOpacity<{ $active: boolean; $color: string }>`
   padding: ${V_SPACING.SM}px ${SPACING.MD}px;
   border-radius: ${RADIUS.PILL}px;
   border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${({ $active, $color }) => ($active ? $color : COLORS.PANEL_BORDER)};
-  background-color: ${({ $active }) => ($active ? COLORS.PANEL : COLORS.PANEL_ALT)};
+  border-color: ${({ $active, $color, theme }) => ($active ? $color : theme.colors.PANEL_BORDER)};
+  background-color: ${({ $active, theme }) => ($active ? theme.colors.PANEL : theme.colors.PANEL_ALT)};
 `;
 
 const Dot = styled.View<{ $color: string }>`
@@ -35,7 +35,7 @@ const Dot = styled.View<{ $color: string }>`
 const Label = styled.Text<{ $active: boolean }>`
   font-family: ${FONTS.BODY_BOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${({ $active }) => ($active ? COLORS.TEXT : COLORS.TEXT_MUTED)};
+  color: ${({ $active, theme }) => ($active ? theme.colors.TEXT : theme.colors.TEXT_MUTED)};
 `;
 
 export const MoodSelectorStyles = {

@@ -6,7 +6,8 @@ import { moderateScale } from 'react-native-size-matters';
 import { TabBarStyles } from './styles';
 import { Icons } from '../../assets/icons';
 import { TAB_CONSTANTS } from '../../constants/screens';
-import { COLORS } from '../../theme/colors';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 
 const { HomeIcon, JournalIcon, ChallengeIcon, BudgetIcon, MoreIcon } = Icons;
 
@@ -21,6 +22,7 @@ const TAB_ITEMS: Record<string, { Icon: (props: any) => React.JSX.Element; label
 };
 
 const TabBar = ({ state, navigation }: BottomTabBarProps) => {
+  const theme = useTheme() as AppTheme;
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
 
@@ -29,7 +31,7 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
       {state?.routes?.map((route: any, index: number) => {
         const active = state?.index === index;
         const item = TAB_ITEMS[route?.name];
-        const color = active ? COLORS.YELLOW : COLORS.TEXT_DIM;
+        const color = active ? theme.colors.YELLOW : theme.colors.TEXT_DIM;
         const label = t(item?.labelKey ?? '');
         const handlePress = () => {
           const event = navigation.emit({ type: 'tabPress', target: route?.key, canPreventDefault: true });

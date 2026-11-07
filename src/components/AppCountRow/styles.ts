@@ -20,7 +20,7 @@ const Label = styled.Text`
 const Count = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Caption = styled.Text`

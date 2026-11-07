@@ -30,7 +30,7 @@ const Title = styled.Text`
   font-family: ${FONTS.DISPLAY_BLACK};
   font-size: ${FONT_SIZES.XL}px;
   letter-spacing: ${SPACING.XXS}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Subtitle = styled.Text`
@@ -46,7 +46,7 @@ const RightLabel = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.XS}px;
   letter-spacing: ${SPACING.XXS / 2}px;
-  color: ${COLORS.RED_BRIGHT};
+  color: ${({ theme }) => theme.colors.RED_BRIGHT};
 `;
 
 export const ScreenHeaderStyles = {

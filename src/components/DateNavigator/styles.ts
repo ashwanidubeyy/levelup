@@ -23,7 +23,7 @@ const Arrow = styled.TouchableOpacity<{ $disabled: boolean }>`
 const Label = styled.Text`
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 export const DateNavigatorStyles = {

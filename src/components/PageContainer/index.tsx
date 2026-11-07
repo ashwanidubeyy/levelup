@@ -5,7 +5,8 @@ import GradientView from '../GradientView';
 import AnimatedScreenBackdrop from '../AnimatedScreenBackdrop';
 import type { PageContainerProps } from '../../types';
 import { PageContainerStyles } from './styles';
-import { GRADIENTS } from '../../theme/colors';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 
 const PageContainer = ({
   children,
@@ -14,6 +15,7 @@ const PageContainer = ({
   withBottomInset = false,
   animatedBackground = false,
 }: PageContainerProps) => {
+  const theme = useTheme() as AppTheme;
   const insets = useSafeAreaInsets();
   const scrollX = useRef(new Animated.Value(0)).current;
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -35,7 +37,7 @@ const PageContainer = ({
 
   return (
     <PageContainerStyles.Container>
-      <GradientView colors={GRADIENTS.SCREEN} fill />
+      <GradientView colors={[...theme.gradients.SCREEN]} fill />
       {animatedBackground ? <AnimatedScreenBackdrop scrollX={scrollX} scrollY={scrollY} /> : null}
       {scrollable ? (
         <PageContainerStyles.Scroll

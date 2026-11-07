@@ -8,7 +8,7 @@ const Title = styled.Text`
   margin-top: ${V_SPACING.SM}px;
   font-family: ${FONTS.DISPLAY_BOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Body = styled.Text`

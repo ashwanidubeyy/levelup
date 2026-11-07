@@ -17,7 +17,7 @@ const Title = styled.Text`
   flex: 1;
   font-family: ${FONTS.BODY_SEMIBOLD};
   font-size: ${FONT_SIZES.MD}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const When = styled.Text`

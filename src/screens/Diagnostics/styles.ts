@@ -18,20 +18,20 @@ const Actions = styled.View`
 const LogItem = styled.View`
   padding: ${V_SPACING.SM}px 0;
   border-bottom-width: ${BORDER.HAIRLINE}px;
-  border-bottom-color: ${COLORS.PANEL};
+  border-bottom-color: ${({ theme }) => theme.colors.PANEL};
 `;
 
 const LogHeader = styled.Text`
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
-  color: ${COLORS.BLUE_LIGHT};
+  color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 const LogDetail = styled.Text`
   margin-top: ${V_SPACING.XS / 2}px;
   font-family: ${FONTS.BODY_MEDIUM};
   font-size: ${FONT_SIZES.SM}px;
-  color: ${COLORS.TEXT};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 export const DiagnosticsStyles = {

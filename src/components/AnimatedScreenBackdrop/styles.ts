@@ -18,7 +18,7 @@ const Aura = styled(Animated.View)`
   width: ${moderateScale(420, 0.9)}px;
   height: ${moderateScale(420, 0.9)}px;
   border-radius: ${moderateScale(210, 0.9)}px;
-  background-color: ${COLORS.BLUE_TINT};
+  background-color: ${({ theme }) => theme.colors.BLUE_TINT};
 `;
 
 const AuraAlt = styled(Animated.View)`
@@ -26,7 +26,7 @@ const AuraAlt = styled(Animated.View)`
   width: ${moderateScale(340, 0.9)}px;
   height: ${moderateScale(340, 0.9)}px;
   border-radius: ${moderateScale(170, 0.9)}px;
-  background-color: ${COLORS.VIOLET_TINT};
+  background-color: ${({ theme }) => theme.colors.VIOLET_TINT};
 `;
 
 const LeftImage = styled(Animated.Image)`
@@ -53,7 +53,7 @@ const Shimmer = styled(Animated.View)`
   top: 0;
   width: 45%;
   bottom: 0;
-  background-color: ${COLORS.SCRIM_TOP};
+  background-color: ${({ theme }) => theme.colors.SCRIM_TOP};
 `;
 
 export const AnimatedScreenBackdropStyles = {

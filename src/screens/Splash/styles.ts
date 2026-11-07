@@ -10,7 +10,7 @@ const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: ${COLORS.BLACK};
+  background-color: ${({ theme }) => theme.colors.BLACK};
 `;
 
 const Gif = styled.Image`
@@ -23,8 +23,8 @@ const Title = styled.Text`
   font-family: ${FONTS.DISPLAY_BLACK};
   font-size: ${FONT_SIZES.XXL}px;
   letter-spacing: ${SPACING.SM}px;
-  color: ${COLORS.WHITE};
-  text-shadow-color: ${COLORS.BLUE_GLOW};
+  color: ${({ theme }) => theme.colors.WHITE};
+  text-shadow-color: ${({ theme }) => theme.colors.BLUE_GLOW};
   text-shadow-radius: ${SPACING.MD}px;
 `;
 
@@ -33,7 +33,7 @@ const Tagline = styled.Text`
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XXS}px;
   letter-spacing: ${SPACING.XS}px;
-  color: ${COLORS.RED_BRIGHT};
+  color: ${({ theme }) => theme.colors.RED_BRIGHT};
 `;
 
 export const SplashStyles = {
