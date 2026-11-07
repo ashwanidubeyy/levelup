@@ -2,7 +2,8 @@ import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
-import { BORDER, RADIUS, SPACING } from '../../theme/spacing';
+import { BORDER, SPACING } from '../../theme/spacing';
+import { scaleForTheme } from '../../theme/layoutScale';
 import type { ButtonVariant } from '../../types';
 
 const HEIGHT = moderateVerticalScale(50, 0.9);
@@ -17,7 +18,7 @@ const Gradient = styled(LinearGradient)<{ $variant: ButtonVariant; $compact: boo
   height: ${({ $compact }) => ($compact ? COMPACT_HEIGHT : HEIGHT)}px;
   padding-left: ${({ $compact }) => ($compact ? SPACING.LG : SPACING.XL)}px;
   padding-right: ${({ $compact }) => ($compact ? SPACING.LG : SPACING.XL)}px;
-  border-radius: ${RADIUS.SM}px;
+  border-radius: ${({ theme }) => scaleForTheme(theme.layout.buttonRadius, theme.layout.scale)}px;
   border-width: ${BORDER.HAIRLINE}px;
   border-color: ${({ $variant, theme }) =>
     $variant === 'ghost' ? theme.accents.system : theme.colors.TRANSPARENT};

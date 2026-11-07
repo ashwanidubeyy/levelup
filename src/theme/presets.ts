@@ -1,6 +1,14 @@
-import type { AppTheme, ThemeColors, ThemeGradients } from './types';
+import type { AppTheme, ThemeColors, ThemeGradients, ThemeIcons, ThemeLayout, ThemeMotion } from './types';
+import { THEME_BACKDROP_ART, THEME_SCREEN_ASSETS } from './themeArt';
 
-const buildTheme = (id: AppTheme['id'], colors: ThemeColors, accents: AppTheme['accents']): AppTheme => {
+const buildTheme = (
+  id: AppTheme['id'],
+  colors: ThemeColors,
+  accents: AppTheme['accents'],
+  layout: ThemeLayout,
+  motion: ThemeMotion,
+  icons: ThemeIcons,
+): AppTheme => {
   const gradients: ThemeGradients = {
     SYSTEM: [colors.BLUE_DEEP, colors.BACKGROUND_ELEVATED],
     DANGER: [colors.RED_BLOOD, colors.BACKGROUND_ELEVATED],
@@ -39,8 +47,108 @@ const buildTheme = (id: AppTheme['id'], colors: ThemeColors, accents: AppTheme['
       danger: gradients.DANGER,
       monarch: gradients.MONARCH,
     },
+    layout,
+    motion,
+    icons,
+    assets: {
+      backdropArt: THEME_BACKDROP_ART[id],
+      ...THEME_SCREEN_ASSETS[id],
+    },
   };
 };
+
+const LEVELUP_LAYOUT: ThemeLayout = {
+  scale: 1,
+  contentInset: 16,
+  hubGap: 12,
+  panelRadius: 8,
+  buttonRadius: 4,
+  panelFrame: 'corners',
+  tabIndicator: 'line',
+  tabIconScale: 1,
+  letterSpacing: 1,
+};
+
+const ONE_PIECE_LAYOUT: ThemeLayout = {
+  scale: 1.02,
+  contentInset: 18,
+  hubGap: 14,
+  panelRadius: 12,
+  buttonRadius: 8,
+  panelFrame: 'corners',
+  tabIndicator: 'pill',
+  tabIconScale: 1.06,
+  letterSpacing: 1.2,
+};
+
+const NARUTO_LAYOUT: ThemeLayout = {
+  scale: 1,
+  contentInset: 16,
+  hubGap: 10,
+  panelRadius: 6,
+  buttonRadius: 6,
+  panelFrame: 'minimal',
+  tabIndicator: 'line',
+  tabIconScale: 1,
+  letterSpacing: 0.8,
+};
+
+const SOLO_LAYOUT: ThemeLayout = {
+  scale: 0.98,
+  contentInset: 20,
+  hubGap: 16,
+  panelRadius: 16,
+  buttonRadius: 12,
+  panelFrame: 'rounded',
+  tabIndicator: 'glow',
+  tabIconScale: 0.96,
+  letterSpacing: 1.5,
+};
+
+const LEVELUP_MOTION: ThemeMotion = {
+  backdropDriftMs: 14000,
+  backdropShimmerMs: 9000,
+  parallaxX: 0.12,
+  parallaxY: 0.1,
+  auraPulseMax: 1.08,
+  stackAnimation: 'fade_from_bottom',
+  pressScale: 0.98,
+};
+
+const ONE_PIECE_MOTION: ThemeMotion = {
+  backdropDriftMs: 11000,
+  backdropShimmerMs: 7500,
+  parallaxX: 0.15,
+  parallaxY: 0.12,
+  auraPulseMax: 1.1,
+  stackAnimation: 'slide_from_right',
+  pressScale: 0.96,
+};
+
+const NARUTO_MOTION: ThemeMotion = {
+  backdropDriftMs: 12000,
+  backdropShimmerMs: 10000,
+  parallaxX: 0.08,
+  parallaxY: 0.06,
+  auraPulseMax: 1.05,
+  stackAnimation: 'fade',
+  pressScale: 0.99,
+};
+
+const SOLO_MOTION: ThemeMotion = {
+  backdropDriftMs: 16000,
+  backdropShimmerMs: 11000,
+  parallaxX: 0.18,
+  parallaxY: 0.14,
+  auraPulseMax: 1.12,
+  stackAnimation: 'fade_from_bottom',
+  pressScale: 0.94,
+};
+
+const LEVELUP_ICONS: ThemeIcons = { strokeWidth: 2, activeStrokeWidth: 2.5, filled: false };
+const ONE_PIECE_ICONS: ThemeIcons = { strokeWidth: 2.5, activeStrokeWidth: 3, filled: false };
+const NARUTO_ICONS: ThemeIcons = { strokeWidth: 2.25, activeStrokeWidth: 2.75, filled: false };
+const SOLO_ICONS: ThemeIcons = { strokeWidth: 1.75, activeStrokeWidth: 2.25, filled: false };
 
 const LEVELUP_COLORS: ThemeColors = {
   BACKGROUND: '#05060A',
@@ -167,26 +275,54 @@ const SOLO_LEVELING_COLORS: ThemeColors = {
 };
 
 export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
-  levelup: buildTheme('levelup', LEVELUP_COLORS, {
-    system: LEVELUP_COLORS.BLUE,
-    danger: LEVELUP_COLORS.RED_BRIGHT,
-    monarch: LEVELUP_COLORS.YELLOW,
-  }),
-  onePiece: buildTheme('onePiece', ONE_PIECE_COLORS, {
-    system: ONE_PIECE_COLORS.BLUE_LIGHT,
-    danger: ONE_PIECE_COLORS.RED_BRIGHT,
-    monarch: ONE_PIECE_COLORS.YELLOW,
-  }),
-  naruto: buildTheme('naruto', NARUTO_COLORS, {
-    system: NARUTO_COLORS.BLUE_LIGHT,
-    danger: NARUTO_COLORS.RED_BRIGHT,
-    monarch: NARUTO_COLORS.YELLOW,
-  }),
-  soloLeveling: buildTheme('soloLeveling', SOLO_LEVELING_COLORS, {
-    system: SOLO_LEVELING_COLORS.BLUE_GLOW,
-    danger: SOLO_LEVELING_COLORS.VIOLET_GLOW,
-    monarch: SOLO_LEVELING_COLORS.YELLOW,
-  }),
+  levelup: buildTheme(
+    'levelup',
+    LEVELUP_COLORS,
+    {
+      system: LEVELUP_COLORS.BLUE,
+      danger: LEVELUP_COLORS.RED_BRIGHT,
+      monarch: LEVELUP_COLORS.YELLOW,
+    },
+    LEVELUP_LAYOUT,
+    LEVELUP_MOTION,
+    LEVELUP_ICONS,
+  ),
+  onePiece: buildTheme(
+    'onePiece',
+    ONE_PIECE_COLORS,
+    {
+      system: ONE_PIECE_COLORS.BLUE_LIGHT,
+      danger: ONE_PIECE_COLORS.RED_BRIGHT,
+      monarch: ONE_PIECE_COLORS.YELLOW,
+    },
+    ONE_PIECE_LAYOUT,
+    ONE_PIECE_MOTION,
+    ONE_PIECE_ICONS,
+  ),
+  naruto: buildTheme(
+    'naruto',
+    NARUTO_COLORS,
+    {
+      system: NARUTO_COLORS.BLUE_LIGHT,
+      danger: NARUTO_COLORS.RED_BRIGHT,
+      monarch: NARUTO_COLORS.YELLOW,
+    },
+    NARUTO_LAYOUT,
+    NARUTO_MOTION,
+    NARUTO_ICONS,
+  ),
+  soloLeveling: buildTheme(
+    'soloLeveling',
+    SOLO_LEVELING_COLORS,
+    {
+      system: SOLO_LEVELING_COLORS.BLUE_GLOW,
+      danger: SOLO_LEVELING_COLORS.VIOLET_GLOW,
+      monarch: SOLO_LEVELING_COLORS.YELLOW,
+    },
+    SOLO_LAYOUT,
+    SOLO_MOTION,
+    SOLO_ICONS,
+  ),
 };
 
 export const DEFAULT_THEME_ID: AppTheme['id'] = 'levelup';

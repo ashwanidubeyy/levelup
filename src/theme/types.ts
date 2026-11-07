@@ -1,6 +1,49 @@
+import type { ImageSourcePropType } from 'react-native';
 import type { ButtonVariant, ChipVariant, PanelVariant } from '../types';
 
 export type ThemeId = 'levelup' | 'onePiece' | 'naruto' | 'soloLeveling';
+
+export type ThemePanelFrame = 'corners' | 'minimal' | 'rounded';
+
+export type ThemeTabIndicator = 'line' | 'pill' | 'glow';
+
+export type ThemeStackAnimation = 'fade_from_bottom' | 'slide_from_right' | 'fade';
+
+export interface ThemeLayout {
+  scale: number;
+  contentInset: number;
+  hubGap: number;
+  panelRadius: number;
+  buttonRadius: number;
+  panelFrame: ThemePanelFrame;
+  tabIndicator: ThemeTabIndicator;
+  tabIconScale: number;
+  letterSpacing: number;
+}
+
+export interface ThemeMotion {
+  backdropDriftMs: number;
+  backdropShimmerMs: number;
+  parallaxX: number;
+  parallaxY: number;
+  auraPulseMax: number;
+  stackAnimation: ThemeStackAnimation;
+  pressScale: number;
+}
+
+export interface ThemeIcons {
+  strokeWidth: number;
+  activeStrokeWidth: number;
+  filled: boolean;
+}
+
+export interface ThemeAssets {
+  backdropArt: ImageSourcePropType[];
+  settingsBanner: ImageSourcePropType;
+  statsBanner: ImageSourcePropType;
+  journalBanner: ImageSourcePropType;
+  questsBanner: ImageSourcePropType;
+}
 
 export interface ThemeColors {
   BACKGROUND: string;
@@ -59,4 +102,8 @@ export interface AppTheme {
   chipColors: Record<ChipVariant, string>;
   buttonGradients: Record<ButtonVariant, readonly string[]>;
   panelGradients: Record<PanelVariant, readonly string[]>;
+  layout: ThemeLayout;
+  motion: ThemeMotion;
+  icons: ThemeIcons;
+  assets: ThemeAssets;
 }

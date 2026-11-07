@@ -12,6 +12,8 @@ import type { JournalEntry } from '../../types';
 import { JOURNAL_CONSTANTS } from '../../constants/journal';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { SCREEN_IMAGES } from '../../constants/images';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 import { useAppSelector } from '../../store';
 import { formatDateTime } from '../../utils/date';
 import { previewText } from '../../utils/helpers';
@@ -21,6 +23,7 @@ type Props = TabScreenProps<'Journal'>;
 const PREVIEW_LENGTH = 180;
 
 const Journal = ({ navigation }: Props) => {
+  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const entries = useAppSelector(state => state?.journal?.entries) ?? [];
 
@@ -36,7 +39,7 @@ const Journal = ({ navigation }: Props) => {
 
   return (
     <PageContainer animatedBackground>
-      <AnimeHeroCard image={SCREEN_IMAGES.JOURNAL_BANNER} size="short">
+      <AnimeHeroCard image={theme.assets.journalBanner} size="short">
         <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
       </AnimeHeroCard>
       <JournalStyles.Actions>

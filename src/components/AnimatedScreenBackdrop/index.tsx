@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Animated, Easing } from 'react-native';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 import { AnimatedScreenBackdropStyles } from './styles';
-import { QUOTE_FALLBACK_ART } from '../../constants/images';
 
 interface Props {
   scrollX?: Animated.Value;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const AnimatedScreenBackdrop = ({ scrollX, scrollY }: Props) => {
+  const theme = useTheme() as AppTheme;
   const drift = useRef(new Animated.Value(0)).current;
   const shimmer = useRef(new Animated.Value(0)).current;
   const zero = useRef(new Animated.Value(0)).current;
@@ -16,7 +18,7 @@ const AnimatedScreenBackdrop = ({ scrollX, scrollY }: Props) => {
   const offsetY = scrollY ?? zero;
 
   const { leftSource, rightSource } = useMemo(() => {
-    const pool = QUOTE_FALLBACK_ART;
+    const pool = theme.assets.backdropArt;
     const len = pool.length;
     const i = len > 0 ? Math.floor(Math.random() * len) : 0;
     let j = len > 1 ? Math.floor(Math.random() * len) : 0;
@@ -24,19 +26,21 @@ const AnimatedScreenBackdrop = ({ scrollX, scrollY }: Props) => {
       j = (j + 1) % len;
     }
     return { leftSource: pool[i], rightSource: pool[j] };
-  }, []);
+  }, [theme.id]);
 
   useEffect(() => {
+    const driftMs = theme.motion.backdropDriftMs;
+    const shimmerMs = theme.motion.backdropShimmerMs;
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(drift, { toValue: 1, duration: 14000, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
-        Animated.timing(drift, { toValue: 0, duration: 14000, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(drift, { toValue: 1, duration: driftMs, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(drift, { toValue: 0, duration: driftMs, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
       ]),
     );
     const sweep = Animated.loop(
       Animated.timing(shimmer, {
         toValue: 1,
-        duration: 9000,
+        duration: shimmerMs,
         easing: Easing.linear,
         useNativeDriver: true,
       }),
@@ -47,17 +51,17 @@ const AnimatedScreenBackdrop = ({ scrollX, scrollY }: Props) => {
       loop.stop();
       sweep.stop();
     };
-  }, [drift, shimmer]);
+  }, [drift, shimmer, theme.id, theme.motion.backdropDriftMs, theme.motion.backdropShimmerMs]);
 
-  const interactiveX = Animated.multiply(offsetX, -0.12);
-  const interactiveY = Animated.multiply(offsetY, -0.1);
+  const interactiveX = Animated.multiply(offsetX, -theme.motion.parallaxX);
+  const interactiveY = Animated.multiply(offsetY, -theme.motion.parallaxY);
 
   const auraOne = {
     transform: [
       { translateX: Animated.add(drift.interpolate({ inputRange: [0, 1], outputRange: [-18, 22] }), interactiveX) },
       { translateY: Animated.add(drift.interpolate({ inputRange: [0, 1], outputRange: [12, -14] }), interactiveY) },
       {
-        scale: drift.interpolate({ inputRange: [0, 1], outputRange: [1, 1.08] }),
+        scale: drift.interpolate({ inputRange: [0, 1], outputRange: [1, theme.motion.auraPulseMax] }),
       },
     ],
   };

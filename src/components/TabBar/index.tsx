@@ -11,7 +11,7 @@ import type { AppTheme } from '../../theme/types';
 
 const { HomeIcon, JournalIcon, ChallengeIcon, BudgetIcon, MoreIcon } = Icons;
 
-const ICON_SIZE = moderateScale(22, 0.9);
+const BASE_ICON_SIZE = 22;
 
 const TAB_ITEMS: Record<string, { Icon: (props: any) => React.JSX.Element; labelKey: string }> = {
   Home: { Icon: HomeIcon, labelKey: TAB_CONSTANTS.HOME },
@@ -21,10 +21,18 @@ const TAB_ITEMS: Record<string, { Icon: (props: any) => React.JSX.Element; label
   More: { Icon: MoreIcon, labelKey: TAB_CONSTANTS.MORE },
 };
 
+const INDICATOR_BY_MODE = {
+  line: TabBarStyles.IndicatorLine,
+  pill: TabBarStyles.IndicatorPill,
+  glow: TabBarStyles.IndicatorGlow,
+} as const;
+
 const TabBar = ({ state, navigation }: BottomTabBarProps) => {
   const theme = useTheme() as AppTheme;
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const Indicator = INDICATOR_BY_MODE[theme.layout.tabIndicator];
+  const iconSize = moderateScale(BASE_ICON_SIZE * theme.layout.tabIconScale, 0.9);
 
   return (
     <TabBarStyles.Container $bottom={insets.bottom}>
@@ -32,6 +40,7 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
         const active = state?.index === index;
         const item = TAB_ITEMS[route?.name];
         const color = active ? theme.colors.YELLOW : theme.colors.TEXT_DIM;
+        const strokeWidth = active ? theme.icons.activeStrokeWidth : theme.icons.strokeWidth;
         const label = t(item?.labelKey ?? '');
         const handlePress = () => {
           const event = navigation.emit({ type: 'tabPress', target: route?.key, canPreventDefault: true });
@@ -47,8 +56,8 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
             accessibilityState={{ selected: active }}
             accessibilityLabel={label}
           >
-            <TabBarStyles.Indicator $active={active} />
-            {item ? <item.Icon size={ICON_SIZE} color={color} /> : null}
+            <Indicator $active={active} />
+            {item ? <item.Icon size={iconSize} color={color} strokeWidth={strokeWidth} /> : null}
             <TabBarStyles.Label $color={color} numberOfLines={1}>{label?.toUpperCase()}</TabBarStyles.Label>
           </TabBarStyles.Tab>
         );

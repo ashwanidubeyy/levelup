@@ -1,10 +1,11 @@
 import styled from 'styled-components/native';
-import { moderateVerticalScale } from 'react-native-size-matters';
-import { COLORS } from '../../theme/colors';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
 
 const INDICATOR_HEIGHT = moderateVerticalScale(3, 0.9);
+const PILL_INDICATOR_HEIGHT = moderateVerticalScale(4, 0.9);
+const GLOW_INDICATOR_HEIGHT = moderateVerticalScale(5, 0.9);
 
 const Container = styled.View<{ $bottom: number }>`
   flex-direction: row;
@@ -21,7 +22,7 @@ const Tab = styled.TouchableOpacity`
   justify-content: center;
 `;
 
-const Indicator = styled.View<{ $active: boolean }>`
+const IndicatorLine = styled.View<{ $active: boolean }>`
   position: absolute;
   top: 0;
   left: ${SPACING.LG}px;
@@ -30,17 +31,41 @@ const Indicator = styled.View<{ $active: boolean }>`
   background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
 `;
 
+const IndicatorPill = styled.View<{ $active: boolean }>`
+  position: absolute;
+  top: ${V_SPACING.XS}px;
+  align-self: center;
+  width: ${moderateScale(36, 0.9)}px;
+  height: ${PILL_INDICATOR_HEIGHT}px;
+  border-radius: ${moderateScale(8, 0.9)}px;
+  background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
+`;
+
+const IndicatorGlow = styled.View<{ $active: boolean }>`
+  position: absolute;
+  top: 0;
+  left: ${SPACING.MD}px;
+  right: ${SPACING.MD}px;
+  height: ${GLOW_INDICATOR_HEIGHT}px;
+  border-bottom-left-radius: ${moderateScale(6, 0.9)}px;
+  border-bottom-right-radius: ${moderateScale(6, 0.9)}px;
+  background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
+  opacity: ${({ $active }) => ($active ? 0.95 : 0)};
+`;
+
 const Label = styled.Text<{ $color: string }>`
   margin-top: ${V_SPACING.XS}px;
   font-family: ${FONTS.DISPLAY_MEDIUM};
   font-size: ${FONT_SIZES.XXS * 0.9}px;
-  letter-spacing: ${SPACING.XXS / 2}px;
+  letter-spacing: ${({ theme }) => theme.layout.letterSpacing}px;
   color: ${({ $color }) => $color};
 `;
 
 export const TabBarStyles = {
   Container,
   Tab,
-  Indicator,
+  IndicatorLine,
+  IndicatorPill,
+  IndicatorGlow,
   Label,
 };

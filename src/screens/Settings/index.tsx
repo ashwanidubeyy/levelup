@@ -17,7 +17,7 @@ import { SETTINGS_CONSTANTS } from '../../constants/screens';
 import { TRACKING_SNOOZE_CONSTANTS, TRACKING_SNOOZE_RULES } from '../../constants/trackingSnooze';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
-import { SCREEN_IMAGES } from '../../constants/images';
+import { useTheme } from 'styled-components/native';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
@@ -27,11 +27,12 @@ import { TIME } from '../../constants/common';
 import { THEME_CONSTANTS, THEME_OPTIONS } from '../../constants/theme';
 import { useAppDispatch } from '../../store';
 import { setThemeId } from '../../store/slices/settingsSlice';
-import type { ThemeId } from '../../theme/types';
+import type { AppTheme, ThemeId } from '../../theme/types';
 
 type Props = RootScreenProps<'Settings'>;
 
 const Settings = ({ navigation }: Props) => {
+  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(state => state?.settings);
@@ -199,7 +200,7 @@ const Settings = ({ navigation }: Props) => {
 
   return (
     <PageContainer>
-      <AnimeHeroCard image={SCREEN_IMAGES.SETTINGS_BANNER} size="short">
+      <AnimeHeroCard image={theme.assets.settingsBanner} size="short">
         <ScreenHeader
           title={t(SETTINGS_CONSTANTS.TITLE)}
           subtitle={t(SETTINGS_CONSTANTS.SUBTITLE)}

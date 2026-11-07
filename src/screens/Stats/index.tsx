@@ -20,6 +20,8 @@ import { STATS_CONSTANTS, HOME_CONSTANTS } from '../../constants/screens';
 import { COMMON_CONSTANTS, TRACKED_APP_IDS } from '../../constants/common';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
 import { SCREEN_IMAGES } from '../../constants/images';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useDayStats, useMonthStats } from '../../hooks/useStatsData';
@@ -30,6 +32,7 @@ import { appLabel, appShortLabel, formatDuration } from '../../utils/format';
 import { buildMonthChart, isSameOrAfterMonth } from '../../utils/stats';
 
 const Stats = ({ navigation }: RootScreenProps<'Stats'>) => {
+  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
   const { status } = useTrackerState();
@@ -178,7 +181,7 @@ const Stats = ({ navigation }: RootScreenProps<'Stats'>) => {
 
   return (
     <PageContainer>
-      <AnimeHeroCard image={SCREEN_IMAGES.STATS_BANNER} size="short">
+      <AnimeHeroCard image={theme.assets.statsBanner} size="short">
         <ScreenHeader
           title={t(STATS_CONSTANTS.TITLE)}
           subtitle={t(STATS_CONSTANTS.SUBTITLE)}

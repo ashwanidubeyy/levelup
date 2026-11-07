@@ -106,10 +106,10 @@ const AppNavigator = ({ initialRoute }: AppNavigatorProps) => {
   const stackOptions = useMemo(
     () => ({
       headerShown: false,
-      animation: 'fade_from_bottom' as const,
+      animation: theme.motion.stackAnimation,
       contentStyle: { backgroundColor: theme.colors.BACKGROUND },
     }),
-    [theme],
+    [theme.colors.BACKGROUND, theme.motion.stackAnimation],
   );
 
   return (

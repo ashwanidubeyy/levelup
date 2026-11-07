@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
-import { COLORS } from '../../theme/colors';
-import { SPACING, V_SPACING } from '../../theme/spacing';
+import { scaleForTheme } from '../../theme/layoutScale';
+import { V_SPACING } from '../../theme/spacing';
 
 const Container = styled.View`
   flex: 1;
@@ -15,8 +15,8 @@ const Content = styled.View<{ $top: number; $bottom: number; $grow: boolean }>`
   position: relative;
   z-index: 1;
   ${({ $grow }) => ($grow ? 'flex: 1;' : '')}
-  padding-left: ${SPACING.LG}px;
-  padding-right: ${SPACING.LG}px;
+  padding-left: ${({ theme }) => scaleForTheme(theme.layout.contentInset, theme.layout.scale)}px;
+  padding-right: ${({ theme }) => scaleForTheme(theme.layout.contentInset, theme.layout.scale)}px;
   padding-top: ${({ $top }) => $top + V_SPACING.MD}px;
   padding-bottom: ${({ $bottom }) => $bottom + V_SPACING.XL}px;
 `;

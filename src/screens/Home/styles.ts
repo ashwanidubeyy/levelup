@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
+import { scaleForTheme } from '../../theme/layoutScale';
 import { mutedText } from '../../utils/commonStyles';
 
 const Shortcuts = styled.View`
@@ -13,7 +14,7 @@ const Shortcuts = styled.View`
 const Hub = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  gap: ${SPACING.MD}px;
+  gap: ${({ theme }) => scaleForTheme(theme.layout.hubGap, theme.layout.scale)}px;
   margin-top: ${V_SPACING.LG}px;
 `;
 

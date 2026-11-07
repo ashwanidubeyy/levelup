@@ -33,6 +33,8 @@ import { formatAgendaDay, formatDayLabel, formatTime, todayKey } from '../../uti
 import { buildAgenda } from '../../utils/agenda';
 import { openShortcut } from '../../utils/appLinks';
 import { openTodosForDay } from '../../utils/todos';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 
 type Props = TabScreenProps<'Home'>;
 
@@ -50,6 +52,7 @@ const agendaMeta = (item: AgendaItem, translate: (key: string, options?: Record<
 };
 
 const Home = ({ navigation }: Props) => {
+  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const rootNavigation = navigation.getParent<NavigationProp<RootStackParamList>>();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
@@ -60,7 +63,7 @@ const Home = ({ navigation }: Props) => {
   const { today: todayResult, todayUsage, live, status } = useTrackerState();
   const { openPermission, changeTracking } = useSettingsActions();
   const [quoteIndex, setQuoteIndex] = useState(quoteIndexForToday);
-  const quote = quoteAt(quoteIndex);
+  const quote = quoteAt(quoteIndex, theme.assets.backdropArt);
   const counts = resultData(todayResult);
   const usage = resultData(todayUsage);
   const total = counts?.total ?? 0;

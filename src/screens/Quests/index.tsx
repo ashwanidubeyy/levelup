@@ -14,6 +14,8 @@ import type { QuestProgress, RankId, XpLogEntry } from '../../types';
 import { QUEST_CONSTANTS, QUEST_TITLE_KEYS, RANKS } from '../../constants/quests';
 import { HOME_CONSTANTS } from '../../constants/screens';
 import { SCREEN_IMAGES } from '../../constants/images';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
 import { useAppSelector } from '../../store';
 import { useQuestBoard } from '../../hooks/useQuestBoard';
@@ -21,6 +23,7 @@ import { formatDayLabel } from '../../utils/date';
 import { toQuestCardProps, xpLabel } from '../../utils/format';
 
 const Quests = () => {
+  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
   const { quests, penalty, levelInfo, log, input } = useQuestBoard();
@@ -29,7 +32,7 @@ const Quests = () => {
 
   return (
     <PageContainer>
-      <AnimeHeroCard image={SCREEN_IMAGES.QUESTS_BANNER} size="short">
+      <AnimeHeroCard image={theme.assets.questsBanner} size="short">
         <ScreenHeader title={t(QUEST_CONSTANTS.TITLE)} subtitle={t(QUEST_CONSTANTS.SUBTITLE)} />
       </AnimeHeroCard>
       <SystemPanel title={t(QUEST_CONSTANTS.CURRENT)} rightLabel={t(QUEST_CONSTANTS.RANK_LABEL, { rank: levelInfo.rank })} variant="monarch">

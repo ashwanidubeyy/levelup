@@ -1,18 +1,19 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { FONTS, FONT_SIZES } from '../../theme/typography';
-import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
+import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
+import { scaleForTheme } from '../../theme/layoutScale';
 import type { PanelVariant } from '../../types';
 
 const CORNER = moderateScale(14, 0.9);
 
-const Container = styled.View<{ $variant: PanelVariant }>`
+const Container = styled.View<{ $variant: PanelVariant; $rounded: boolean }>`
   margin-top: ${V_SPACING.LG}px;
   padding: ${V_SPACING.LG}px ${SPACING.LG}px;
   background-color: ${({ theme }) => theme.colors.PANEL_ALT};
-  border-width: ${BORDER.HAIRLINE}px;
-  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
-  border-radius: ${RADIUS.MD}px;
+  border-width: ${({ $rounded }) => ($rounded ? BORDER.THICK : BORDER.HAIRLINE)}px;
+  border-color: ${({ $variant, $rounded, theme }) => ($rounded ? theme.accents[$variant] : theme.colors.PANEL_BORDER)};
+  border-radius: ${({ theme }) => scaleForTheme(theme.layout.panelRadius, theme.layout.scale)}px;
   overflow: hidden;
 `;
 
@@ -34,7 +35,7 @@ const CornerTopLeft = styled.View<{ $variant: PanelVariant }>`
   border-top-width: ${BORDER.THICK}px;
   border-left-width: ${BORDER.THICK}px;
   border-color: ${({ $variant, theme }) => theme.accents[$variant]};
-  border-top-left-radius: ${RADIUS.MD}px;
+  border-top-left-radius: ${({ theme }) => scaleForTheme(theme.layout.panelRadius, theme.layout.scale)}px;
 `;
 
 const CornerBottomRight = styled.View<{ $variant: PanelVariant }>`
@@ -46,7 +47,7 @@ const CornerBottomRight = styled.View<{ $variant: PanelVariant }>`
   border-bottom-width: ${BORDER.THICK}px;
   border-right-width: ${BORDER.THICK}px;
   border-color: ${({ $variant, theme }) => theme.accents[$variant]};
-  border-bottom-right-radius: ${RADIUS.MD}px;
+  border-bottom-right-radius: ${({ theme }) => scaleForTheme(theme.layout.panelRadius, theme.layout.scale)}px;
 `;
 
 const Header = styled.View`

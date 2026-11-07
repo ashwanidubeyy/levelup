@@ -31,13 +31,14 @@ const hashToIndex = (value: string, modulo: number): number => {
   return modulo > 0 ? hash % modulo : 0;
 };
 
-const fallbackArtForQuote = (id: string): ImageSourcePropType =>
-  QUOTE_FALLBACK_ART[hashToIndex(id, QUOTE_FALLBACK_ART.length)] ?? QUOTE_FALLBACK_ART[0];
+const fallbackArtForQuote = (id: string, pool: ImageSourcePropType[]): ImageSourcePropType =>
+  pool[hashToIndex(id, pool.length)] ?? pool[0];
 
-export const quoteAt = (index: number): QuoteEntry => {
+export const quoteAt = (index: number, artPool?: ImageSourcePropType[]): QuoteEntry => {
+  const pool = artPool?.length ? artPool : QUOTE_FALLBACK_ART;
   const position = ((index % QUOTES.length) + QUOTES.length) % QUOTES.length;
   const entry = QUOTES[(position * quoteStride) % QUOTES.length];
-  const image = entry.image ?? fallbackArtForQuote(entry.id);
+  const image = entry.image ?? fallbackArtForQuote(entry.id, pool);
   return { ...entry, image };
 };
 
