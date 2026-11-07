@@ -17,7 +17,7 @@ const LevelInfo = styled.View`
 const RankName = styled.Text`
   font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BLACK};
   font-size: ${({ theme }) => themeFontSize(theme, 'LG')}px;
-  color: ${({ theme }) => theme.colors.WHITE};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const LevelText = styled.Text`

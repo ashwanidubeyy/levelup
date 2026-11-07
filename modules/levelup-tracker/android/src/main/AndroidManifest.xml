@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
@@ -34,6 +35,38 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/reel_count_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.levelup.tracker.widget.DigitalClockWidgetProvider"
+            android:exported="true"
+            android:label="@string/levelup_clock_digital_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/clock_digital_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.levelup.tracker.widget.AnalogClockWidgetProvider"
+            android:exported="true"
+            android:label="@string/levelup_clock_analog_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/clock_analog_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.levelup.tracker.widget.ClockWidgetTickReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.levelup.tracker.widget.CLOCK_TICK" />
+            </intent-filter>
         </receiver>
 
         <receiver

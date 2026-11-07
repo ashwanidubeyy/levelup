@@ -10,5 +10,7 @@ class WidgetBootReceiver : BroadcastReceiver() {
             return
         }
         ReelCountWidgetProvider.refreshAll(context)
+        ClockWidgetRenderer.renderAll(context)
+        ClockWidgetScheduler.schedule(context)
     }
 }

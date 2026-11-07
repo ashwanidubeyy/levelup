@@ -1,191 +1,155 @@
-import React, { useState } from 'react';
-import type { NavigationProp } from '@react-navigation/native';
+import React, { useEffect, useRef } from 'react';
+import { Animated } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { RootStackParamList, TabScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
-import QuoteCard from '../../components/QuoteCard';
-import HubTile from '../../components/HubTile';
-import SystemPanel from '../../components/SystemPanel';
-import StatBar from '../../components/StatBar';
-import StatTile from '../../components/StatTile';
-import AppCountRow from '../../components/AppCountRow';
-import Banner from '../../components/Banner';
-import ComingSoonCard from '../../components/ComingSoonCard';
-import ScreenHeader from '../../components/ScreenHeader';
+import FadeInView from '../../components/FadeInView';
 import AnimeClockWidget from '../../components/AnimeClockWidget';
+import ChallengeRewardCard from '../../components/ChallengeRewardCard';
 import { HomeStyles } from './styles';
-import type { JournalEntry, TrackedAppId } from '../../types';
 import { HOME_CONSTANTS, ONBOARDING_CONSTANTS } from '../../constants/screens';
-import { HUB_CONSTANTS } from '../../constants/hub';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
-import { FOCUS_RULES } from '../../constants/focus';
-import { JOURNAL_CONSTANTS } from '../../constants/journal';
-import { COMMON_CONSTANTS, TRACKED_APP_IDS } from '../../constants/common';
-import { HOME_RULES } from '../../constants/shortcuts';
-import { useAppSelector } from '../../store';
+import { CHALLENGE_CONSTANTS, CHALLENGE_RULES, XP_SOURCES } from '../../constants/challenges';
+import { COMMON_CONSTANTS, TIME } from '../../constants/common';
+import { TRACKING_SNOOZE_RULES } from '../../constants/trackingSnooze';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { checkInChallenge } from '../../store/slices/challengeSlice';
+import { awardXp } from '../../store/slices/questSlice';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
-import { previewText, quoteAt, quoteIndexForToday, ratio } from '../../utils/helpers';
-import { QUOTES } from '../../constants/quotes';
+import { clamp, ratio } from '../../utils/helpers';
 import { resultData } from '../../utils/trackerResult';
-import { appLabel, formatDuration, limitMessage } from '../../utils/format';
-import { expensesForMonth, formatAmount, monthKeyFromDay, sumExpenses } from '../../utils/money';
+import { appLabel, formatDuration } from '../../utils/format';
 import { todayKey } from '../../utils/date';
-import { openTodosForDay } from '../../utils/todos';
-import { useTheme } from 'styled-components/native';
-import type { AppTheme } from '../../theme/types';
+import { activeChallenge, canCheckIn, challengeRatio, challengeStreak } from '../../utils/challenges';
+import { isTrackingSnoozed } from '../../utils/trackingSnooze';
+import { makeXp } from '../../utils/progress';
 
-type Props = TabScreenProps<'Home'>;
-
-const Home = ({ navigation }: Props) => {
-  const theme = useTheme() as AppTheme;
+const Home = () => {
   const { t } = useTranslation();
-  const rootNavigation = navigation.getParent<NavigationProp<RootStackParamList>>();
-  const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
-  const todoItems = useAppSelector(state => state?.todos?.items) ?? [];
-  const budget = useAppSelector(state => state?.budget);
-  const entries = useAppSelector(state => state?.journal?.entries) ?? [];
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector(state => state?.settings);
+  const dailyLimit = settings?.dailyLimit ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
+  const challenges = useAppSelector(state => state?.challenges?.items) ?? [];
   const { today: todayResult, todayUsage, live, status } = useTrackerState();
-  const { openPermission, changeTracking } = useSettingsActions();
-  const [quoteIndex, setQuoteIndex] = useState(quoteIndexForToday);
-  const quote = quoteAt(quoteIndex, theme.assets.backdropArt);
+  const actions = useSettingsActions();
   const counts = resultData(todayResult);
   const usage = resultData(todayUsage);
   const total = counts?.total ?? 0;
-  const danger = ratio(total, dailyLimit) >= TRACKER_CONSTANTS.WARNING_RATIO;
+  const exceeded = total > dailyLimit;
+  const progress = ratio(total, dailyLimit);
   const isIos = status === 'comingSoon';
   const day = todayKey();
-  const latest = entries?.[0] as JournalEntry | undefined;
-  const spent = sumExpenses(expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)));
-  const monthly = budget?.monthlyBudget ?? 0;
-  const remaining = monthly - spent;
-  const openTasks = openTodosForDay(todoItems, day);
+  const challenge = activeChallenge(challenges, day);
+  const streak = challengeStreak(challenge, day);
+  const snoozed = isTrackingSnoozed(settings, Date.now());
+  const fill = useRef(new Animated.Value(0)).current;
 
+  useEffect(() => {
+    Animated.timing(fill, {
+      toValue: clamp(progress, 0, 1),
+      duration: 420,
+      useNativeDriver: false,
+    }).start();
+  }, [fill, progress]);
+
+  const barWidth = fill.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] });
   const liveLabel = live?.inFeed
     ? t(TRACKER_CONSTANTS.LIVE.IN_FEED, { app: appLabel(live?.app, t), count: live?.sessionCount ?? 0 })
     : t(TRACKER_CONSTANTS.LIVE.IDLE);
 
-  const renderBanner = () => {
-    switch (status) {
-      case 'permissionRequired':
-        return (
-          <Banner
-            message={t(HOME_CONSTANTS.PERMISSION_BANNER)}
-            actionLabel={t(HOME_CONSTANTS.FIX)}
-            onAction={() => openPermission('accessibility')}
-          />
-        );
-      case 'paused':
-        return (
-          <Banner
-            message={t(HOME_CONSTANTS.PAUSED_BANNER)}
-            actionLabel={t(HOME_CONSTANTS.RESUME)}
-            onAction={() => changeTracking(true)}
-            variant="system"
-          />
-        );
-      case 'notConnected':
-        return <Banner message={t(ONBOARDING_CONSTANTS.ACCESSIBILITY.WAITING)} variant="system" />;
-      case 'comingSoon':
-        return <Banner message={t(HOME_CONSTANTS.IOS_BANNER)} variant="monarch" />;
-      default:
-        return null;
+  const handleCheckIn = () => {
+    if (!challenge || !canCheckIn(challenge, day)) {
+      return;
     }
+    dispatch(checkInChallenge({ id: challenge.id, day }));
+    dispatch(awardXp(makeXp(day, XP_SOURCES.CHECK_IN, CHALLENGE_RULES.CHECK_IN_XP)));
+  };
+
+  const handleSnooze = () => {
+    if (snoozed) {
+      actions.endSnooze();
+      return;
+    }
+    actions.snoozeTracking(Date.now() + TRACKING_SNOOZE_RULES.MINUTES[0] * TIME.MINUTE_MS);
   };
 
   const renderTracker = () =>
     isIos ? (
-      <ComingSoonCard
-        title={t(HOME_CONSTANTS.TODAY_TITLE)}
-        body={t(TRACKER_CONSTANTS.REASONS['ios-family-controls-entitlement-required'])}
-        badge={t(TRACKER_CONSTANTS.STATUS.COMING_SOON)}
-      />
+      <HomeStyles.Card>
+        <HomeStyles.CardTitle>{t(TRACKER_CONSTANTS.STATUS.COMING_SOON)}</HomeStyles.CardTitle>
+        <HomeStyles.Body>{t(HOME_CONSTANTS.IOS_BANNER)}</HomeStyles.Body>
+      </HomeStyles.Card>
     ) : (
-      <SystemPanel
-        title={t(HOME_CONSTANTS.TODAY_TITLE)}
-        rightLabel={t(TRACKER_CONSTANTS.STATUS_LABELS[status])}
-        variant={danger ? 'danger' : 'system'}
-      >
-        <HomeStyles.CountRow>
-          <HomeStyles.Count $danger={danger}>{total}</HomeStyles.Count>
-          <HomeStyles.Limit>{t(HOME_CONSTANTS.LIMIT_OF, { limit: dailyLimit })}</HomeStyles.Limit>
-        </HomeStyles.CountRow>
-        <HomeStyles.Message $danger={total > dailyLimit}>{limitMessage(total, dailyLimit, t)}</HomeStyles.Message>
-        <HomeStyles.DayHint>{t(HOME_CONSTANTS.REEL_DAY_HINT)}</HomeStyles.DayHint>
-        <StatBar progress={ratio(total, dailyLimit)} variant={danger ? 'danger' : 'system'} />
+      <HomeStyles.Card>
+        <HomeStyles.CardHeader>
+          <HomeStyles.CardTitle>{t(HOME_CONSTANTS.REEL_TITLE)}</HomeStyles.CardTitle>
+          <HomeStyles.CardValue>{t(HOME_CONSTANTS.REEL_RATIO, { count: total, limit: dailyLimit })}</HomeStyles.CardValue>
+        </HomeStyles.CardHeader>
+        <HomeStyles.Track>
+          <HomeStyles.Fill $danger={exceeded} style={{ width: barWidth }} />
+        </HomeStyles.Track>
+        <HomeStyles.MetaRow>
+          <HomeStyles.Meta>{t(HOME_CONSTANTS.FEED_LINE, { time: formatDuration(usage?.feedTimeMs ?? 0, t) })}</HomeStyles.Meta>
+          <HomeStyles.Snooze onPress={handleSnooze} accessibilityRole="button">
+            <HomeStyles.SnoozeLabel>
+              {t(snoozed ? HOME_CONSTANTS.RESUME : HOME_CONSTANTS.SNOOZE)}
+            </HomeStyles.SnoozeLabel>
+          </HomeStyles.Snooze>
+        </HomeStyles.MetaRow>
         <HomeStyles.Live $active={!!live?.inFeed}>{liveLabel}</HomeStyles.Live>
-        <HomeStyles.Tiles>
-          <StatTile label={t(HOME_CONSTANTS.FEED_TIME)} value={formatDuration(usage?.feedTimeMs ?? 0, t)} />
-          <StatTile label={t(HOME_CONSTANTS.SESSIONS)} value={`${counts?.sessions ?? 0}`} accent="monarch" />
-        </HomeStyles.Tiles>
-        {TRACKED_APP_IDS.map((app: TrackedAppId) => (
-          <AppCountRow
-            key={app}
-            label={appLabel(app, t)}
-            count={counts?.byApp?.[app] ?? 0}
-            max={Math.max(total, 1)}
-          />
-        ))}
-      </SystemPanel>
+        {status === 'permissionRequired' ? (
+          <HomeStyles.NoteAction onPress={() => actions.openPermission('accessibility')}>
+            {t(HOME_CONSTANTS.PERMISSION_BANNER)}
+          </HomeStyles.NoteAction>
+        ) : null}
+        {status === 'paused' && !snoozed ? (
+          <HomeStyles.NoteAction onPress={() => actions.changeTracking(true)}>{t(HOME_CONSTANTS.PAUSED_BANNER)}</HomeStyles.NoteAction>
+        ) : null}
+        {status === 'notConnected' ? <HomeStyles.Note>{t(ONBOARDING_CONSTANTS.ACCESSIBILITY.WAITING)}</HomeStyles.Note> : null}
+      </HomeStyles.Card>
     );
 
   return (
-    <PageContainer>
-      <ScreenHeader title={t(HOME_CONSTANTS.GREETING)} subtitle={t(COMMON_CONSTANTS.APP_NAME)} />
-      <AnimeClockWidget />
-      {renderBanner()}
-      {renderTracker()}
-      <SystemPanel title={t(HOME_CONSTANTS.HUB_TITLE)} variant="monarch">
-        <HomeStyles.Hub>
-          <HubTile
-            label={t(HUB_CONSTANTS.JOURNAL)}
-            value={latest ? latest?.title || t(JOURNAL_CONSTANTS.UNTITLED) : t(HUB_CONSTANTS.JOURNAL_EMPTY)}
-            hint={latest ? previewText(latest?.body ?? '', HOME_RULES.JOURNAL_PREVIEW) : t(HUB_CONSTANTS.JOURNAL_HINT)}
-            accent="system"
-            onPress={() =>
-              latest?.id
-                ? rootNavigation?.navigate('JournalEditor', { entryId: latest.id })
-                : navigation.navigate('JournalHub', { section: 'journal' })
-            }
-          />
-          <HubTile
-            label={t(HUB_CONSTANTS.FOCUS)}
-            value={t(HOME_CONSTANTS.FOCUS_VALUE, { minutes: FOCUS_RULES.DEFAULT_MINUTES })}
-            hint={t(HUB_CONSTANTS.FOCUS_HINT)}
-            accent="monarch"
-            onPress={() => rootNavigation?.navigate('Focus')}
-          />
-          <HubTile
-            label={t(HUB_CONSTANTS.BUDGET)}
-            value={formatAmount(monthly > 0 ? remaining : spent)}
-            hint={t(monthly > 0 ? HUB_CONSTANTS.BUDGET_HINT : HUB_CONSTANTS.BUDGET_EMPTY, {
-              spent: formatAmount(spent),
-            })}
-            accent={monthly > 0 && remaining < 0 ? 'danger' : 'monarch'}
-            onPress={() => navigation.navigate('Budget')}
-          />
-          <HubTile
-            label={t(HUB_CONSTANTS.PLANNER)}
-            value={openTasks?.[0]?.title ?? t(HUB_CONSTANTS.PLANNER_EMPTY)}
-            hint={
-              openTasks.length > 0
-                ? t(HUB_CONSTANTS.PLANNER_HINT, { count: openTasks.length })
-                : t(HUB_CONSTANTS.PLANNER_EMPTY)
-            }
-            accent="system"
-            onPress={() => rootNavigation?.navigate('Planner')}
-          />
-        </HomeStyles.Hub>
-      </SystemPanel>
-      <QuoteCard
-        variant="default"
-        title={t(HOME_CONSTANTS.QUOTE_TITLE)}
-        text={t(quote.textKey)}
-        author={t(quote.authorKey)}
-        image={quote.image}
-        hint={t(HOME_CONSTANTS.QUOTE_HINT, { current: quoteIndex % QUOTES.length + 1, total: QUOTES.length })}
-        onPress={() => setQuoteIndex((prev: number) => prev + 1)}
-      />
+    <PageContainer fadeIn={false}>
+      <FadeInView>
+        <HomeStyles.TopBar>
+          <HomeStyles.Greeting>{t(HOME_CONSTANTS.GREETING)}</HomeStyles.Greeting>
+          <HomeStyles.StreakPill>
+            <HomeStyles.StreakText>{t(HOME_CONSTANTS.STREAK, { count: streak })}</HomeStyles.StreakText>
+          </HomeStyles.StreakPill>
+        </HomeStyles.TopBar>
+        <HomeStyles.Subtitle>{t(COMMON_CONSTANTS.APP_NAME)}</HomeStyles.Subtitle>
+      </FadeInView>
+      <FadeInView delay={40}>
+        <ChallengeRewardCard
+          title={challenge ? t(HOME_CONSTANTS.CHALLENGE_GOAL, { title: challenge.title }) : t(HOME_CONSTANTS.CHALLENGE_EMPTY_TITLE)}
+          reward={
+            challenge
+              ? t(challenge.reward ? HOME_CONSTANTS.CHALLENGE_REWARD : HOME_CONSTANTS.CHALLENGE_REWARD_EMPTY, {
+                  reward: challenge.reward ?? '',
+                })
+              : t(HOME_CONSTANTS.CHALLENGE_EMPTY_BODY)
+          }
+          progressLabel={
+            challenge
+              ? t(HOME_CONSTANTS.CHALLENGE_PROGRESS, {
+                  done: challenge.checkIns?.length ?? 0,
+                  total: challenge.days ?? 0,
+                })
+              : ''
+          }
+          progress={challenge ? challengeRatio(challenge) : 0}
+          total={challenge?.days ?? 0}
+          done={challenge?.checkIns?.length ?? 0}
+          checkInLabel={t(CHALLENGE_CONSTANTS.CHECK_IN)}
+          canCheckIn={challenge ? canCheckIn(challenge, day) : false}
+          onCheckIn={handleCheckIn}
+        />
+      </FadeInView>
+      <FadeInView delay={80}>
+        <AnimeClockWidget />
+      </FadeInView>
+      <FadeInView delay={120}>{renderTracker()}</FadeInView>
     </PageContainer>
   );
 };

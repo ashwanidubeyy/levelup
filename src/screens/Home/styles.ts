@@ -1,103 +1,205 @@
+import { Animated } from 'react-native';
 import styled from 'styled-components/native';
-import { COLORS } from '../../theme/colors';
-import {themeFontSize} from '../../theme/typography';
-import { SPACING, V_SPACING } from '../../theme/spacing';
-import { scaleForTheme } from '../../theme/layoutScale';
-import { mutedText } from '../../utils/commonStyles';
+import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
 
-const Shortcuts = styled.View`
-  flex-direction: row;
-  gap: ${SPACING.MD}px;
-  margin-top: ${V_SPACING.LG}px;
-`;
-
-const Hub = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => scaleForTheme(theme.layout.hubGap, theme.layout.scale)}px;
-`;
-
-const AgendaRow = styled.TouchableOpacity`
+const TopBar = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: ${V_SPACING.SM}px 0;
 `;
 
-const AgendaTitle = styled.Text`
-  flex: 1;
-  margin-right: ${SPACING.SM}px;
-  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
-  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
-  color: ${({ theme }) => theme.colors.TEXT};
+const Greeting = styled.Text`
+  font-family: ${({ theme }) => theme.bento.fontTitle};
+  font-size: ${moderateScale(28, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textPrimary};
 `;
 
-const AgendaMeta = styled.Text`
-  ${mutedText}
+const Subtitle = styled.Text`
+  margin-top: ${moderateVerticalScale(2, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(13, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textSecondary};
 `;
 
-const Empty = styled.Text`
-  ${mutedText}
+const StreakPill = styled.View`
+  padding: ${moderateVerticalScale(6, 0.9)}px ${moderateScale(12, 0.9)}px;
+  border-radius: ${moderateScale(999, 0.9)}px;
+  background-color: ${({ theme }) => theme.bento.accentMuted};
+  border-width: ${moderateScale(1, 0.9)}px;
+  border-color: ${({ theme }) => theme.bento.border};
 `;
 
-const CountRow = styled.View`
+const StreakText = styled.Text`
+  font-family: ${({ theme }) => theme.bento.fontTitle};
+  font-size: ${moderateScale(13, 0.9)}px;
+  color: ${({ theme }) => theme.bento.accent};
+`;
+
+const Card = styled.View`
+  margin-top: ${moderateVerticalScale(12, 0.9)}px;
+  padding: ${moderateVerticalScale(16, 0.9)}px ${moderateScale(16, 0.9)}px;
+  border-radius: ${({ theme }) => moderateScale(theme.bento.radius, 0.9)}px;
+  background-color: ${({ theme }) => theme.bento.surface};
+  border-width: ${moderateScale(1, 0.9)}px;
+  border-color: ${({ theme }) => theme.bento.border};
+`;
+
+const CardHeader = styled.View`
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const Count = styled.Text<{ $danger: boolean }>`
-  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
-  font-size: ${({ theme }) => themeFontSize(theme, 'GIANT')}px;
-  line-height: ${({ theme }) => themeFontSize(theme, 'GIANT') * 1.05}px;
-  color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.WHITE)};
+const CardTitle = styled.Text`
+  font-family: ${({ theme }) => theme.bento.fontTitle};
+  font-size: ${moderateScale(13, 0.9)}px;
+  letter-spacing: ${moderateScale(0.8, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textSecondary};
 `;
 
-const Limit = styled.Text`
-  margin-left: ${SPACING.SM}px;
-  margin-bottom: ${V_SPACING.SM}px;
-  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
-  font-size: ${({ theme }) => themeFontSize(theme, 'LG')}px;
-  color: ${({ theme }) => theme.colors.TEXT_MUTED};
+const CardValue = styled.Text`
+  font-family: ${({ theme }) => theme.bento.fontTitle};
+  font-size: ${moderateScale(16, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textPrimary};
 `;
 
-const Message = styled.Text<{ $danger: boolean }>`
-  margin-top: ${V_SPACING.SM}px;
-  margin-bottom: ${V_SPACING.MD}px;
-  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
-  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
-  color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.TEXT)};
+const Track = styled.View`
+  margin-top: ${moderateVerticalScale(12, 0.9)}px;
+  height: ${moderateVerticalScale(8, 0.9)}px;
+  border-radius: ${moderateScale(999, 0.9)}px;
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.bento.surfaceSecondary};
 `;
 
-const DayHint = styled.Text`
-  ${mutedText}
-  margin-bottom: ${V_SPACING.SM}px;
+const Fill = styled(Animated.View)<{ $danger: boolean }>`
+  height: ${moderateVerticalScale(8, 0.9)}px;
+  border-radius: ${moderateScale(999, 0.9)}px;
+  background-color: ${({ $danger, theme }) => ($danger ? theme.bento.danger : theme.bento.accent)};
+`;
+
+const MetaRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: ${moderateVerticalScale(12, 0.9)}px;
+`;
+
+const Meta = styled.Text`
+  flex: 1;
+  margin-right: ${moderateScale(8, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(13, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textSecondary};
 `;
 
 const Live = styled.Text<{ $active: boolean }>`
-  ${mutedText}
-  margin-top: ${V_SPACING.MD}px;
-  color: ${({ $active, theme }) => ($active ? theme.colors.BLUE_GLOW : theme.colors.TEXT_MUTED)};
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(13, 0.9)}px;
+  color: ${({ $active, theme }) => ($active ? theme.bento.accent : theme.bento.textSecondary)};
 `;
 
-const Tiles = styled.View`
+const Snooze = styled.Pressable`
+  padding: ${moderateVerticalScale(6, 0.9)}px ${moderateScale(12, 0.9)}px;
+  border-radius: ${moderateScale(999, 0.9)}px;
+  border-width: ${moderateScale(1, 0.9)}px;
+  border-color: ${({ theme }) => theme.bento.border};
+  background-color: ${({ theme }) => theme.bento.surfaceSecondary};
+`;
+
+const SnoozeLabel = styled.Text`
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(12, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textPrimary};
+`;
+
+const Note = styled.Text`
+  margin-top: ${moderateVerticalScale(8, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(13, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textSecondary};
+`;
+
+const NoteAction = styled.Text`
+  margin-top: ${moderateVerticalScale(6, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontTitle};
+  font-size: ${moderateScale(13, 0.9)}px;
+  color: ${({ theme }) => theme.bento.accent};
+`;
+
+const Body = styled.Text`
+  margin-top: ${moderateVerticalScale(8, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(15, 0.9)}px;
+  line-height: ${moderateScale(21, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textPrimary};
+`;
+
+const Row = styled.View`
   flex-direction: row;
-  margin-top: ${V_SPACING.LG}px;
-  margin-bottom: ${V_SPACING.LG}px;
-  gap: ${SPACING.MD}px;
+  align-items: stretch;
+  gap: ${moderateScale(10, 0.9)}px;
+  margin-top: ${moderateVerticalScale(10, 0.9)}px;
+`;
+
+const Cell = styled.View`
+  flex: 1;
+`;
+
+const Tile = styled.View`
+  flex: 1;
+  min-height: ${moderateVerticalScale(108, 0.9)}px;
+  padding: ${moderateVerticalScale(14, 0.9)}px ${moderateScale(12, 0.9)}px;
+  border-radius: ${({ theme }) => moderateScale(theme.bento.radius, 0.9)}px;
+  background-color: ${({ theme }) => theme.bento.surface};
+  border-width: ${moderateScale(1, 0.9)}px;
+  border-color: ${({ theme }) => theme.bento.border};
+  justify-content: space-between;
+`;
+
+const TileLabel = styled.Text`
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(12, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textSecondary};
+`;
+
+const TileValue = styled.Text`
+  margin-top: ${moderateVerticalScale(8, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontTitle};
+  font-size: ${moderateScale(18, 0.9)}px;
+  color: ${({ theme }) => theme.bento.textPrimary};
+`;
+
+const TileHint = styled.Text`
+  margin-top: ${moderateVerticalScale(4, 0.9)}px;
+  font-family: ${({ theme }) => theme.bento.fontBody};
+  font-size: ${moderateScale(12, 0.9)}px;
+  color: ${({ theme }) => theme.bento.accent};
 `;
 
 export const HomeStyles = {
-  Shortcuts,
-  Hub,
-  AgendaRow,
-  AgendaTitle,
-  AgendaMeta,
-  Empty,
-  CountRow,
-  Count,
-  Limit,
-  Message,
-  DayHint,
+  TopBar,
+  Greeting,
+  Subtitle,
+  StreakPill,
+  StreakText,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardValue,
+  Track,
+  Fill,
+  MetaRow,
+  Meta,
   Live,
-  Tiles,
+  Snooze,
+  SnoozeLabel,
+  Note,
+  NoteAction,
+  Body,
+  Row,
+  Cell,
+  Tile,
+  TileLabel,
+  TileValue,
+  TileHint,
 };

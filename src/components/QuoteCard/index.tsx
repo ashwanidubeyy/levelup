@@ -26,7 +26,7 @@ const QuoteCard = ({ text, author, image, title, hint, variant = 'default', onPr
       ) : (
         <QuoteCardStyles.Placeholder $variant={variant}>
           <GradientView colors={[...theme.gradients.MONARCH]} fill />
-          <BoltIcon size={variant === 'hero' ? moderateScale(44, 0.9) : ICON_SIZE} color={theme.colors.WHITE} />
+          <BoltIcon size={variant === 'hero' ? moderateScale(44, 0.9) : ICON_SIZE} color={theme.colors.TEXT} />
         </QuoteCardStyles.Placeholder>
       )}
       <QuoteCardStyles.Body $variant={variant}>

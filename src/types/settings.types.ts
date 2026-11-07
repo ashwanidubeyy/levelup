@@ -1,5 +1,5 @@
 import type { TrackedAppId } from './tracker.types';
-import type { ColorSchemeId, ThemeId } from '../theme/types';
+import type { AppMode, ColorSchemeId, FontId, ThemeId, ThemeOverrides } from '../theme/types';
 
 export interface AppSettings {
   onboardingComplete: boolean;
@@ -14,4 +14,7 @@ export interface AppSettings {
   trackingSnoozeRestore: boolean;
   themeId: ThemeId;
   colorScheme: ColorSchemeId;
+  themeOverrides: ThemeOverrides;
+  appMode: AppMode;
+  fontId: FontId;
 }

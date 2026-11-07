@@ -1,5 +1,6 @@
-import type { AppTheme, ColorSchemeId, ThemeColors, ThemeId } from './types';
+import type { AppTheme, ColorSchemeId, ThemeColors, ThemeId, ThemeOverrides } from './types';
 import { themeById } from './presets';
+import { applyBentoTokens, getAppTheme } from './tokens';
 
 const DARK_GLASS: Pick<ThemeColors, 'GLASS_FILL' | 'GLASS_STROKE' | 'GLASS_HIGHLIGHT'> = {
   GLASS_FILL: 'rgba(16, 20, 32, 0.78)',
@@ -114,7 +115,11 @@ export const applyColorScheme = (theme: AppTheme, scheme: ColorSchemeId): AppThe
   };
 };
 
-export const resolveAppTheme = (id: ThemeId | undefined, scheme: ColorSchemeId): AppTheme => {
+export const resolveAppTheme = (
+  id: ThemeId | undefined,
+  scheme: ColorSchemeId,
+  overrides?: ThemeOverrides | null,
+): AppTheme => {
   const base: AppTheme = { ...themeById(id), colorScheme: scheme };
-  return applyColorScheme(base, scheme);
+  return applyBentoTokens(applyColorScheme(base, scheme), getAppTheme(id, scheme, overrides));
 };

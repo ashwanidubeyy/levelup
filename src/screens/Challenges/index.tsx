@@ -41,6 +41,7 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
   const sorted = useMemo(() => sortChallenges(items ?? []), [items]);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
+  const [reward, setReward] = useState('');
   const [preset, setPreset] = useState<string>(CHALLENGE_RULES.PRESET_21);
   const [customDays, setCustomDays] = useState(21);
   const [startDay, setStartDay] = useState(todayKey());
@@ -70,11 +71,13 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
       reminderMinute: minute,
       reminderEnabled: false,
       checkIns: [],
+      reward: reward?.trim() ?? '',
       completedAt: null,
       createdAt: Date.now(),
     };
     dispatch(addChallenge(challenge));
     setTitle('');
+    setReward('');
     setError('');
     setOpen(false);
   };
@@ -111,6 +114,12 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
               onChangeText={setTitle}
               placeholder={t(CHALLENGE_CONSTANTS.NAME_PLACEHOLDER)}
               error={error ? t(error) : undefined}
+            />
+            <InputField
+              label={t(CHALLENGE_CONSTANTS.REWARD)}
+              value={reward}
+              onChangeText={setReward}
+              placeholder={t(CHALLENGE_CONSTANTS.REWARD_PLACEHOLDER)}
             />
             <ChallengesStyles.Block>
               <SegmentedControl options={presets} value={preset} onChange={setPreset} />
@@ -153,6 +162,7 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
               total: challenge?.days ?? 0,
             })}
             progress={challengeRatio(challenge)}
+            rewardLabel={challenge?.reward ? t(HOME_CONSTANTS.CHALLENGE_REWARD, { reward: challenge.reward }) : undefined}
             xpLabel={t(CHALLENGE_CONSTANTS.XP_LINE, {
               daily: CHALLENGE_RULES.CHECK_IN_XP,
               bonus: CHALLENGE_RULES.COMPLETE_XP,

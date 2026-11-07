@@ -3,6 +3,7 @@ import { moderateScale } from 'react-native-size-matters';
 import { themeFontSize } from '../../theme/typography';
 import { BORDER } from '../../theme/spacing';
 import { scaleForTheme, themeSpace, themeVSpace } from '../../theme/layoutScale';
+import { hexToRgba } from '../../utils/color';
 import type { PanelVariant } from '../../types';
 import type { ThemePanelFrame } from '../../theme/types';
 
@@ -13,14 +14,23 @@ const STRIPE_HEIGHT = moderateScale(4, 0.9);
 const Container = styled.View<{ $variant: PanelVariant; $frame: ThemePanelFrame }>`
   margin-top: ${({ theme }) => themeVSpace(theme, 'MD')}px;
   padding: ${({ theme }) => themeVSpace(theme, 'MD')}px ${({ theme }) => themeSpace(theme, 'MD')}px;
-  background-color: ${({ $frame, theme }) =>
-    $frame === 'stripe' ? theme.colors.PANEL : theme.colors.PANEL_ALT};
+  background-color: ${({ theme }) => hexToRgba(theme.bento.surface, theme.colorScheme === 'light' ? 0.9 : 0.78)};
   border-width: ${({ $frame }) =>
     $frame === 'rounded' ? BORDER.THICK : $frame === 'minimal' || $frame === 'flag' ? BORDER.HAIRLINE : 0}px;
   border-color: ${({ $variant, $frame, theme }) =>
     $frame === 'rounded' ? theme.accents[$variant] : theme.colors.PANEL_BORDER};
   border-radius: ${({ theme }) => scaleForTheme(theme.layout.panelRadius, theme.layout.scale)}px;
   overflow: hidden;
+`;
+
+const Sheen = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: ${moderateScale(22, 0.9)}px;
+  background-color: ${({ theme }) => theme.colors.GLASS_HIGHLIGHT};
+  opacity: 0.4;
 `;
 
 const TopGlow = styled.View<{ $variant: PanelVariant; $frame: ThemePanelFrame }>`
@@ -88,6 +98,7 @@ const RightLabel = styled.Text`
 
 export const SystemPanelStyles = {
   Container,
+  Sheen,
   TopGlow,
   FlagRail,
   CornerTopLeft,

@@ -11,9 +11,8 @@ export interface JournalEntry {
 }
 
 export interface JournalFormValues {
-  title: string;
   body: string;
-  mood: MoodValue;
+  startedAt: number | null;
 }
 
 export interface JournalFormErrors {

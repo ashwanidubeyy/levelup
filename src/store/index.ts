@@ -9,6 +9,8 @@ import reminderReducer from './slices/reminderSlice';
 import budgetReducer from './slices/budgetSlice';
 import focusReducer from './slices/focusSlice';
 import todoReducer from './slices/todoSlice';
+import notesReducer from './slices/notesSlice';
+import calculatorReducer from './slices/calculatorSlice';
 import storageService from '../services/storage.service';
 import { STORAGE_KEYS, TIME } from '../constants/common';
 
@@ -23,6 +25,8 @@ export const store = configureStore({
     budget: budgetReducer,
     focus: focusReducer,
     todos: todoReducer,
+    notes: notesReducer,
+    calculator: calculatorReducer,
   },
 });
 
@@ -35,7 +39,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 let persistTimer: ReturnType<typeof setTimeout> | null = null;
 let lastSnapshot: Pick<
   RootState,
-  'settings' | 'journal' | 'quests' | 'challenges' | 'reminders' | 'budget' | 'focus' | 'todos'
+  'settings' | 'journal' | 'quests' | 'challenges' | 'reminders' | 'budget' | 'focus' | 'todos' | 'notes' | 'calculator'
 > | null = null;
 
 const persist = () => {
@@ -67,6 +71,12 @@ const persist = () => {
   if (lastSnapshot?.todos !== state.todos) {
     storageService.writeJson(STORAGE_KEYS.TODOS, state.todos);
   }
+  if (lastSnapshot?.notes !== state.notes) {
+    storageService.writeJson(STORAGE_KEYS.NOTES, state.notes?.items ?? []);
+  }
+  if (lastSnapshot?.calculator !== state.calculator) {
+    storageService.writeJson(STORAGE_KEYS.CALCULATOR, state.calculator?.entries ?? []);
+  }
   lastSnapshot = {
     settings: state.settings,
     journal: state.journal,
@@ -76,6 +86,8 @@ const persist = () => {
     budget: state.budget,
     focus: state.focus,
     todos: state.todos,
+    notes: state.notes,
+    calculator: state.calculator,
   };
 };
 

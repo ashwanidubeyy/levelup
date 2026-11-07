@@ -9,11 +9,13 @@ const DOT = moderateScale(8, 0.9);
 
 const Touchable = styled.TouchableOpacity`
   margin-top: ${V_SPACING.MD}px;
-  padding: ${V_SPACING.MD}px ${SPACING.LG}px;
-  background-color: ${({ theme }) => theme.colors.PANEL};
-  border-radius: ${RADIUS.MD}px;
+  padding: ${V_SPACING.LG}px ${SPACING.LG}px ${V_SPACING.LG}px ${SPACING.XL}px;
+  background-color: ${({ theme }) => theme.bento.surface};
+  border-radius: ${RADIUS.SM}px;
   border-width: ${BORDER.HAIRLINE}px;
   border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
+  border-left-width: ${moderateScale(3, 0.9)}px;
+  border-left-color: ${({ theme }) => theme.bento.accent};
 `;
 
 const Header = styled.View`

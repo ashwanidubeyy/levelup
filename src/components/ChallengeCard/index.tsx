@@ -10,6 +10,7 @@ const ChallengeCard = ({
   progressLabel,
   progress,
   xpLabel,
+  rewardLabel,
   checkInLabel,
   deleteLabel,
   doneLabel,
@@ -21,6 +22,7 @@ const ChallengeCard = ({
   <ChallengeCardStyles.Card>
     <ChallengeCardStyles.Title>{title}</ChallengeCardStyles.Title>
     <ChallengeCardStyles.Meta>{rangeLabel}</ChallengeCardStyles.Meta>
+    {rewardLabel ? <ChallengeCardStyles.Meta>{rewardLabel}</ChallengeCardStyles.Meta> : null}
     <StatBar progress={progress} variant={completed ? 'monarch' : 'system'} thin />
     <ChallengeCardStyles.Progress>{progressLabel}</ChallengeCardStyles.Progress>
     <ChallengeCardStyles.Meta>{xpLabel}</ChallengeCardStyles.Meta>

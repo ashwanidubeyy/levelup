@@ -53,7 +53,7 @@ const Note = styled.Text`
 const Amount = styled.Text`
   font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
   font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
-  color: ${({ theme }) => theme.colors.WHITE};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Empty = styled.Text`

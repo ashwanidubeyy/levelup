@@ -7,6 +7,7 @@ export interface Challenge {
   reminderMinute: number;
   reminderEnabled: boolean;
   checkIns: string[];
+  reward?: string;
   completedAt: number | null;
   createdAt: number;
 }

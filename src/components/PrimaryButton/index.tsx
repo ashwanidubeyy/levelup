@@ -41,7 +41,9 @@ const PrimaryButton = ({
           <Loader />
         </PrimaryButtonStyles.LoaderSlot>
       ) : null}
-      <PrimaryButtonStyles.Label $compact={compact}>{label?.toUpperCase()}</PrimaryButtonStyles.Label>
+      <PrimaryButtonStyles.Label $compact={compact} $variant={variant}>
+        {label?.toUpperCase()}
+      </PrimaryButtonStyles.Label>
     </PrimaryButtonStyles.Gradient>
   </PrimaryButtonStyles.Touchable>
   );

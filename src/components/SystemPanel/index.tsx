@@ -13,6 +13,7 @@ const SystemPanel = ({ children, title, rightLabel, variant = 'system' }: System
 
   return (
     <SystemPanelStyles.Container $variant={variant} $frame={frame}>
+      <SystemPanelStyles.Sheen />
       {showGlow ? <SystemPanelStyles.TopGlow $variant={variant} $frame={frame} /> : null}
       {showFlag ? <SystemPanelStyles.FlagRail $variant={variant} /> : null}
       {showCorners ? <SystemPanelStyles.CornerTopLeft $variant={variant} /> : null}

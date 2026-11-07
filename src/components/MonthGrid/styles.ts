@@ -42,7 +42,7 @@ const Cell = styled.TouchableOpacity<{ $selected: boolean; $today: boolean }>`
 const Day = styled.Text<{ $selected: boolean }>`
   font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
   font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
-  color: ${({ $selected, theme }) => ($selected ? theme.colors.WHITE : theme.colors.TEXT)};
+  color: ${({ $selected, theme }) => ($selected ? theme.colors.BLACK : theme.colors.TEXT)};
 `;
 
 const Dot = styled.View`

@@ -1,25 +1,24 @@
 import type { JournalEntry, JournalFormValues } from '../types';
+import { JOURNAL_CONSTANTS } from '../constants/journal';
 import { generateId } from '../utils/helpers';
 import { toDayKey } from '../utils/date';
 
 const createEntry = (values: JournalFormValues): JournalEntry => {
-  const now = Date.now();
+  const started = values?.startedAt ?? Date.now();
   return {
     id: generateId(),
-    day: toDayKey(new Date(now)),
-    title: values?.title?.trim() ?? '',
+    day: toDayKey(new Date(started)),
+    title: '',
     body: values?.body?.trim() ?? '',
-    mood: values?.mood,
-    createdAt: now,
-    updatedAt: now,
+    mood: JOURNAL_CONSTANTS.DEFAULT_MOOD,
+    createdAt: started,
+    updatedAt: Date.now(),
   };
 };
 
 const updateEntry = (entry: JournalEntry, values: JournalFormValues): JournalEntry => ({
   ...entry,
-  title: values?.title?.trim() ?? '',
   body: values?.body?.trim() ?? '',
-  mood: values?.mood,
   updatedAt: Date.now(),
 });
 

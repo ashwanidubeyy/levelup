@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import ScreenHeader from '../../components/ScreenHeader';
 import SegmentedControl from '../../components/SegmentedControl';
@@ -31,7 +30,7 @@ import { isPermissionRequired, resultData } from '../../utils/trackerResult';
 import { appLabel, appShortLabel, formatDuration } from '../../utils/format';
 import { buildMonthChart, isSameOrAfterMonth } from '../../utils/stats';
 
-const Stats = ({ navigation }: RootScreenProps<'Stats'>) => {
+const Stats = () => {
   const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
@@ -182,12 +181,7 @@ const Stats = ({ navigation }: RootScreenProps<'Stats'>) => {
   return (
     <PageContainer>
       <AnimeHeroCard image={theme.assets.statsBanner} size="short">
-        <ScreenHeader
-          title={t(STATS_CONSTANTS.TITLE)}
-          subtitle={t(STATS_CONSTANTS.SUBTITLE)}
-          onBack={navigation.goBack}
-          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
-        />
+        <ScreenHeader title={t(STATS_CONSTANTS.TITLE)} subtitle={t(STATS_CONSTANTS.SUBTITLE)} />
       </AnimeHeroCard>
       {available ? renderAvailable() : <EmptyState image={SCREEN_IMAGES.STATS_EMPTY} message={t(STATS_CONSTANTS.UNAVAILABLE)} />}
     </PageContainer>

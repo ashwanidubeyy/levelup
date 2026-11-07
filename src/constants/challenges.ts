@@ -25,6 +25,8 @@ export const CHALLENGE_CONSTANTS = {
   NEW: 'challenges.new',
   NAME: 'challenges.name',
   NAME_PLACEHOLDER: 'challenges.namePlaceholder',
+  REWARD: 'challenges.reward',
+  REWARD_PLACEHOLDER: 'challenges.rewardPlaceholder',
   LENGTH: 'challenges.length',
   DAYS: 'challenges.days',
   DAYS_VALUE: 'challenges.daysValue',

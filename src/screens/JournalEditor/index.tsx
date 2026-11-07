@@ -1,15 +1,15 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from 'styled-components/native';
+import type { AppTheme } from '../../theme/types';
 import type { RootScreenProps } from '../../navigation/AppNavigator';
 import KeybordView from '../../components/KeybordView';
 import PageContainer from '../../components/PageContainer';
 import ScreenHeader from '../../components/ScreenHeader';
-import InputField from '../../components/InputField';
-import MoodSelector from '../../components/MoodSelector';
 import PrimaryButton from '../../components/PrimaryButton';
 import { JournalEditorStyles } from './styles';
-import type { JournalEntry, MoodOption } from '../../types';
+import type { JournalEntry } from '../../types';
 import { JOURNAL_CONSTANTS } from '../../constants/journal';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -18,28 +18,20 @@ import { awardJournal } from '../../store/slices/questSlice';
 import { useJournalForm } from '../../hooks/useJournalForm';
 import journalService from '../../services/journal.service';
 import questService from '../../services/quest.service';
-import { todayKey } from '../../utils/date';
+import { formatDateTime, todayKey } from '../../utils/date';
 
 type Props = RootScreenProps<'JournalEditor'>;
 
 const JournalEditor = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
+  const theme = useTheme() as AppTheme;
   const dispatch = useAppDispatch();
   const entryId = route?.params?.entryId;
   const entry = useAppSelector(state =>
     state?.journal?.entries?.find((item: JournalEntry) => item?.id === entryId),
   );
-  const { values, errors, setTitle, setBody, setMood, validate } = useJournalForm(entry);
-
-  const moodOptions: MoodOption[] = useMemo(
-    () =>
-      JOURNAL_CONSTANTS.MOOD_OPTIONS.map((mood: (typeof JOURNAL_CONSTANTS.MOOD_OPTIONS)[number]) => ({
-        value: mood.value,
-        label: t(mood.labelKey),
-        color: mood.color,
-      })),
-    [t],
-  );
+  const { values, errors, setBody, validate } = useJournalForm(entry);
+  const opening = entry?.title?.trim() ?? '';
 
   const handleSave = () => {
     if (!validate()) {
@@ -69,7 +61,7 @@ const JournalEditor = ({ navigation, route }: Props) => {
 
   return (
     <KeybordView>
-      <PageContainer withBottomInset>
+      <PageContainer scrollable={false} withBottomInset fadeIn={false}>
         <ScreenHeader
           title={t(entry ? JOURNAL_CONSTANTS.EDIT_TITLE : JOURNAL_CONSTANTS.NEW_TITLE)}
           onBack={navigation.goBack}
@@ -77,24 +69,22 @@ const JournalEditor = ({ navigation, route }: Props) => {
           rightLabel={entry ? t(COMMON_CONSTANTS.ACTIONS.DELETE) : undefined}
           onRightPress={entry ? handleDelete : undefined}
         />
-        <InputField
-          label={t(JOURNAL_CONSTANTS.FORMS.LABELS.TITLE)}
-          value={values.title}
-          onChangeText={setTitle}
-          placeholder={t(JOURNAL_CONSTANTS.FORMS.PLACEHOLDERS.TITLE)}
-          maxLength={JOURNAL_CONSTANTS.TITLE_MAX_LENGTH}
-        />
-        <InputField
-          label={t(JOURNAL_CONSTANTS.FORMS.LABELS.BODY)}
-          value={values.body}
-          onChangeText={setBody}
-          placeholder={t(JOURNAL_CONSTANTS.FORMS.PLACEHOLDERS.BODY)}
-          error={errors.body ? t(errors.body) : undefined}
-          maxLength={JOURNAL_CONSTANTS.BODY_MAX_LENGTH}
-          multiline
-        />
-        <JournalEditorStyles.MoodLabel>{t(JOURNAL_CONSTANTS.FORMS.LABELS.MOOD).toUpperCase()}</JournalEditorStyles.MoodLabel>
-        <MoodSelector options={moodOptions} value={values.mood} onChange={setMood} />
+        <JournalEditorStyles.Page>
+          <JournalEditorStyles.Stamp>
+            {values.startedAt ? formatDateTime(values.startedAt) : t(JOURNAL_CONSTANTS.STAMP_EMPTY)}
+          </JournalEditorStyles.Stamp>
+          {opening ? <JournalEditorStyles.LegacyTitle>{opening}</JournalEditorStyles.LegacyTitle> : null}
+          <JournalEditorStyles.PageInput
+            value={values.body}
+            onChangeText={setBody}
+            placeholder={t(JOURNAL_CONSTANTS.FORMS.PLACEHOLDERS.BODY)}
+            placeholderTextColor={theme.colors.TEXT_DIM}
+            multiline
+            maxLength={JOURNAL_CONSTANTS.BODY_MAX_LENGTH}
+            textAlignVertical="top"
+          />
+          {errors.body ? <JournalEditorStyles.Error>{t(errors.body)}</JournalEditorStyles.Error> : null}
+        </JournalEditorStyles.Page>
         <JournalEditorStyles.Actions>
           <PrimaryButton label={t(COMMON_CONSTANTS.ACTIONS.SAVE)} onPress={handleSave} />
         </JournalEditorStyles.Actions>

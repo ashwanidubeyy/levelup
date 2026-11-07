@@ -162,6 +162,43 @@ const CalendarIcon = (props: any) => (
   </Svg>
 );
 
+const NotesIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M7 3h8l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
+      stroke={props?.color ?? COLORS.TEXT}
+      strokeWidth={props?.strokeWidth ?? STROKE}
+      strokeLinejoin="round"
+    />
+    <Path d="M15 3v5h5M9 13h6M9 17h4" stroke={props?.color ?? COLORS.TEXT} strokeWidth={props?.strokeWidth ?? STROKE} strokeLinecap="round" />
+  </Svg>
+);
+
+const MotivationIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"
+      stroke={props?.color ?? COLORS.TEXT}
+      strokeWidth={props?.strokeWidth ?? STROKE}
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+const CalculatorIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Rect x="5" y="3" width="14" height="18" rx="2" stroke={props?.color ?? COLORS.TEXT} strokeWidth={props?.strokeWidth ?? STROKE} />
+    <Path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01" stroke={props?.color ?? COLORS.TEXT} strokeWidth={props?.strokeWidth ?? STROKE} strokeLinecap="round" />
+  </Svg>
+);
+
+const PlannerIcon = (props: any) => (
+  <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
+    <Rect x="5" y="4" width="14" height="16" rx="2" stroke={props?.color ?? COLORS.TEXT} strokeWidth={props?.strokeWidth ?? STROKE} />
+    <Path d="M9 4v3M15 4v3M8 12h8M8 16h5" stroke={props?.color ?? COLORS.TEXT} strokeWidth={props?.strokeWidth ?? STROKE} strokeLinecap="round" />
+  </Svg>
+);
+
 const MoreIcon = (props: any) => (
   <Svg width={props?.size ?? DEFAULT_SIZE} height={props?.size ?? DEFAULT_SIZE} viewBox="0 0 24 24" fill="none">
     <Rect x="4" y="4" width="6" height="6" rx="1" stroke={props?.color ?? COLORS.TEXT} strokeWidth={props?.strokeWidth ?? STROKE} />
@@ -192,4 +229,8 @@ export const Icons = {
   BudgetIcon,
   CalendarIcon,
   MoreIcon,
+  NotesIcon,
+  MotivationIcon,
+  CalculatorIcon,
+  PlannerIcon,
 };

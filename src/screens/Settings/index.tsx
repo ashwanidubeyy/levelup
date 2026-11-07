@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { RootScreenProps } from '../../navigation/AppNavigator';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { MainTabParamList, RootStackParamList } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import ScreenHeader from '../../components/ScreenHeader';
 import SystemPanel from '../../components/SystemPanel';
@@ -22,16 +24,17 @@ import { useSettingsActions } from '../../hooks/useSettingsActions';
 import { appLabel, formatDuration } from '../../utils/format';
 import { isTrackingSnoozed, trackingSnoozeLabelMs } from '../../utils/trackingSnooze';
 import { TIME } from '../../constants/common';
-import { APPEARANCE_OPTIONS, THEME_CONSTANTS, THEME_OPTIONS } from '../../constants/theme';
+import { APPEARANCE_OPTIONS, FONT_OPTIONS, THEME_CONSTANTS, THEME_OPTIONS } from '../../constants/theme';
 import { useAppDispatch } from '../../store';
-import { setColorScheme, setThemeId } from '../../store/slices/settingsSlice';
-import type { ColorSchemeId, ThemeId } from '../../theme/types';
+import { setColorScheme, setFontId, setThemeId } from '../../store/slices/settingsSlice';
+import type { ColorSchemeId, FontId, ThemeId } from '../../theme/types';
 
-type Props = RootScreenProps<'Settings'>;
+type Props = BottomTabScreenProps<MainTabParamList, 'Settings'>;
 
 const Settings = ({ navigation }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const rootNavigation = navigation.getParent<NativeStackNavigationProp<RootStackParamList>>();
   const settings = useAppSelector(state => state?.settings);
   const { capabilities, status } = useTrackerState();
   const actions = useSettingsActions();
@@ -106,6 +109,11 @@ const Settings = ({ navigation }: Props) => {
     actions.snoozeTracking(end.getTime());
   };
 
+  const fontOptions: SegmentOption[] = FONT_OPTIONS.map((item: (typeof FONT_OPTIONS)[number]) => ({
+    label: t(item.labelKey),
+    value: item.value,
+  }));
+
   const appearanceOptions: SegmentOption[] = APPEARANCE_OPTIONS.map(
     (item: (typeof APPEARANCE_OPTIONS)[number]) => ({
       label: t(item.labelKey),
@@ -124,9 +132,25 @@ const Settings = ({ navigation }: Props) => {
     </SystemPanel>
   );
 
+  const renderFont = () => (
+    <SystemPanel title={t(THEME_CONSTANTS.FONT_TITLE)} variant="system">
+      <SettingsStyles.Hint>{t(THEME_CONSTANTS.FONT_HINT)}</SettingsStyles.Hint>
+      <SegmentedControl
+        value={settings?.fontId ?? 'minimal'}
+        onChange={(value: string) => dispatch(setFontId(value as FontId))}
+        options={fontOptions}
+      />
+    </SystemPanel>
+  );
+
   const renderTheme = () => (
     <SystemPanel title={t(THEME_CONSTANTS.TITLE)} variant="monarch">
       <SettingsStyles.Hint>{t(THEME_CONSTANTS.HINT)}</SettingsStyles.Hint>
+      <NavRow
+        label={t(THEME_CONSTANTS.STUDIO_OPEN)}
+        hint={t(THEME_CONSTANTS.STUDIO_HINT)}
+        onPress={() => rootNavigation?.navigate('ThemeStudio')}
+      />
       {THEME_OPTIONS.map((option: (typeof THEME_OPTIONS)[number]) => {
         const active = settings?.themeId === option.id;
         return (
@@ -218,10 +242,9 @@ const Settings = ({ navigation }: Props) => {
       <ScreenHeader
         title={t(SETTINGS_CONSTANTS.TITLE)}
         subtitle={t(SETTINGS_CONSTANTS.SUBTITLE)}
-        onBack={navigation.goBack}
-        backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
       />
       {renderAppearance()}
+      {renderFont()}
       {isIos ? (
         <ComingSoonCard
           title={t(SETTINGS_CONSTANTS.IOS_TITLE)}
@@ -242,10 +265,10 @@ const Settings = ({ navigation }: Props) => {
           <NavRow
             label={t(SETTINGS_CONSTANTS.DIAGNOSTICS)}
             hint={t(SETTINGS_CONSTANTS.DIAGNOSTICS_HINT)}
-            onPress={() => navigation.navigate('Diagnostics')}
+            onPress={() => rootNavigation?.navigate('Diagnostics')}
           />
         ) : null}
-        <NavRow label={t(SETTINGS_CONSTANTS.RERUN_ONBOARDING)} onPress={() => navigation.navigate('Onboarding')} />
+        <NavRow label={t(SETTINGS_CONSTANTS.RERUN_ONBOARDING)} onPress={() => rootNavigation?.navigate('Onboarding')} />
       </SystemPanel>
     </PageContainer>
   );

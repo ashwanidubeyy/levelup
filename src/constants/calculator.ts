@@ -4,12 +4,20 @@ export const CALCULATOR_RULES = {
 
 export const CALCULATOR_CONSTANTS = {
   TITLE: 'calculator.title',
+  SUBTITLE: 'calculator.subtitle',
   HINT: 'calculator.hint',
   DISPLAY_PLACEHOLDER: 'calculator.displayPlaceholder',
-  USE: 'calculator.use',
+  SAVE: 'calculator.save',
+  LABEL: 'calculator.label',
+  LABEL_PLACEHOLDER: 'calculator.labelPlaceholder',
+  LABEL_REQUIRED: 'calculator.labelRequired',
+  HISTORY: 'calculator.history',
+  HISTORY_EMPTY: 'calculator.historyEmpty',
   CLEAR: 'calculator.clear',
   EQUALS: 'calculator.equals',
   INVALID: 'calculator.invalid',
+  DELETE_TITLE: 'calculator.deleteTitle',
+  DELETE_BODY: 'calculator.deleteBody',
   KEY_CLEAR: 'C',
   KEY_EQUALS: '=',
 } as const;

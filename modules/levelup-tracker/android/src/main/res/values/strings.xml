@@ -4,4 +4,9 @@
     <string name="levelup_widget_title">Today\'s reels</string>
     <string name="levelup_widget_description">Reel count and daily limit</string>
     <string name="levelup_widget_resets">Resets 6:00 AM</string>
+    <string name="levelup_clock_tag">ANIME</string>
+    <string name="levelup_clock_digital_title">Anime digital clock</string>
+    <string name="levelup_clock_digital_description">Digital clock on a moving fire backdrop</string>
+    <string name="levelup_clock_analog_title">Anime analog clock</string>
+    <string name="levelup_clock_analog_description">Analog clock on a moving fire backdrop</string>
 </resources>

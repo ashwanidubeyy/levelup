@@ -2,6 +2,8 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { AppSettings, TrackedAppId } from '../../types';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
 import { DEFAULT_THEME_ID } from '../../theme/presets';
+import { EMPTY_THEME_OVERRIDES } from '../../theme/tokens';
+import type { ThemeOverrides } from '../../theme/types';
 
 export interface SettingsState extends AppSettings {
   hydrated: boolean;
@@ -21,6 +23,9 @@ const initialState: SettingsState = {
   trackingSnoozeRestore: true,
   themeId: DEFAULT_THEME_ID,
   colorScheme: 'dark',
+  themeOverrides: EMPTY_THEME_OVERRIDES,
+  appMode: 'tracker',
+  fontId: 'minimal',
 };
 
 const settingsSlice = createSlice({
@@ -36,6 +41,17 @@ const settingsSlice = createSlice({
         action.payload?.trackingSnoozeRestore === undefined ? true : action.payload.trackingSnoozeRestore,
       themeId: action.payload?.themeId ?? DEFAULT_THEME_ID,
       colorScheme: action.payload?.colorScheme ?? 'dark',
+      themeOverrides: {
+        accent: action.payload?.themeOverrides?.accent ?? null,
+        background: action.payload?.themeOverrides?.background ?? null,
+        surface: action.payload?.themeOverrides?.surface ?? null,
+        text: action.payload?.themeOverrides?.text ?? null,
+      },
+      appMode: action.payload?.appMode === 'tools' ? 'tools' : 'tracker',
+      fontId:
+        action.payload?.fontId === 'rajdhani' || action.payload?.fontId === 'orbitron'
+          ? action.payload.fontId
+          : 'minimal',
       hydrated: true,
     }),
     setInstallDay: (state, action: PayloadAction<string>) => {
@@ -87,6 +103,29 @@ const settingsSlice = createSlice({
     setColorScheme: (state, action: PayloadAction<AppSettings['colorScheme']>) => {
       state.colorScheme = action.payload;
     },
+    setThemeOverride: (state, action: PayloadAction<Partial<ThemeOverrides>>) => {
+      state.themeOverrides = {
+        accent: state.themeOverrides?.accent ?? null,
+        background: state.themeOverrides?.background ?? null,
+        surface: state.themeOverrides?.surface ?? null,
+        text: state.themeOverrides?.text ?? null,
+        ...action.payload,
+      };
+    },
+    clearThemeOverrides: state => {
+      state.themeOverrides = {
+        accent: null,
+        background: null,
+        surface: null,
+        text: null,
+      };
+    },
+    setAppMode: (state, action: PayloadAction<AppSettings['appMode']>) => {
+      state.appMode = action.payload;
+    },
+    setFontId: (state, action: PayloadAction<AppSettings['fontId']>) => {
+      state.fontId = action.payload;
+    },
   },
 });
 
@@ -105,6 +144,10 @@ export const {
   expireTrackingSnooze,
   setThemeId,
   setColorScheme,
+  setThemeOverride,
+  clearThemeOverrides,
+  setAppMode,
+  setFontId,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

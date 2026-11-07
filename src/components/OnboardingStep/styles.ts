@@ -19,7 +19,7 @@ const Title = styled.Text`
   font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BLACK};
   font-size: ${({ theme }) => themeFontSize(theme, 'XL')}px;
   letter-spacing: ${SPACING.XXS}px;
-  color: ${({ theme }) => theme.colors.WHITE};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Body = styled.Text`

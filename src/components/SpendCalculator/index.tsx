@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import InputField from '../InputField';
 import PrimaryButton from '../PrimaryButton';
 import type { SpendCalculatorProps } from '../../types';
 import { SpendCalculatorStyles } from './styles';
@@ -7,7 +8,7 @@ import { CALCULATOR_CONSTANTS, CALCULATOR_KEYS, CALCULATOR_RULES } from '../../c
 import { evaluateExpression } from '../../utils/calculator';
 import { formatAmount } from '../../utils/money';
 
-const SpendCalculator = ({ onApply }: SpendCalculatorProps) => {
+const SpendCalculator = ({ label, onLabelChange, labelError, onSave }: SpendCalculatorProps) => {
   const { t } = useTranslation();
   const [expression, setExpression] = useState('');
   const [result, setResult] = useState<number | null>(null);
@@ -40,18 +41,17 @@ const SpendCalculator = ({ onApply }: SpendCalculatorProps) => {
     });
   };
 
-  const handleUse = () => {
+  const handleSave = () => {
     const value = result ?? evaluateExpression(expression);
-    if (value === null || value <= 0) {
+    if (value === null) {
       setError(true);
       return;
     }
     setError(false);
-    onApply(formatAmount(value));
+    onSave({ expression, result: value });
   };
 
-  const display =
-    expression?.length > 0 ? expression : t(CALCULATOR_CONSTANTS.DISPLAY_PLACEHOLDER);
+  const display = expression?.length > 0 ? expression : t(CALCULATOR_CONSTANTS.DISPLAY_PLACEHOLDER);
 
   return (
     <SpendCalculatorStyles.Wrap>
@@ -71,8 +71,15 @@ const SpendCalculator = ({ onApply }: SpendCalculatorProps) => {
           </SpendCalculatorStyles.Key>
         ))}
       </SpendCalculatorStyles.Grid>
+      <InputField
+        label={t(CALCULATOR_CONSTANTS.LABEL)}
+        value={label}
+        onChangeText={onLabelChange}
+        placeholder={t(CALCULATOR_CONSTANTS.LABEL_PLACEHOLDER)}
+        error={labelError}
+      />
       <SpendCalculatorStyles.Actions>
-        <PrimaryButton label={t(CALCULATOR_CONSTANTS.USE)} onPress={handleUse} compact />
+        <PrimaryButton label={t(CALCULATOR_CONSTANTS.SAVE)} onPress={handleSave} compact />
       </SpendCalculatorStyles.Actions>
     </SpendCalculatorStyles.Wrap>
   );

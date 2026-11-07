@@ -5,6 +5,10 @@ export type ThemeId = 'levelup' | 'onePiece' | 'naruto' | 'soloLeveling';
 
 export type ColorSchemeId = 'dark' | 'light';
 
+export type FontId = 'minimal' | 'rajdhani' | 'orbitron';
+
+export type AppMode = 'tracker' | 'tools';
+
 export type ThemePanelFrame = 'corners' | 'minimal' | 'rounded' | 'stripe' | 'flag';
 
 export type ThemeTabIndicator = 'line' | 'pill' | 'glow';
@@ -65,6 +69,30 @@ export interface ThemeTypography {
   displayLetterSpacing: number;
   bodyLetterSpacing: number;
   lineHeightScale: number;
+}
+
+export interface BentoTokens {
+  accent: string;
+  accentMuted: string;
+  glow: string;
+  danger: string;
+  radius: number;
+  fontTitle: string;
+  fontBody: string;
+  bg: string;
+  surface: string;
+  surfaceSecondary: string;
+  border: string;
+  textPrimary: string;
+  textSecondary: string;
+  clockTagKey: string;
+}
+
+export interface ThemeOverrides {
+  accent: string | null;
+  background: string | null;
+  surface: string | null;
+  text: string | null;
 }
 
 export interface ThemeColors {
@@ -133,4 +161,5 @@ export interface AppTheme {
   icons: ThemeIcons;
   assets: ThemeAssets;
   typography: ThemeTypography;
+  bento: BentoTokens;
 }

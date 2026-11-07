@@ -15,6 +15,8 @@ export const STORAGE_KEYS = {
   BUDGET: 'levelup.budget.v1',
   FOCUS: 'levelup.focus.v1',
   TODOS: 'levelup.todos.v1',
+  NOTES: 'levelup.notes.v1',
+  CALCULATOR: 'levelup.calculator.v1',
 } as const;
 
 export const COMMON_CONSTANTS = {

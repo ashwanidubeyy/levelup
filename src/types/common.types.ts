@@ -152,11 +152,9 @@ export interface QuestCardProps {
 }
 
 export interface JournalEntryCardProps {
-  title: string;
-  preview: string;
   dateLabel: string;
-  moodLabel: string;
-  moodColor: string;
+  opening?: string;
+  preview: string;
   onPress: () => void;
 }
 
@@ -278,6 +276,7 @@ export interface ChallengeCardProps {
   progressLabel: string;
   progress: number;
   xpLabel: string;
+  rewardLabel?: string;
   checkInLabel: string;
   deleteLabel: string;
   doneLabel: string;
@@ -285,6 +284,20 @@ export interface ChallengeCardProps {
   completed: boolean;
   onCheckIn: () => void;
   onDelete: () => void;
+}
+
+export interface PressScaleProps {
+  children: ReactNode;
+  onPress: () => void;
+  accessibilityLabel: string;
+  disabled?: boolean;
+}
+
+export interface ColorFieldProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  swatches: readonly string[];
 }
 
 export interface BulletListProps {
@@ -306,5 +319,8 @@ export interface TabIconProps {
 }
 
 export interface SpendCalculatorProps {
-  onApply: (amount: string) => void;
+  label: string;
+  onLabelChange: (value: string) => void;
+  labelError?: string;
+  onSave: (payload: { expression: string; result: number }) => void;
 }

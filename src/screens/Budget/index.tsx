@@ -9,8 +9,6 @@ import InputField from '../../components/InputField';
 import PrimaryButton from '../../components/PrimaryButton';
 import StatBar from '../../components/StatBar';
 import DateNavigator from '../../components/DateNavigator';
-import SpendCalculator from '../../components/SpendCalculator';
-import SegmentedControl from '../../components/SegmentedControl';
 import { BudgetStyles } from './styles';
 import type { BudgetCategoryId, Expense } from '../../types';
 import {
@@ -18,7 +16,6 @@ import {
   BUDGET_CATEGORY_DEFAULT,
   BUDGET_CONSTANTS,
   BUDGET_RULES,
-  BUDGET_SECTIONS,
 } from '../../constants/budget';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -57,7 +54,6 @@ const Budget = () => {
   const [editNote, setEditNote] = useState('');
   const [categoryId, setCategoryId] = useState<BudgetCategoryId>(BUDGET_CATEGORY_DEFAULT);
   const [editCategoryId, setEditCategoryId] = useState<BudgetCategoryId>(BUDGET_CATEGORY_DEFAULT);
-  const [section, setSection] = useState<string>(BUDGET_SECTIONS.TRACKER);
   const monthExpenses = useMemo(
     () => expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)),
     [budget?.expenses, day],
@@ -183,28 +179,6 @@ const Budget = () => {
     <KeybordView>
       <PageContainer>
         <ScreenHeader title={t(BUDGET_CONSTANTS.TITLE)} subtitle={t(BUDGET_CONSTANTS.SUBTITLE)} />
-        <BudgetStyles.SectionSwitch>
-          <SegmentedControl
-            value={section}
-            onChange={setSection}
-            options={[
-              { value: BUDGET_SECTIONS.TRACKER, label: t(BUDGET_CONSTANTS.SECTION_TRACKER) },
-              { value: BUDGET_SECTIONS.CALCULATOR, label: t(BUDGET_CONSTANTS.SECTION_CALCULATOR) },
-            ]}
-          />
-        </BudgetStyles.SectionSwitch>
-        {section === BUDGET_SECTIONS.CALCULATOR ? (
-          <SystemPanel title={t(BUDGET_CONSTANTS.CALCULATOR_TITLE)} variant="system">
-            <SpendCalculator
-              onApply={(value: string) => {
-                setAmount(value);
-                setError('');
-                setSection(BUDGET_SECTIONS.TRACKER);
-              }}
-            />
-          </SystemPanel>
-        ) : null}
-        {section === BUDGET_SECTIONS.TRACKER ? (
         <BudgetStyles.TrackerWrap>
         <SystemPanel title={t(BUDGET_CONSTANTS.MONTHLY)} variant={over ? 'danger' : 'monarch'}>
           <InputField
@@ -340,7 +314,6 @@ const Budget = () => {
           </BudgetStyles.Status>
         </SystemPanel>
         </BudgetStyles.TrackerWrap>
-        ) : null}
       </PageContainer>
     </KeybordView>
   );

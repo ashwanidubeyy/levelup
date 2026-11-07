@@ -17,6 +17,25 @@ export const challengeRatio = (challenge: Challenge): number => {
   return Math.min(challenge?.checkIns?.length ?? 0, total) / total;
 };
 
+export const activeChallenge = (items: Challenge[], day: string): Challenge | undefined => {
+  const open = sortChallenges(items).filter((item: Challenge) => !item?.completedAt);
+  return open.find((item: Challenge) => isDayInChallenge(item, day)) ?? open[0];
+};
+
+export const challengeStreak = (challenge: Challenge | undefined, today: string): number => {
+  const days = new Set(challenge?.checkIns ?? []);
+  let cursor = days.has(today) ? today : addDays(today, -1);
+  if (!days.has(cursor)) {
+    return 0;
+  }
+  let count = 0;
+  while (days.has(cursor)) {
+    count += 1;
+    cursor = addDays(cursor, -1);
+  }
+  return count;
+};
+
 export const sortChallenges = (items: Challenge[]): Challenge[] =>
   [...(items ?? [])].sort((left: Challenge, right: Challenge) => {
     if (!!left?.completedAt !== !!right?.completedAt) {

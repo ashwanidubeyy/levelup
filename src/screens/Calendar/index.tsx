@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import KeybordView from '../../components/KeybordView';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -23,9 +22,11 @@ import { holidaysInMonth, holidaysOnDay } from '../../utils/indiaCalendar';
 import { remindersOnDay } from '../../utils/reminders';
 import { generateId } from '../../utils/helpers';
 
-type Props = RootScreenProps<'Calendar'>;
+interface CalendarProps {
+  route?: { params?: { day?: string } };
+}
 
-const Calendar = ({ navigation, route }: Props) => {
+const Calendar = ({ route }: CalendarProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const items = useAppSelector(state => state?.reminders?.items);
@@ -96,12 +97,7 @@ const Calendar = ({ navigation, route }: Props) => {
   return (
     <KeybordView>
       <PageContainer>
-        <ScreenHeader
-          title={t(CALENDAR_CONSTANTS.TITLE)}
-          subtitle={t(CALENDAR_CONSTANTS.SUBTITLE)}
-          onBack={navigation.goBack}
-          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
-        />
+        <ScreenHeader title={t(CALENDAR_CONSTANTS.TITLE)} subtitle={t(CALENDAR_CONSTANTS.SUBTITLE)} />
         <SystemPanel>
           <DateNavigator
             label={formatMonthLabel(year, month)}

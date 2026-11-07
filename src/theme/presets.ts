@@ -1,6 +1,7 @@
 import type { AppTheme, ThemeColors, ThemeGradients, ThemeIcons, ThemeLayout, ThemeMotion, ThemeTypography } from './types';
 import { THEME_BACKDROP_ART, THEME_SCREEN_ASSETS } from './themeArt';
 import { THEME_FONT_STACKS } from './themeFonts';
+import { getAppTheme } from './tokens';
 
 const buildTheme = (
   id: AppTheme['id'],
@@ -59,6 +60,7 @@ const buildTheme = (
       ...THEME_SCREEN_ASSETS[id],
     },
     typography,
+    bento: getAppTheme(id, 'dark'),
   };
 };
 
@@ -68,7 +70,7 @@ const LEVELUP_LAYOUT: ThemeLayout = {
   contentInset: 14,
   hubGap: 9,
   panelRadius: 16,
-  buttonRadius: 12,
+  buttonRadius: 16,
   panelFrame: 'minimal',
   tabIndicator: 'pill',
   tabIconScale: 0.98,
@@ -80,8 +82,8 @@ const ONE_PIECE_LAYOUT: ThemeLayout = {
   spacingScale: 0.92,
   contentInset: 14,
   hubGap: 10,
-  panelRadius: 18,
-  buttonRadius: 12,
+  panelRadius: 24,
+  buttonRadius: 24,
   panelFrame: 'minimal',
   tabIndicator: 'pill',
   tabIconScale: 1.02,
@@ -93,8 +95,8 @@ const NARUTO_LAYOUT: ThemeLayout = {
   spacingScale: 0.88,
   contentInset: 13,
   hubGap: 8,
-  panelRadius: 14,
-  buttonRadius: 10,
+  panelRadius: 12,
+  buttonRadius: 12,
   panelFrame: 'minimal',
   tabIndicator: 'pill',
   tabIconScale: 0.96,
@@ -106,8 +108,8 @@ const SOLO_LAYOUT: ThemeLayout = {
   spacingScale: 0.9,
   contentInset: 15,
   hubGap: 11,
-  panelRadius: 20,
-  buttonRadius: 14,
+  panelRadius: 16,
+  buttonRadius: 16,
   panelFrame: 'minimal',
   tabIndicator: 'pill',
   tabIconScale: 0.94,

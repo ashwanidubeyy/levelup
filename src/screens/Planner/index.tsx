@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
 import KeybordView from '../../components/KeybordView';
 import ScreenHeader from '../../components/ScreenHeader';
@@ -19,9 +18,7 @@ import { addDays, formatDayLabel, todayKey } from '../../utils/date';
 import { doneCountForDay, todosForDay } from '../../utils/todos';
 import { generateId } from '../../utils/helpers';
 
-type Props = RootScreenProps<'Planner'>;
-
-const Planner = ({ navigation }: Props) => {
+const Planner = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const todoState = useAppSelector(state => state?.todos);
@@ -90,12 +87,7 @@ const Planner = ({ navigation }: Props) => {
   return (
     <KeybordView>
       <PageContainer>
-        <ScreenHeader
-          title={t(PLANNER_CONSTANTS.TITLE)}
-          subtitle={t(PLANNER_CONSTANTS.SUBTITLE)}
-          onBack={navigation.goBack}
-          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
-        />
+        <ScreenHeader title={t(PLANNER_CONSTANTS.TITLE)} subtitle={t(PLANNER_CONSTANTS.SUBTITLE)} />
         <SystemPanel title={t(PLANNER_CONSTANTS.ADD)} variant="monarch">
           <DateNavigator
             label={formatDayLabel(day)}

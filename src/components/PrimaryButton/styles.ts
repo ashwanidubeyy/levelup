@@ -27,11 +27,11 @@ const Gradient = styled(LinearGradient)<{ $variant: ButtonVariant; $compact: boo
   justify-content: center;
 `;
 
-const Label = styled.Text<{ $compact: boolean }>`
+const Label = styled.Text<{ $compact: boolean; $variant: ButtonVariant }>`
   font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
   font-size: ${({ $compact, theme }) => ($compact ? themeFontSize(theme, 'XXS') : themeFontSize(theme, 'SM'))}px;
   letter-spacing: ${({ theme }) => theme.typography.displayLetterSpacing}px;
-  color: ${({ theme }) => theme.colors.WHITE};
+  color: ${({ $variant, theme }) => ($variant === 'ghost' ? theme.colors.TEXT : theme.colors.BLACK)};
 `;
 
 const LoaderSlot = styled.View`

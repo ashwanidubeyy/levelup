@@ -25,6 +25,7 @@ export const JOURNAL_CONSTANTS = {
     DELETE_BODY: 'journal.deleteBody',
   },
   UNTITLED: 'journal.untitled',
+  STAMP_EMPTY: 'journal.stampEmpty',
   MOOD_OPTIONS: [
     { value: 'radiant', labelKey: 'journal.moods.radiant', color: COLORS.GOLD },
     { value: 'focused', labelKey: 'journal.moods.focused', color: COLORS.BLUE_LIGHT },

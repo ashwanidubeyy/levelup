@@ -83,6 +83,12 @@ export const hourOf = (timestamp: number): number => new Date(timestamp).getHour
 
 export const formatClock = (hour: number, minute: number): string => `${pad(hour)}:${pad(minute)}`;
 
+export const formatBentoDate = (date: Date, locale?: string): string => {
+  const weekday = date.toLocaleDateString(locale, { weekday: 'short' }).replace('.', '').toUpperCase();
+  const month = date.toLocaleDateString(locale, { month: 'short' }).replace('.', '').toUpperCase();
+  return `${weekday}, ${pad(date.getDate())} ${month}`;
+};
+
 export const timestampFor = (day: string, hour: number, minute: number): number => {
   const date = parseDayKey(day);
   date.setHours(hour, minute, 0, 0);

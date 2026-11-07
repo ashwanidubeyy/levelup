@@ -16,7 +16,7 @@ const Card = styled.View`
 const Title = styled.Text`
   font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
   font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
-  color: ${({ theme }) => theme.colors.WHITE};
+  color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Meta = styled.Text`
