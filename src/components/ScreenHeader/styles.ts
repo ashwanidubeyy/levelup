@@ -10,7 +10,7 @@ const HIT = moderateScale(40, 0.9);
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-bottom: ${V_SPACING.SM}px;
+  margin-bottom: ${V_SPACING.MD}px;
 `;
 
 const BackButton = styled.TouchableOpacity`

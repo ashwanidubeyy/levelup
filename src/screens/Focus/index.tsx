@@ -30,7 +30,7 @@ const Focus = ({ navigation }: Props) => {
   );
 
   return (
-    <PageContainer animatedBackground>
+    <PageContainer>
       <ScreenHeader
         title={t(FOCUS_CONSTANTS.TITLE)}
         subtitle={t(FOCUS_CONSTANTS.SUBTITLE)}

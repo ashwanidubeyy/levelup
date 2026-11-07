@@ -15,7 +15,6 @@ const Hub = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   gap: ${({ theme }) => scaleForTheme(theme.layout.hubGap, theme.layout.scale)}px;
-  margin-top: ${V_SPACING.LG}px;
 `;
 
 const AgendaRow = styled.TouchableOpacity`

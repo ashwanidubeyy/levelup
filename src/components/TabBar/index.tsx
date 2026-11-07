@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { Animated } from 'react-native';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,7 @@ import type { AppTheme } from '../../theme/types';
 
 const { HomeIcon, JournalIcon, BudgetIcon, MoreIcon } = Icons;
 
-const BASE_ICON_SIZE = 20;
+const BASE_ICON_SIZE = 21;
 
 const TAB_ITEMS: Record<string, { Icon: (props: any) => React.JSX.Element; labelKey: string }> = {
   Home: { Icon: HomeIcon, labelKey: TAB_CONSTANTS.HOME },
@@ -25,7 +26,15 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const iconSize = moderateScale(BASE_ICON_SIZE * theme.layout.tabIconScale, 0.9);
-  const bottomInset = insets.bottom + moderateScale(10, 0.9);
+  const bottomInset = Math.max(insets.bottom, moderateScale(10, 0.9));
+  const scalesRef = useRef<Record<string, Animated.Value>>({});
+
+  const scaleFor = (key: string) => {
+    if (!scalesRef.current[key]) {
+      scalesRef.current[key] = new Animated.Value(1);
+    }
+    return scalesRef.current[key];
+  };
 
   return (
     <TabBarStyles.Outer $bottom={bottomInset}>
@@ -39,7 +48,12 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
           const color = active ? theme.colors.TEXT : theme.colors.TEXT_DIM;
           const strokeWidth = active ? theme.icons.activeStrokeWidth : theme.icons.strokeWidth;
           const label = t(item.labelKey);
+          const scale = scaleFor(route?.key);
           const handlePress = () => {
+            Animated.sequence([
+              Animated.timing(scale, { toValue: theme.motion.pressScale, duration: 80, useNativeDriver: true }),
+              Animated.spring(scale, { toValue: 1, friction: 5, useNativeDriver: true }),
+            ]).start();
             const event = navigation.emit({ type: 'tabPress', target: route?.key, canPreventDefault: true });
             if (!active && !event?.defaultPrevented) {
               navigation.navigate(route?.name);
@@ -48,14 +62,17 @@ const TabBar = ({ state, navigation }: BottomTabBarProps) => {
           return (
             <TabBarStyles.Tab
               key={route?.key}
+              $active={active}
               onPress={handlePress}
               accessibilityRole="tab"
               accessibilityState={{ selected: active }}
               accessibilityLabel={label}
             >
-              {active ? <TabBarStyles.ActiveHalo $accent={theme.colors.BLUE_GLOW} /> : null}
-              <item.Icon size={iconSize} color={color} strokeWidth={strokeWidth} />
-              {active ? <TabBarStyles.Dot $accent={theme.colors.YELLOW} /> : null}
+              <TabBarStyles.ActivePill $accent={theme.colors.BLUE_GLOW} $visible={active} />
+              <Animated.View style={{ transform: [{ scale }] }}>
+                <item.Icon size={iconSize} color={color} strokeWidth={strokeWidth} />
+              </Animated.View>
+              <TabBarStyles.Label $active={active}>{label}</TabBarStyles.Label>
             </TabBarStyles.Tab>
           );
         })}

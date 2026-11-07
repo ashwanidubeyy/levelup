@@ -14,8 +14,8 @@ const Tile = styled.TouchableOpacity<{ $frame: ThemePanelFrame }>`
   padding: ${({ theme }) => themeVSpace(theme, 'SM')}px ${({ theme }) => themeSpace(theme, 'SM')}px;
   background-color: ${({ theme, $frame }) => ($frame === 'stripe' ? theme.colors.PANEL : theme.colors.PANEL_ALT)};
   border-radius: ${({ theme }) => scaleForTheme(theme.layout.panelRadius, theme.layout.scale)}px;
-  border-width: ${({ $frame }) => ($frame === 'rounded' ? BORDER.THICK : BORDER.HAIRLINE)}px;
-  border-color: ${({ theme, $frame }) => ($frame === 'rounded' ? theme.colors.BLUE_GLOW : theme.colors.PANEL_BORDER)};
+  border-width: ${BORDER.HAIRLINE}px;
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
   border-top-width: ${({ $frame }) => ($frame === 'stripe' ? BORDER.THICK : 0)}px;
   border-top-color: ${({ theme, $frame }) => ($frame === 'stripe' ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
   border-left-width: ${({ $frame }) => ($frame === 'flag' ? BORDER.THICK : 0)}px;

@@ -24,6 +24,7 @@ const buildTheme = (
   };
   return {
     id,
+    colorScheme: 'dark' as const,
     colors,
     gradients,
     accents,
@@ -66,10 +67,10 @@ const LEVELUP_LAYOUT: ThemeLayout = {
   spacingScale: 0.9,
   contentInset: 14,
   hubGap: 9,
-  panelRadius: 6,
-  buttonRadius: 4,
-  panelFrame: 'corners',
-  tabIndicator: 'line',
+  panelRadius: 16,
+  buttonRadius: 12,
+  panelFrame: 'minimal',
+  tabIndicator: 'pill',
   tabIconScale: 0.98,
   letterSpacing: 0.8,
 };
@@ -79,9 +80,9 @@ const ONE_PIECE_LAYOUT: ThemeLayout = {
   spacingScale: 0.92,
   contentInset: 14,
   hubGap: 10,
-  panelRadius: 10,
-  buttonRadius: 8,
-  panelFrame: 'stripe',
+  panelRadius: 18,
+  buttonRadius: 12,
+  panelFrame: 'minimal',
   tabIndicator: 'pill',
   tabIconScale: 1.02,
   letterSpacing: 1,
@@ -92,10 +93,10 @@ const NARUTO_LAYOUT: ThemeLayout = {
   spacingScale: 0.88,
   contentInset: 13,
   hubGap: 8,
-  panelRadius: 4,
-  buttonRadius: 4,
-  panelFrame: 'flag',
-  tabIndicator: 'line',
+  panelRadius: 14,
+  buttonRadius: 10,
+  panelFrame: 'minimal',
+  tabIndicator: 'pill',
   tabIconScale: 0.96,
   letterSpacing: 0.5,
 };
@@ -105,10 +106,10 @@ const SOLO_LAYOUT: ThemeLayout = {
   spacingScale: 0.9,
   contentInset: 15,
   hubGap: 11,
-  panelRadius: 14,
-  buttonRadius: 10,
-  panelFrame: 'rounded',
-  tabIndicator: 'glow',
+  panelRadius: 20,
+  buttonRadius: 14,
+  panelFrame: 'minimal',
+  tabIndicator: 'pill',
   tabIconScale: 0.94,
   letterSpacing: 1.2,
 };
@@ -120,8 +121,8 @@ const LEVELUP_MOTION: ThemeMotion = {
   parallaxY: 0.11,
   touchParallax: 0.22,
   auraPulseMax: 1.06,
-  stackAnimation: 'fade_from_bottom',
-  pressScale: 0.98,
+  stackAnimation: 'slide_from_right',
+  pressScale: 0.97,
 };
 
 const ONE_PIECE_MOTION: ThemeMotion = {
@@ -142,8 +143,8 @@ const NARUTO_MOTION: ThemeMotion = {
   parallaxY: 0.08,
   touchParallax: 0.2,
   auraPulseMax: 1.04,
-  stackAnimation: 'fade',
-  pressScale: 0.99,
+  stackAnimation: 'slide_from_right',
+  pressScale: 0.97,
 };
 
 const SOLO_MOTION: ThemeMotion = {
@@ -153,8 +154,8 @@ const SOLO_MOTION: ThemeMotion = {
   parallaxY: 0.16,
   touchParallax: 0.28,
   auraPulseMax: 1.1,
-  stackAnimation: 'fade_from_bottom',
-  pressScale: 0.94,
+  stackAnimation: 'slide_from_right',
+  pressScale: 0.96,
 };
 
 const LEVELUP_ICONS: ThemeIcons = { strokeWidth: 2, activeStrokeWidth: 2.5, filled: false };
@@ -229,6 +230,9 @@ const LEVELUP_COLORS: ThemeColors = {
   SCRIM_BOTTOM: 'rgba(5, 6, 10, 0.98)',
   SCRIM_FULL: 'rgba(5, 6, 10, 0.92)',
   OVERLAY_DARK: 'rgba(0, 0, 0, 0.6)',
+  GLASS_FILL: 'rgba(16, 20, 32, 0.78)',
+  GLASS_STROKE: 'rgba(255, 255, 255, 0.18)',
+  GLASS_HIGHLIGHT: 'rgba(255, 255, 255, 0.08)',
 };
 
 const ONE_PIECE_COLORS: ThemeColors = {

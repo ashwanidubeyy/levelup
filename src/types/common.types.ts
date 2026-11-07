@@ -15,7 +15,12 @@ export interface PageContainerProps {
   scrollable?: boolean;
   withTopInset?: boolean;
   withBottomInset?: boolean;
-  animatedBackground?: boolean;
+  fadeIn?: boolean;
+}
+
+export interface FadeInViewProps {
+  children: ReactNode;
+  delay?: number;
 }
 
 export interface SystemPanelProps {

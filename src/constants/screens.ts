@@ -1,5 +1,6 @@
 export const SPLASH_CONSTANTS = {
   TAGLINE: 'splash.tagline',
+  LOADING: 'splash.loading',
 } as const;
 
 export const ONBOARDING_CONSTANTS = {
@@ -101,6 +102,8 @@ export const HOME_CONSTANTS = {
   VIEW_ALL: 'home.viewAll',
   QUOTE_TITLE: 'home.quoteTitle',
   QUOTE_HINT: 'home.quoteHint',
+  HUB_TITLE: 'home.hubTitle',
+  GREETING: 'home.greeting',
   FOCUS_VALUE: 'home.focusValue',
   UPCOMING: 'home.upcoming',
   UPCOMING_EMPTY: 'home.upcomingEmpty',

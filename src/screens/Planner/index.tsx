@@ -8,16 +8,14 @@ import ScreenHeader from '../../components/ScreenHeader';
 import SystemPanel from '../../components/SystemPanel';
 import InputField from '../../components/InputField';
 import PrimaryButton from '../../components/PrimaryButton';
-import ToggleRow from '../../components/ToggleRow';
-import Stepper from '../../components/Stepper';
 import DateNavigator from '../../components/DateNavigator';
 import { PlannerStyles } from './styles';
 import type { TodoItem } from '../../types';
 import { PLANNER_CONSTANTS, PLANNER_RULES } from '../../constants/planner';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { addTodo, clearDayTodos, removeTodo, setPlannerReminder, updateTodo } from '../../store/slices/todoSlice';
-import { addDays, formatClock, formatDayLabel, todayKey } from '../../utils/date';
+import { addTodo, clearDayTodos, removeTodo, updateTodo } from '../../store/slices/todoSlice';
+import { addDays, formatDayLabel, todayKey } from '../../utils/date';
 import { doneCountForDay, todosForDay } from '../../utils/todos';
 import { generateId } from '../../utils/helpers';
 
@@ -89,13 +87,9 @@ const Planner = ({ navigation }: Props) => {
     ]);
   };
 
-  const handleReminder = (hour: number, minute: number, enabled: boolean) => {
-    dispatch(setPlannerReminder({ hour, minute, enabled }));
-  };
-
   return (
     <KeybordView>
-      <PageContainer animatedBackground>
+      <PageContainer>
         <ScreenHeader
           title={t(PLANNER_CONSTANTS.TITLE)}
           subtitle={t(PLANNER_CONSTANTS.SUBTITLE)}
@@ -177,38 +171,6 @@ const Planner = ({ navigation }: Props) => {
               <PrimaryButton label={t(PLANNER_CONSTANTS.RESET_DAY)} onPress={handleResetDay} variant="danger" compact />
             </PlannerStyles.Block>
           ) : null}
-        </SystemPanel>
-        <SystemPanel title={t(PLANNER_CONSTANTS.REMINDER)} variant="system">
-          <ToggleRow
-            label={t(PLANNER_CONSTANTS.REMINDER)}
-            hint={t(PLANNER_CONSTANTS.REMINDER_HINT)}
-            value={!!todoState?.reminderEnabled}
-            onValueChange={enabled =>
-              handleReminder(todoState?.reminderHour ?? PLANNER_RULES.REMINDER_HOUR, todoState?.reminderMinute ?? 0, enabled)
-            }
-          />
-          <Stepper
-            label={t(PLANNER_CONSTANTS.HOUR)}
-            valueLabel={formatClock(todoState?.reminderHour ?? PLANNER_RULES.REMINDER_HOUR, todoState?.reminderMinute ?? 0)}
-            value={todoState?.reminderHour ?? PLANNER_RULES.REMINDER_HOUR}
-            min={0}
-            max={23}
-            step={1}
-            onChange={hour =>
-              handleReminder(hour, todoState?.reminderMinute ?? 0, !!todoState?.reminderEnabled)
-            }
-          />
-          <Stepper
-            label={t(PLANNER_CONSTANTS.MINUTE)}
-            valueLabel={formatClock(todoState?.reminderHour ?? PLANNER_RULES.REMINDER_HOUR, todoState?.reminderMinute ?? 0)}
-            value={todoState?.reminderMinute ?? 0}
-            min={0}
-            max={55}
-            step={5}
-            onChange={minute =>
-              handleReminder(todoState?.reminderHour ?? PLANNER_RULES.REMINDER_HOUR, minute, !!todoState?.reminderEnabled)
-            }
-          />
         </SystemPanel>
       </PageContainer>
     </KeybordView>

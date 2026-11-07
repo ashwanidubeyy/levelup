@@ -20,6 +20,7 @@ const initialState: SettingsState = {
   trackingSnoozeUntil: null,
   trackingSnoozeRestore: true,
   themeId: DEFAULT_THEME_ID,
+  colorScheme: 'dark',
 };
 
 const settingsSlice = createSlice({
@@ -34,6 +35,7 @@ const settingsSlice = createSlice({
       trackingSnoozeRestore:
         action.payload?.trackingSnoozeRestore === undefined ? true : action.payload.trackingSnoozeRestore,
       themeId: action.payload?.themeId ?? DEFAULT_THEME_ID,
+      colorScheme: action.payload?.colorScheme ?? 'dark',
       hydrated: true,
     }),
     setInstallDay: (state, action: PayloadAction<string>) => {
@@ -82,6 +84,9 @@ const settingsSlice = createSlice({
     setThemeId: (state, action: PayloadAction<AppSettings['themeId']>) => {
       state.themeId = action.payload;
     },
+    setColorScheme: (state, action: PayloadAction<AppSettings['colorScheme']>) => {
+      state.colorScheme = action.payload;
+    },
   },
 });
 
@@ -99,6 +104,7 @@ export const {
   clearTrackingSnooze,
   expireTrackingSnooze,
   setThemeId,
+  setColorScheme,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

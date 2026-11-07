@@ -6,6 +6,16 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.BACKGROUND};
 `;
 
+const Ambient = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: ${({ theme }) => themeVSpace(theme, 'XXL') * 3}px;
+  background-color: ${({ theme }) => theme.colors.GLASS_HIGHLIGHT};
+  opacity: 0.35;
+`;
+
 const Scroll = styled.ScrollView`
   flex: 1;
 `;
@@ -22,6 +32,7 @@ const Content = styled.View<{ $top: number; $bottom: number; $grow: boolean }>`
 
 export const PageContainerStyles = {
   Container,
+  Ambient,
   Scroll,
   Content,
 };

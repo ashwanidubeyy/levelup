@@ -5,22 +5,23 @@ import type { RootStackParamList, TabScreenProps } from '../../navigation/AppNav
 import PageContainer from '../../components/PageContainer';
 import QuoteCard from '../../components/QuoteCard';
 import HubTile from '../../components/HubTile';
-import AppShortcut from '../../components/AppShortcut';
 import SystemPanel from '../../components/SystemPanel';
 import StatBar from '../../components/StatBar';
 import StatTile from '../../components/StatTile';
 import AppCountRow from '../../components/AppCountRow';
 import Banner from '../../components/Banner';
 import ComingSoonCard from '../../components/ComingSoonCard';
+import ScreenHeader from '../../components/ScreenHeader';
+import AnimeClockWidget from '../../components/AnimeClockWidget';
 import { HomeStyles } from './styles';
-import type { AgendaItem, JournalEntry, TrackedAppId } from '../../types';
+import type { JournalEntry, TrackedAppId } from '../../types';
 import { HOME_CONSTANTS, ONBOARDING_CONSTANTS } from '../../constants/screens';
 import { HUB_CONSTANTS } from '../../constants/hub';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
 import { FOCUS_RULES } from '../../constants/focus';
 import { JOURNAL_CONSTANTS } from '../../constants/journal';
-import { TRACKED_APP_IDS } from '../../constants/common';
-import { HOME_RULES, SHORTCUT_TARGETS } from '../../constants/shortcuts';
+import { COMMON_CONSTANTS, TRACKED_APP_IDS } from '../../constants/common';
+import { HOME_RULES } from '../../constants/shortcuts';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
@@ -29,34 +30,18 @@ import { QUOTES } from '../../constants/quotes';
 import { resultData } from '../../utils/trackerResult';
 import { appLabel, formatDuration, limitMessage } from '../../utils/format';
 import { expensesForMonth, formatAmount, monthKeyFromDay, sumExpenses } from '../../utils/money';
-import { formatAgendaDay, formatDayLabel, formatTime, todayKey } from '../../utils/date';
-import { buildAgenda } from '../../utils/agenda';
-import { openShortcut } from '../../utils/appLinks';
+import { todayKey } from '../../utils/date';
 import { openTodosForDay } from '../../utils/todos';
 import { useTheme } from 'styled-components/native';
 import type { AppTheme } from '../../theme/types';
 
 type Props = TabScreenProps<'Home'>;
 
-const agendaLabel = (item: AgendaItem, translate: (key: string) => string): string =>
-  item?.kind === 'holiday' ? translate(item?.titleKey ?? '') : item?.title ?? '';
-
-const agendaMeta = (item: AgendaItem, translate: (key: string, options?: Record<string, string>) => string): string => {
-  const dayLabel = formatAgendaDay(item?.day ?? '', translate);
-  return item?.kind === 'holiday'
-    ? translate(HOME_CONSTANTS.AGENDA_HOLIDAY, { day: dayLabel })
-    : translate(HOME_CONSTANTS.AGENDA_REMINDER, {
-        day: dayLabel,
-        time: formatTime(item?.at ?? 0),
-      });
-};
-
 const Home = ({ navigation }: Props) => {
   const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const rootNavigation = navigation.getParent<NavigationProp<RootStackParamList>>();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
-  const reminders = useAppSelector(state => state?.reminders?.items) ?? [];
   const todoItems = useAppSelector(state => state?.todos?.items) ?? [];
   const budget = useAppSelector(state => state?.budget);
   const entries = useAppSelector(state => state?.journal?.entries) ?? [];
@@ -70,8 +55,6 @@ const Home = ({ navigation }: Props) => {
   const danger = ratio(total, dailyLimit) >= TRACKER_CONSTANTS.WARNING_RATIO;
   const isIos = status === 'comingSoon';
   const day = todayKey();
-  const agenda = buildAgenda(reminders, Date.now(), HOME_RULES.UPCOMING_LIMIT);
-  const next = agenda?.[0];
   const latest = entries?.[0] as JournalEntry | undefined;
   const spent = sumExpenses(expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)));
   const monthly = budget?.monthlyBudget ?? 0;
@@ -147,89 +130,62 @@ const Home = ({ navigation }: Props) => {
     );
 
   return (
-    <PageContainer animatedBackground>
+    <PageContainer>
+      <ScreenHeader title={t(HOME_CONSTANTS.GREETING)} subtitle={t(COMMON_CONSTANTS.APP_NAME)} />
+      <AnimeClockWidget />
+      {renderBanner()}
+      {renderTracker()}
+      <SystemPanel title={t(HOME_CONSTANTS.HUB_TITLE)} variant="monarch">
+        <HomeStyles.Hub>
+          <HubTile
+            label={t(HUB_CONSTANTS.JOURNAL)}
+            value={latest ? latest?.title || t(JOURNAL_CONSTANTS.UNTITLED) : t(HUB_CONSTANTS.JOURNAL_EMPTY)}
+            hint={latest ? previewText(latest?.body ?? '', HOME_RULES.JOURNAL_PREVIEW) : t(HUB_CONSTANTS.JOURNAL_HINT)}
+            accent="system"
+            onPress={() =>
+              latest?.id
+                ? rootNavigation?.navigate('JournalEditor', { entryId: latest.id })
+                : navigation.navigate('JournalHub', { section: 'journal' })
+            }
+          />
+          <HubTile
+            label={t(HUB_CONSTANTS.FOCUS)}
+            value={t(HOME_CONSTANTS.FOCUS_VALUE, { minutes: FOCUS_RULES.DEFAULT_MINUTES })}
+            hint={t(HUB_CONSTANTS.FOCUS_HINT)}
+            accent="monarch"
+            onPress={() => rootNavigation?.navigate('Focus')}
+          />
+          <HubTile
+            label={t(HUB_CONSTANTS.BUDGET)}
+            value={formatAmount(monthly > 0 ? remaining : spent)}
+            hint={t(monthly > 0 ? HUB_CONSTANTS.BUDGET_HINT : HUB_CONSTANTS.BUDGET_EMPTY, {
+              spent: formatAmount(spent),
+            })}
+            accent={monthly > 0 && remaining < 0 ? 'danger' : 'monarch'}
+            onPress={() => navigation.navigate('Budget')}
+          />
+          <HubTile
+            label={t(HUB_CONSTANTS.PLANNER)}
+            value={openTasks?.[0]?.title ?? t(HUB_CONSTANTS.PLANNER_EMPTY)}
+            hint={
+              openTasks.length > 0
+                ? t(HUB_CONSTANTS.PLANNER_HINT, { count: openTasks.length })
+                : t(HUB_CONSTANTS.PLANNER_EMPTY)
+            }
+            accent="system"
+            onPress={() => rootNavigation?.navigate('Planner')}
+          />
+        </HomeStyles.Hub>
+      </SystemPanel>
       <QuoteCard
-        variant="hero"
+        variant="default"
+        title={t(HOME_CONSTANTS.QUOTE_TITLE)}
         text={t(quote.textKey)}
         author={t(quote.authorKey)}
         image={quote.image}
         hint={t(HOME_CONSTANTS.QUOTE_HINT, { current: quoteIndex % QUOTES.length + 1, total: QUOTES.length })}
         onPress={() => setQuoteIndex((prev: number) => prev + 1)}
       />
-      <HomeStyles.Shortcuts>
-        {SHORTCUT_TARGETS.map((target: (typeof SHORTCUT_TARGETS)[number]) => (
-          <AppShortcut
-            key={target.id}
-            label={t(target.labelKey)}
-            onPress={() => {
-              openShortcut(target.app, target.web).catch(() => undefined);
-            }}
-          />
-        ))}
-      </HomeStyles.Shortcuts>
-      <SystemPanel title={t(HOME_CONSTANTS.UPCOMING)} variant="monarch">
-        {agenda.length === 0 ? <HomeStyles.Empty>{t(HOME_CONSTANTS.UPCOMING_EMPTY)}</HomeStyles.Empty> : null}
-        {agenda.map((item: AgendaItem) => (
-          <HomeStyles.AgendaRow
-            key={item?.id}
-            onPress={() => navigation.navigate('Calendar', { day: item?.day })}
-            accessibilityRole="button"
-            accessibilityLabel={agendaLabel(item, t)}
-          >
-            <HomeStyles.AgendaTitle numberOfLines={1}>{agendaLabel(item, t)}</HomeStyles.AgendaTitle>
-            <HomeStyles.AgendaMeta>{agendaMeta(item, t)}</HomeStyles.AgendaMeta>
-          </HomeStyles.AgendaRow>
-        ))}
-      </SystemPanel>
-      <HomeStyles.Hub>
-        <HubTile
-          label={t(HUB_CONSTANTS.CALENDAR)}
-          value={next ? agendaLabel(next, t) : t(HUB_CONSTANTS.CALENDAR_EMPTY)}
-          hint={next ? agendaMeta(next, t) : t(HUB_CONSTANTS.CALENDAR_EMPTY)}
-          accent="system"
-          onPress={() => navigation.navigate('Calendar', next?.day ? { day: next.day } : undefined)}
-        />
-        <HubTile
-          label={t(HUB_CONSTANTS.BUDGET)}
-          value={formatAmount(monthly > 0 ? remaining : spent)}
-          hint={t(monthly > 0 ? HUB_CONSTANTS.BUDGET_HINT : HUB_CONSTANTS.BUDGET_EMPTY, {
-            spent: formatAmount(spent),
-          })}
-          accent={monthly > 0 && remaining < 0 ? 'danger' : 'monarch'}
-          onPress={() => navigation.navigate('Budget')}
-        />
-        <HubTile
-          label={t(HUB_CONSTANTS.JOURNAL)}
-          value={latest ? latest?.title || t(JOURNAL_CONSTANTS.UNTITLED) : t(HUB_CONSTANTS.JOURNAL_EMPTY)}
-          hint={latest ? previewText(latest?.body ?? '', HOME_RULES.JOURNAL_PREVIEW) : t(HUB_CONSTANTS.JOURNAL_HINT)}
-          accent="system"
-          onPress={() =>
-            latest?.id
-              ? navigation.navigate('JournalEditor', { entryId: latest.id })
-              : navigation.navigate('JournalHub', { section: 'journal' })
-          }
-        />
-        <HubTile
-          label={t(HUB_CONSTANTS.FOCUS)}
-          value={t(HOME_CONSTANTS.FOCUS_VALUE, { minutes: FOCUS_RULES.DEFAULT_MINUTES })}
-          hint={t(HUB_CONSTANTS.FOCUS_HINT)}
-          accent="monarch"
-          onPress={() => rootNavigation?.navigate('Focus')}
-        />
-        <HubTile
-          label={t(HUB_CONSTANTS.PLANNER)}
-          value={openTasks?.[0]?.title ?? t(HUB_CONSTANTS.PLANNER_EMPTY)}
-          hint={
-            openTasks.length > 0
-              ? t(HUB_CONSTANTS.PLANNER_HINT, { count: openTasks.length })
-              : t(HUB_CONSTANTS.PLANNER_EMPTY)
-          }
-          accent="system"
-          onPress={() => rootNavigation?.navigate('Planner')}
-        />
-      </HomeStyles.Hub>
-      {renderBanner()}
-      {renderTracker()}
     </PageContainer>
   );
 };

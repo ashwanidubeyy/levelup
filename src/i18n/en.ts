@@ -76,6 +76,11 @@ export const en = {
   },
   splash: {
     tagline: 'ONE PLACE FOR YOUR DAY',
+    loading: 'Loading…',
+  },
+  clock: {
+    caption: 'THEME TIME',
+    accessibility: 'Anime clock showing local time',
   },
   onboarding: {
     step: 'STEP {{current}} / {{total}}',
@@ -145,8 +150,10 @@ export const en = {
     sessions: 'Sessions',
     questsTitle: 'DAILY QUESTS',
     viewAll: 'View all',
+    greeting: 'Today',
+    hubTitle: 'Shortcuts',
     quoteTitle: 'TODAY’S QUOTE',
-    quoteHint: 'Every morning at 6:00 · tap for another · {{current}} / {{total}}',
+    quoteHint: 'Tap for another · {{current}} / {{total}}',
     focusValue: '{{minutes}}m',
     upcoming: 'UPCOMING',
     upcomingEmpty: 'Nothing coming up.',
@@ -310,6 +317,12 @@ export const en = {
     iosTitle: 'IPHONE',
     iosBody: 'Reel tracking is not available on iPhone. Screen Time usage reports are coming soon.',
     versionTagged: '{{version}} · {{tag}}',
+    appearance: {
+      title: 'APPEARANCE',
+      hint: 'Light or dark surfaces. Anime accent colors stay vivid.',
+      dark: 'Dark',
+      light: 'Light',
+    },
     theme: {
       title: 'ANIME THEME',
       hint: 'Colors, fonts, icons, layout, motion, and screen art across the app.',

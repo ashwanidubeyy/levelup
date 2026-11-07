@@ -3,6 +3,8 @@ import type { ButtonVariant, ChipVariant, PanelVariant } from '../types';
 
 export type ThemeId = 'levelup' | 'onePiece' | 'naruto' | 'soloLeveling';
 
+export type ColorSchemeId = 'dark' | 'light';
+
 export type ThemePanelFrame = 'corners' | 'minimal' | 'rounded' | 'stripe' | 'flag';
 
 export type ThemeTabIndicator = 'line' | 'pill' | 'glow';
@@ -100,6 +102,9 @@ export interface ThemeColors {
   SCRIM_BOTTOM: string;
   SCRIM_FULL: string;
   OVERLAY_DARK: string;
+  GLASS_FILL: string;
+  GLASS_STROKE: string;
+  GLASS_HIGHLIGHT: string;
 }
 
 export interface ThemeGradients {
@@ -115,6 +120,7 @@ export interface ThemeGradients {
 
 export interface AppTheme {
   id: ThemeId;
+  colorScheme: ColorSchemeId;
   colors: ThemeColors;
   gradients: ThemeGradients;
   accents: Record<PanelVariant, string>;

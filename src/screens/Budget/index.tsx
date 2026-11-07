@@ -8,8 +8,6 @@ import SystemPanel from '../../components/SystemPanel';
 import InputField from '../../components/InputField';
 import PrimaryButton from '../../components/PrimaryButton';
 import StatBar from '../../components/StatBar';
-import Stepper from '../../components/Stepper';
-import ToggleRow from '../../components/ToggleRow';
 import DateNavigator from '../../components/DateNavigator';
 import SpendCalculator from '../../components/SpendCalculator';
 import SegmentedControl from '../../components/SegmentedControl';
@@ -29,10 +27,9 @@ import {
   clearMonthExpenses,
   removeExpense,
   setMonthlyBudget,
-  setNightReminder,
   updateExpense,
 } from '../../store/slices/budgetSlice';
-import { addDays, formatClock, formatDayLabel, formatMonthLabel, monthOf, todayKey } from '../../utils/date';
+import { addDays, formatDayLabel, formatMonthLabel, monthOf, todayKey } from '../../utils/date';
 import {
   expensesForDay,
   expensesForMonth,
@@ -182,19 +179,9 @@ const Budget = () => {
     ]);
   };
 
-  const handleNight = (hour: number, minute: number, enabled: boolean) => {
-    dispatch(
-      setNightReminder({
-        hour,
-        minute,
-        enabled,
-      }),
-    );
-  };
-
   return (
     <KeybordView>
-      <PageContainer animatedBackground>
+      <PageContainer>
         <ScreenHeader title={t(BUDGET_CONSTANTS.TITLE)} subtitle={t(BUDGET_CONSTANTS.SUBTITLE)} />
         <BudgetStyles.SectionSwitch>
           <SegmentedControl
@@ -346,32 +333,6 @@ const Budget = () => {
               </BudgetStyles.ExpenseBlock>
             ),
           )}
-        </SystemPanel>
-        <SystemPanel title={t(BUDGET_CONSTANTS.NIGHT)} variant="danger">
-          <ToggleRow
-            label={t(BUDGET_CONSTANTS.NIGHT)}
-            hint={t(BUDGET_CONSTANTS.NIGHT_HINT)}
-            value={!!budget?.nightReminderEnabled}
-            onValueChange={enabled => handleNight(budget?.nightHour ?? BUDGET_RULES.NIGHT_HOUR, budget?.nightMinute ?? 0, enabled)}
-          />
-          <Stepper
-            label={t(BUDGET_CONSTANTS.HOUR)}
-            valueLabel={formatClock(budget?.nightHour ?? BUDGET_RULES.NIGHT_HOUR, budget?.nightMinute ?? 0)}
-            value={budget?.nightHour ?? BUDGET_RULES.NIGHT_HOUR}
-            min={0}
-            max={BUDGET_RULES.HOUR_MAX}
-            step={1}
-            onChange={hour => handleNight(hour, budget?.nightMinute ?? 0, !!budget?.nightReminderEnabled)}
-          />
-          <Stepper
-            label={t(BUDGET_CONSTANTS.MINUTE)}
-            valueLabel={formatClock(budget?.nightHour ?? BUDGET_RULES.NIGHT_HOUR, budget?.nightMinute ?? 0)}
-            value={budget?.nightMinute ?? 0}
-            min={0}
-            max={BUDGET_RULES.MINUTE_MAX}
-            step={BUDGET_RULES.MINUTE_STEP}
-            onChange={minute => handleNight(budget?.nightHour ?? BUDGET_RULES.NIGHT_HOUR, minute, !!budget?.nightReminderEnabled)}
-          />
           <BudgetStyles.Status>
             <BudgetStyles.Empty>
               {loggedToday ? t(BUDGET_CONSTANTS.LOGGED) : t(BUDGET_CONSTANTS.MISSING)}

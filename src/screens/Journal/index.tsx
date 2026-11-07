@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TabScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
-import AnimeHeroCard from '../../components/AnimeHeroCard';
 import ScreenHeader from '../../components/ScreenHeader';
 import PrimaryButton from '../../components/PrimaryButton';
 import JournalEntryCard from '../../components/JournalEntryCard';
@@ -12,8 +11,6 @@ import type { JournalEntry } from '../../types';
 import { JOURNAL_CONSTANTS } from '../../constants/journal';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { SCREEN_IMAGES } from '../../constants/images';
-import { useTheme } from 'styled-components/native';
-import type { AppTheme } from '../../theme/types';
 import { useAppSelector } from '../../store';
 import { formatDateTime } from '../../utils/date';
 import { previewText } from '../../utils/helpers';
@@ -25,7 +22,6 @@ type Props = TabScreenProps<'JournalHub'> & {
 const PREVIEW_LENGTH = 180;
 
 const Journal = ({ navigation, embedded = false }: Props) => {
-  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const entries = useAppSelector(state => state?.journal?.entries) ?? [];
 
@@ -41,11 +37,6 @@ const Journal = ({ navigation, embedded = false }: Props) => {
 
   const list = (
     <>
-      {embedded ? (
-        <AnimeHeroCard image={theme.assets.journalBanner} size="short">
-          <JournalStyles.HeroTitle>{t(JOURNAL_CONSTANTS.TITLE)}</JournalStyles.HeroTitle>
-        </AnimeHeroCard>
-      ) : null}
       <JournalStyles.Actions>
         <PrimaryButton label={t(JOURNAL_CONSTANTS.NEW_TITLE)} onPress={handleNew} />
       </JournalStyles.Actions>
@@ -67,10 +58,8 @@ const Journal = ({ navigation, embedded = false }: Props) => {
   return embedded ? (
     list
   ) : (
-    <PageContainer animatedBackground>
-      <AnimeHeroCard image={theme.assets.journalBanner} size="short">
-        <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
-      </AnimeHeroCard>
+    <PageContainer>
+      <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
       {list}
     </PageContainer>
   );

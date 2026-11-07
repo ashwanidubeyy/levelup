@@ -5,7 +5,14 @@ import type { AppTheme } from '../../theme/types';
 
 const ThemedStatusBar = () => {
   const theme = useTheme() as AppTheme;
-  return <StatusBar barStyle="light-content" backgroundColor={theme.colors.TRANSPARENT} translucent />;
+  const light = theme.colorScheme === 'light';
+  return (
+    <StatusBar
+      barStyle={light ? 'dark-content' : 'light-content'}
+      backgroundColor={theme.colors.TRANSPARENT}
+      translucent
+    />
+  );
 };
 
 export default ThemedStatusBar;

@@ -9,7 +9,7 @@ const SystemPanel = ({ children, title, rightLabel, variant = 'system' }: System
   const frame = theme.layout.panelFrame;
   const showCorners = frame === 'corners';
   const showFlag = frame === 'flag';
-  const showGlow = frame === 'corners' || frame === 'stripe' || frame === 'rounded';
+  const showGlow = frame === 'stripe' || frame === 'rounded';
 
   return (
     <SystemPanelStyles.Container $variant={variant} $frame={frame}>

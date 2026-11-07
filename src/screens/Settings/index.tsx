@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RootScreenProps } from '../../navigation/AppNavigator';
 import PageContainer from '../../components/PageContainer';
-import AnimeHeroCard from '../../components/AnimeHeroCard';
 import ScreenHeader from '../../components/ScreenHeader';
 import SystemPanel from '../../components/SystemPanel';
 import ToggleRow from '../../components/ToggleRow';
@@ -17,22 +16,20 @@ import { SETTINGS_CONSTANTS } from '../../constants/screens';
 import { TRACKING_SNOOZE_CONSTANTS, TRACKING_SNOOZE_RULES } from '../../constants/trackingSnooze';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
-import { useTheme } from 'styled-components/native';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
 import { appLabel, formatDuration } from '../../utils/format';
 import { isTrackingSnoozed, trackingSnoozeLabelMs } from '../../utils/trackingSnooze';
 import { TIME } from '../../constants/common';
-import { THEME_CONSTANTS, THEME_OPTIONS } from '../../constants/theme';
+import { APPEARANCE_OPTIONS, THEME_CONSTANTS, THEME_OPTIONS } from '../../constants/theme';
 import { useAppDispatch } from '../../store';
-import { setThemeId } from '../../store/slices/settingsSlice';
-import type { AppTheme, ThemeId } from '../../theme/types';
+import { setColorScheme, setThemeId } from '../../store/slices/settingsSlice';
+import type { ColorSchemeId, ThemeId } from '../../theme/types';
 
 type Props = RootScreenProps<'Settings'>;
 
 const Settings = ({ navigation }: Props) => {
-  const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const settings = useAppSelector(state => state?.settings);
@@ -108,6 +105,24 @@ const Settings = ({ navigation }: Props) => {
     end.setHours(23, 59, 59, 999);
     actions.snoozeTracking(end.getTime());
   };
+
+  const appearanceOptions: SegmentOption[] = APPEARANCE_OPTIONS.map(
+    (item: (typeof APPEARANCE_OPTIONS)[number]) => ({
+      label: t(item.labelKey),
+      value: item.value,
+    }),
+  );
+
+  const renderAppearance = () => (
+    <SystemPanel title={t(THEME_CONSTANTS.APPEARANCE_TITLE)} variant="system">
+      <SettingsStyles.Hint>{t(THEME_CONSTANTS.APPEARANCE_HINT)}</SettingsStyles.Hint>
+      <SegmentedControl
+        value={settings?.colorScheme ?? 'dark'}
+        onChange={(value: string) => dispatch(setColorScheme(value as ColorSchemeId))}
+        options={appearanceOptions}
+      />
+    </SystemPanel>
+  );
 
   const renderTheme = () => (
     <SystemPanel title={t(THEME_CONSTANTS.TITLE)} variant="monarch">
@@ -200,14 +215,13 @@ const Settings = ({ navigation }: Props) => {
 
   return (
     <PageContainer>
-      <AnimeHeroCard image={theme.assets.settingsBanner} size="short">
-        <ScreenHeader
-          title={t(SETTINGS_CONSTANTS.TITLE)}
-          subtitle={t(SETTINGS_CONSTANTS.SUBTITLE)}
-          onBack={navigation.goBack}
-          backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
-        />
-      </AnimeHeroCard>
+      <ScreenHeader
+        title={t(SETTINGS_CONSTANTS.TITLE)}
+        subtitle={t(SETTINGS_CONSTANTS.SUBTITLE)}
+        onBack={navigation.goBack}
+        backLabel={t(COMMON_CONSTANTS.ACTIONS.BACK)}
+      />
+      {renderAppearance()}
       {isIos ? (
         <ComingSoonCard
           title={t(SETTINGS_CONSTANTS.IOS_TITLE)}

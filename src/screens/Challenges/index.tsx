@@ -9,7 +9,6 @@ import SegmentedControl from '../../components/SegmentedControl';
 import InputField from '../../components/InputField';
 import Stepper from '../../components/Stepper';
 import DateNavigator from '../../components/DateNavigator';
-import ToggleRow from '../../components/ToggleRow';
 import PrimaryButton from '../../components/PrimaryButton';
 import ChallengeCard from '../../components/ChallengeCard';
 import { ChallengesStyles } from './styles';
@@ -20,7 +19,7 @@ import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addChallenge, checkInChallenge, removeChallenge } from '../../store/slices/challengeSlice';
 import { awardXp } from '../../store/slices/questSlice';
-import { addDays, formatClock, formatDayLabel, todayKey } from '../../utils/date';
+import { addDays, formatDayLabel, todayKey } from '../../utils/date';
 import { canCheckIn, challengeEndDay, challengeRatio, sortChallenges } from '../../utils/challenges';
 import { buildLevelInfo } from '../../utils/level';
 import { generateId } from '../../utils/helpers';
@@ -45,9 +44,8 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
   const [preset, setPreset] = useState<string>(CHALLENGE_RULES.PRESET_21);
   const [customDays, setCustomDays] = useState(21);
   const [startDay, setStartDay] = useState(todayKey());
-  const [hour, setHour] = useState<number>(CHALLENGE_RULES.DEFAULT_HOUR);
-  const [minute, setMinute] = useState<number>(CHALLENGE_RULES.DEFAULT_MINUTE);
-  const [reminderEnabled, setReminderEnabled] = useState(true);
+  const [hour] = useState<number>(CHALLENGE_RULES.DEFAULT_HOUR);
+  const [minute] = useState<number>(CHALLENGE_RULES.DEFAULT_MINUTE);
   const [error, setError] = useState('');
 
   const presets: SegmentOption[] = CHALLENGE_PRESETS.map((item: (typeof CHALLENGE_PRESETS)[number]) => ({
@@ -70,7 +68,7 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
       days: dayCount,
       reminderHour: hour,
       reminderMinute: minute,
-      reminderEnabled,
+      reminderEnabled: false,
       checkIns: [],
       completedAt: null,
       createdAt: Date.now(),
@@ -136,34 +134,6 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
               previousLabel={t(COMMON_CONSTANTS.ACTIONS.PREVIOUS)}
               nextLabel={t(COMMON_CONSTANTS.ACTIONS.NEXT)}
             />
-            <ToggleRow
-              label={t(CHALLENGE_CONSTANTS.REMINDER)}
-              hint={t(CHALLENGE_CONSTANTS.REMINDER_HINT)}
-              value={reminderEnabled}
-              onValueChange={setReminderEnabled}
-            />
-            {reminderEnabled ? (
-              <ChallengesStyles.Block>
-                <Stepper
-                  label={t(CHALLENGE_CONSTANTS.HOUR)}
-                  valueLabel={formatClock(hour, minute)}
-                  value={hour}
-                  min={0}
-                  max={CHALLENGE_RULES.HOUR_MAX}
-                  step={1}
-                  onChange={setHour}
-                />
-                <Stepper
-                  label={t(CHALLENGE_CONSTANTS.MINUTE)}
-                  valueLabel={formatClock(hour, minute)}
-                  value={minute}
-                  min={0}
-                  max={CHALLENGE_RULES.MINUTE_MAX}
-                  step={CHALLENGE_RULES.MINUTE_STEP}
-                  onChange={setMinute}
-                />
-              </ChallengesStyles.Block>
-            ) : null}
             <ChallengesStyles.Block>
               <PrimaryButton label={t(CHALLENGE_CONSTANTS.CREATE)} onPress={handleCreate} />
             </ChallengesStyles.Block>
@@ -213,7 +183,7 @@ const Challenges = ({ embedded = false }: ChallengesProps) => {
     body
   ) : (
     <KeybordView>
-      <PageContainer animatedBackground>
+      <PageContainer>
         <ScreenHeader title={t(CHALLENGE_CONSTANTS.TITLE)} subtitle={t(CHALLENGE_CONSTANTS.SUBTITLE)} />
         {body}
       </PageContainer>

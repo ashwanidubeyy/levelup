@@ -26,7 +26,7 @@ const More = ({ navigation }: Props) => {
   const rootNavigation = navigation.getParent<NavigationProp<RootStackParamList>>();
 
   return (
-    <PageContainer animatedBackground>
+    <PageContainer>
       <ScreenHeader title={t(MORE_CONSTANTS.TITLE)} subtitle={t(MORE_CONSTANTS.SUBTITLE)} />
       <MoreStyles.Block>
         <SystemPanel>

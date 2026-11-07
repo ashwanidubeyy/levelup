@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
+import { Platform } from 'react-native';
 import {
   DarkTheme,
+  DefaultTheme,
   NavigationContainer,
   type CompositeScreenProps,
   type Theme,
@@ -11,6 +13,8 @@ import {
   type BottomTabBarProps,
   type BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { moderateVerticalScale } from 'react-native-size-matters';
 import TabBar from '../components/TabBar';
 import Onboarding from '../screens/Onboarding';
 import Home from '../screens/Home';
@@ -25,7 +29,6 @@ import Settings from '../screens/Settings';
 import Diagnostics from '../screens/Diagnostics';
 import Planner from '../screens/Planner';
 import { useTrackerLive } from '../hooks/useTrackerLive';
-import { useNotificationSync } from '../hooks/useNotificationSync';
 import { useTrackingSnooze } from '../hooks/useTrackingSnooze';
 import { useTheme } from 'styled-components/native';
 import type { AppTheme } from '../theme/types';
@@ -63,27 +66,36 @@ interface AppNavigatorProps {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-
-const TAB_OPTIONS = {
-  headerShown: false,
-  lazy: true,
-  tabBarStyle: {
-    position: 'absolute' as const,
-    backgroundColor: 'transparent',
-    borderTopWidth: 0,
-    elevation: 0,
-  },
-};
-
 const renderTabBar = (props: BottomTabBarProps) => <TabBar {...props} />;
 
 const MainTabs = () => {
+  const theme = useTheme() as AppTheme;
+  const insets = useSafeAreaInsets();
   useTrackerLive();
-  useNotificationSync();
   useTrackingSnooze();
 
+  const tabScenePadding = moderateVerticalScale(74, 0.9) + Math.max(insets.bottom, moderateVerticalScale(10, 0.9));
+
+  const tabOptions = useMemo(
+    () => ({
+      headerShown: false,
+      lazy: true,
+      sceneStyle: {
+        backgroundColor: theme.colors.BACKGROUND,
+        paddingBottom: tabScenePadding,
+      },
+      tabBarStyle: {
+        position: 'absolute' as const,
+        backgroundColor: 'transparent',
+        borderTopWidth: 0,
+        elevation: 0,
+      },
+    }),
+    [tabScenePadding, theme.colors.BACKGROUND],
+  );
+
   return (
-    <Tab.Navigator screenOptions={TAB_OPTIONS} tabBar={renderTabBar}>
+    <Tab.Navigator screenOptions={tabOptions} tabBar={renderTabBar}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="JournalHub" component={JournalHub} />
       <Tab.Screen name="Budget" component={Budget} />
@@ -94,44 +106,51 @@ const MainTabs = () => {
 
 const AppNavigator = ({ initialRoute }: AppNavigatorProps) => {
   const theme = useTheme() as AppTheme;
+  const light = theme.colorScheme === 'light';
   const navigationTheme: Theme = useMemo(
-    () => ({
-      ...DarkTheme,
-      colors: {
-        ...DarkTheme.colors,
-        primary: theme.colors.BLUE,
-        background: theme.colors.BACKGROUND,
-        card: theme.colors.BACKGROUND_ELEVATED,
-        text: theme.colors.TEXT,
-        border: theme.colors.PANEL_BORDER,
-        notification: theme.colors.RED_BRIGHT,
-      },
-    }),
-    [theme],
+    () => {
+      const base = light ? DefaultTheme : DarkTheme;
+      return {
+        ...base,
+        colors: {
+          ...base.colors,
+          primary: theme.colors.BLUE,
+          background: theme.colors.BACKGROUND,
+          card: theme.colors.BACKGROUND_ELEVATED,
+          text: theme.colors.TEXT,
+          border: theme.colors.PANEL_BORDER,
+          notification: theme.colors.RED_BRIGHT,
+        },
+      };
+    },
+    [light, theme],
   );
   const stackOptions = useMemo(
     () => ({
       headerShown: false,
       animation: theme.motion.stackAnimation,
+      animationMatchesGesture: true,
+      gestureEnabled: true,
+      fullScreenGestureEnabled: Platform.OS === 'ios',
       contentStyle: { backgroundColor: theme.colors.BACKGROUND },
     }),
     [theme.colors.BACKGROUND, theme.motion.stackAnimation],
   );
 
   return (
-  <NavigationContainer theme={navigationTheme}>
-    <Stack.Navigator initialRouteName={initialRoute} screenOptions={stackOptions}>
-      <Stack.Screen name="Onboarding" component={Onboarding} />
-      <Stack.Screen name="MainTabs" component={MainTabs} />
-      <Stack.Screen name="Focus" component={Focus} />
-      <Stack.Screen name="JournalEditor" component={JournalEditor} />
-      <Stack.Screen name="Stats" component={Stats} />
-      <Stack.Screen name="Calendar" component={Calendar} />
-      <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Screen name="Diagnostics" component={Diagnostics} />
-      <Stack.Screen name="Planner" component={Planner} />
-    </Stack.Navigator>
-  </NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
+      <Stack.Navigator initialRouteName={initialRoute} screenOptions={stackOptions}>
+        <Stack.Screen name="Onboarding" component={Onboarding} options={{ animation: 'fade_from_bottom' }} />
+        <Stack.Screen name="MainTabs" component={MainTabs} options={{ animation: 'fade' }} />
+        <Stack.Screen name="Focus" component={Focus} />
+        <Stack.Screen name="JournalEditor" component={JournalEditor} />
+        <Stack.Screen name="Stats" component={Stats} />
+        <Stack.Screen name="Calendar" component={Calendar} />
+        <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="Diagnostics" component={Diagnostics} />
+        <Stack.Screen name="Planner" component={Planner} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

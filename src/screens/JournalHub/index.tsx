@@ -25,7 +25,7 @@ const JournalHub = ({ navigation, route }: Props) => {
 
   return (
     <KeybordView>
-      <PageContainer animatedBackground>
+      <PageContainer>
         <ScreenHeader title={t(JOURNAL_HUB_CONSTANTS.TITLE)} subtitle={t(JOURNAL_HUB_CONSTANTS.SUBTITLE)} />
         <JournalHubStyles.Switch>
           <SegmentedControl
