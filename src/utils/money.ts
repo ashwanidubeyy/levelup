@@ -1,4 +1,4 @@
-import type { Expense } from '../types';
+import type { BudgetCategoryId, Expense } from '../types';
 
 export const monthKeyFromDay = (day: string): string => day?.slice(0, 7) ?? '';
 
@@ -22,3 +22,16 @@ export const expensesForDay = (expenses: Expense[], day: string): Expense[] =>
 
 export const sumExpenses = (expenses: Expense[]): number =>
   expenses?.reduce((total: number, expense: Expense) => total + (expense?.amount ?? 0), 0) ?? 0;
+
+export const sumExpensesByCategory = (
+  expenses: Expense[],
+): Array<{ categoryId: BudgetCategoryId; amount: number }> => {
+  const totals = new Map<BudgetCategoryId, number>();
+  expenses?.forEach((expense: Expense) => {
+    const key = expense?.categoryId ?? 'other';
+    totals.set(key, (totals.get(key) ?? 0) + (expense?.amount ?? 0));
+  });
+  return Array.from(totals.entries())
+    .map(([categoryId, amount]: [BudgetCategoryId, number]) => ({ categoryId, amount }))
+    .sort((left, right) => right.amount - left.amount);
+};

@@ -29,28 +29,32 @@ import { QUOTES } from '../../constants/quotes';
 import { resultData } from '../../utils/trackerResult';
 import { appLabel, formatDuration, limitMessage } from '../../utils/format';
 import { expensesForMonth, formatAmount, monthKeyFromDay, sumExpenses } from '../../utils/money';
-import { formatDayLabel, formatTime, todayKey } from '../../utils/date';
+import { formatAgendaDay, formatDayLabel, formatTime, todayKey } from '../../utils/date';
 import { buildAgenda } from '../../utils/agenda';
 import { openShortcut } from '../../utils/appLinks';
+import { openTodosForDay } from '../../utils/todos';
 
 type Props = TabScreenProps<'Home'>;
 
 const agendaLabel = (item: AgendaItem, translate: (key: string) => string): string =>
   item?.kind === 'holiday' ? translate(item?.titleKey ?? '') : item?.title ?? '';
 
-const agendaMeta = (item: AgendaItem, translate: (key: string, options?: Record<string, string>) => string): string =>
-  item?.kind === 'holiday'
-    ? translate(HOME_CONSTANTS.AGENDA_HOLIDAY, { day: formatDayLabel(item?.day ?? '') })
+const agendaMeta = (item: AgendaItem, translate: (key: string, options?: Record<string, string>) => string): string => {
+  const dayLabel = formatAgendaDay(item?.day ?? '', translate);
+  return item?.kind === 'holiday'
+    ? translate(HOME_CONSTANTS.AGENDA_HOLIDAY, { day: dayLabel })
     : translate(HOME_CONSTANTS.AGENDA_REMINDER, {
-        day: formatDayLabel(item?.day ?? ''),
+        day: dayLabel,
         time: formatTime(item?.at ?? 0),
       });
+};
 
 const Home = ({ navigation }: Props) => {
   const { t } = useTranslation();
   const rootNavigation = navigation.getParent<NavigationProp<RootStackParamList>>();
   const dailyLimit = useAppSelector(state => state?.settings?.dailyLimit) ?? TRACKER_CONSTANTS.LIMIT.DEFAULT;
   const reminders = useAppSelector(state => state?.reminders?.items) ?? [];
+  const todoItems = useAppSelector(state => state?.todos?.items) ?? [];
   const budget = useAppSelector(state => state?.budget);
   const entries = useAppSelector(state => state?.journal?.entries) ?? [];
   const { today: todayResult, todayUsage, live, status } = useTrackerState();
@@ -69,6 +73,7 @@ const Home = ({ navigation }: Props) => {
   const spent = sumExpenses(expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)));
   const monthly = budget?.monthlyBudget ?? 0;
   const remaining = monthly - spent;
+  const openTasks = openTodosForDay(todoItems, day);
 
   const liveLabel = live?.inFeed
     ? t(TRACKER_CONSTANTS.LIVE.IN_FEED, { app: appLabel(live?.app, t), count: live?.sessionCount ?? 0 })
@@ -120,6 +125,7 @@ const Home = ({ navigation }: Props) => {
           <HomeStyles.Limit>{t(HOME_CONSTANTS.LIMIT_OF, { limit: dailyLimit })}</HomeStyles.Limit>
         </HomeStyles.CountRow>
         <HomeStyles.Message $danger={total > dailyLimit}>{limitMessage(total, dailyLimit, t)}</HomeStyles.Message>
+        <HomeStyles.DayHint>{t(HOME_CONSTANTS.REEL_DAY_HINT)}</HomeStyles.DayHint>
         <StatBar progress={ratio(total, dailyLimit)} variant={danger ? 'danger' : 'system'} />
         <HomeStyles.Live $active={!!live?.inFeed}>{liveLabel}</HomeStyles.Live>
         <HomeStyles.Tiles>
@@ -206,6 +212,17 @@ const Home = ({ navigation }: Props) => {
           hint={t(HUB_CONSTANTS.FOCUS_HINT)}
           accent="monarch"
           onPress={() => rootNavigation?.navigate('Focus')}
+        />
+        <HubTile
+          label={t(HUB_CONSTANTS.PLANNER)}
+          value={openTasks?.[0]?.title ?? t(HUB_CONSTANTS.PLANNER_EMPTY)}
+          hint={
+            openTasks.length > 0
+              ? t(HUB_CONSTANTS.PLANNER_HINT, { count: openTasks.length })
+              : t(HUB_CONSTANTS.PLANNER_EMPTY)
+          }
+          accent="system"
+          onPress={() => rootNavigation?.navigate('Planner')}
         />
       </HomeStyles.Hub>
       {renderBanner()}

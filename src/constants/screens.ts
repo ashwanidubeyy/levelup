@@ -90,6 +90,7 @@ export const HOME_CONSTANTS = {
   LEVEL: 'home.level',
   XP: 'home.xp',
   TODAY_TITLE: 'home.todayTitle',
+  REEL_DAY_HINT: 'home.reelDayHint',
   LIMIT_OF: 'home.limitOf',
   REMAINING: 'home.remaining',
   AT_LIMIT: 'home.atLimit',

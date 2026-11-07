@@ -16,6 +16,8 @@ const initialState: SettingsState = {
   trackingEnabled: true,
   allowLowConfidence: false,
   appsEnabled: { instagram: true, youtube: true, facebook: true },
+  trackingSnoozeUntil: null,
+  trackingSnoozeRestore: true,
 };
 
 const settingsSlice = createSlice({
@@ -26,6 +28,9 @@ const settingsSlice = createSlice({
       ...state,
       ...(action.payload ?? {}),
       appsEnabled: { ...state.appsEnabled, ...(action.payload?.appsEnabled ?? {}) },
+      trackingSnoozeUntil: action.payload?.trackingSnoozeUntil ?? null,
+      trackingSnoozeRestore:
+        action.payload?.trackingSnoozeRestore === undefined ? true : action.payload.trackingSnoozeRestore,
       hydrated: true,
     }),
     setInstallDay: (state, action: PayloadAction<string>) => {
@@ -52,6 +57,25 @@ const settingsSlice = createSlice({
     setAppEnabledSetting: (state, action: PayloadAction<{ app: TrackedAppId; enabled: boolean }>) => {
       state.appsEnabled[action.payload.app] = action.payload.enabled;
     },
+    startTrackingSnooze: (state, action: PayloadAction<{ until: number }>) => {
+      state.trackingSnoozeRestore = state.trackingEnabled;
+      state.trackingEnabled = false;
+      state.trackingSnoozeUntil = action.payload.until;
+    },
+    clearTrackingSnooze: state => {
+      if (state.trackingSnoozeRestore) {
+        state.trackingEnabled = true;
+      }
+      state.trackingSnoozeUntil = null;
+      state.trackingSnoozeRestore = true;
+    },
+    expireTrackingSnooze: state => {
+      if (state.trackingSnoozeRestore) {
+        state.trackingEnabled = true;
+      }
+      state.trackingSnoozeUntil = null;
+      state.trackingSnoozeRestore = true;
+    },
   },
 });
 
@@ -65,6 +89,9 @@ export const {
   setTrackingSetting,
   setLowConfidenceSetting,
   setAppEnabledSetting,
+  startTrackingSnooze,
+  clearTrackingSnooze,
+  expireTrackingSnooze,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

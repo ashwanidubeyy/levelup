@@ -62,4 +62,46 @@ const Status = styled.View`
   background-color: ${COLORS.PANEL_ALT};
 `;
 
-export const BudgetStyles = { Block, Summary, ExpenseBlock, Row, Actions, Note, Amount, Empty, Status };
+const CategoryWrap = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: ${SPACING.XS}px;
+  margin-top: ${V_SPACING.SM}px;
+  margin-bottom: ${V_SPACING.SM}px;
+`;
+
+const CategoryChip = styled.TouchableOpacity<{ $active: boolean }>`
+  padding: ${V_SPACING.XS}px ${SPACING.SM}px;
+  border-radius: ${RADIUS.SM}px;
+  border-width: ${BORDER.HAIRLINE}px;
+  border-color: ${({ $active }) => ($active ? COLORS.YELLOW : COLORS.PANEL_BORDER)};
+  background-color: ${({ $active }) => ($active ? COLORS.PANEL_ALT : COLORS.PANEL)};
+`;
+
+const CategoryLabel = styled.Text<{ $active: boolean }>`
+  font-family: ${FONTS.BODY_SEMIBOLD};
+  font-size: ${FONT_SIZES.XS}px;
+  color: ${({ $active }) => ($active ? COLORS.YELLOW : COLORS.TEXT_DIM)};
+`;
+
+const CategoryMeta = styled.Text`
+  ${mutedText}
+  font-size: ${FONT_SIZES.XS}px;
+  margin-top: ${V_SPACING.XS}px;
+`;
+
+export const BudgetStyles = {
+  Block,
+  Summary,
+  ExpenseBlock,
+  Row,
+  Actions,
+  Note,
+  Amount,
+  Empty,
+  Status,
+  CategoryWrap,
+  CategoryChip,
+  CategoryLabel,
+  CategoryMeta,
+};

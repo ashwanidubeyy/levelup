@@ -4,7 +4,7 @@ import journalService from '../services/journal.service';
 import { evaluateQuests, penaltyProgress } from '../utils/questRules';
 import { buildLevelInfo } from '../utils/level';
 import { resultData } from '../utils/trackerResult';
-import { todayKey } from '../utils/date';
+import { trackerDayKey } from '../utils/date';
 import type { DayQuestInput } from '../types';
 
 export const useQuestBoard = () => {
@@ -17,7 +17,7 @@ export const useQuestBoard = () => {
 
   const input: DayQuestInput = useMemo(() => {
     const counts = resultData(today);
-    const day = todayKey();
+    const day = trackerDayKey();
     return {
       day,
       total: counts?.total ?? null,

@@ -1,3 +1,15 @@
+export const BUDGET_CATEGORY_DEFAULT = 'other' as const;
+
+export const BUDGET_CATEGORIES = [
+  { id: 'food', labelKey: 'budget.categories.food' },
+  { id: 'transport', labelKey: 'budget.categories.transport' },
+  { id: 'bills', labelKey: 'budget.categories.bills' },
+  { id: 'shopping', labelKey: 'budget.categories.shopping' },
+  { id: 'health', labelKey: 'budget.categories.health' },
+  { id: 'entertainment', labelKey: 'budget.categories.entertainment' },
+  { id: 'other', labelKey: 'budget.categories.other' },
+] as const;
+
 export const BUDGET_RULES = {
   NIGHT_HOUR: 21,
   NIGHT_MINUTE: 0,
@@ -35,6 +47,10 @@ export const BUDGET_CONSTANTS = {
   PLAN_TITLE: 'budget.planTitle',
   PLAN_DAILY: 'budget.planDaily',
   PLAN_PROJECTED: 'budget.planProjected',
+  CALCULATOR_TITLE: 'budget.calculatorTitle',
+  EXPENDITURE: 'budget.expenditure',
+  CATEGORY: 'budget.category',
+  CATEGORIES_TITLE: 'budget.categoriesTitle',
   RESET_MONTH: 'budget.resetMonth',
   RESET_TITLE: 'budget.resetTitle',
   RESET_MESSAGE: 'budget.resetMessage',

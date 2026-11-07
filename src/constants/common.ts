@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   REMINDERS: 'levelup.reminders.v1',
   BUDGET: 'levelup.budget.v1',
   FOCUS: 'levelup.focus.v1',
+  TODOS: 'levelup.todos.v1',
 } as const;
 
 export const COMMON_CONSTANTS = {
@@ -65,6 +66,7 @@ export const COMMON_CONSTANTS = {
   },
   EXPERIMENTAL: 'common.experimental',
   TODAY: 'common.today',
+  TOMORROW: 'common.tomorrow',
   ON: 'common.on',
   OFF: 'common.off',
   DASH: 'common.dash',

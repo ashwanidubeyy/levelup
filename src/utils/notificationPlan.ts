@@ -1,8 +1,9 @@
-import type { Challenge, Expense, Reminder } from '../types';
+import type { Challenge, Expense, Reminder, TodoItem } from '../types';
 import { NOTIFICATION_CHANNELS, NOTIFICATION_CONSTANTS, NOTIFICATION_RULES } from '../constants/notifications';
 import { addDays, compareDayKeys, dayOfYear, formatClock, parseDayKey, timestampFor, todayKey, upcomingDays } from './date';
 import { challengeEndDay, isDayInChallenge } from './challenges';
 import { expensesForDay } from './money';
+import { openTodosForDay } from './todos';
 import { previewText, quoteAt } from './helpers';
 import i18n from '../i18n';
 
@@ -11,6 +12,13 @@ export interface BudgetPlanInput {
   nightHour: number;
   nightMinute: number;
   expenses: Expense[];
+}
+
+export interface PlannerPlanInput {
+  reminderEnabled: boolean;
+  reminderHour: number;
+  reminderMinute: number;
+  items: TodoItem[];
 }
 
 export interface PlannedNotification {
@@ -43,6 +51,7 @@ export const buildNotificationPlan = (
   challenges: Challenge[],
   reminders: Reminder[],
   budget: BudgetPlanInput,
+  planner: PlannerPlanInput,
   now: number,
 ): PlannedNotification[] => {
   const items: PlannedNotification[] = [];
@@ -121,6 +130,35 @@ export const buildNotificationPlan = (
           body: i18n.t(NOTIFICATION_CONSTANTS.BUDGET_BODY),
           timestamp: timestampFor(day, budget?.nightHour ?? 21, budget?.nightMinute ?? 0),
           channelId: NOTIFICATION_CHANNELS.BUDGET,
+          repeatDaily: false,
+        },
+        now,
+      );
+    });
+  }
+
+  if (planner?.reminderEnabled) {
+    upcomingDays(NOTIFICATION_RULES.BUDGET_WINDOW_DAYS).forEach((day: string) => {
+      const open = openTodosForDay(planner?.items ?? [], day);
+      if (open.length === 0) {
+        return;
+      }
+      const preview = open
+        ?.slice(0, 3)
+        ?.map((item: TodoItem) => item?.title ?? '')
+        ?.filter((title: string) => title.length > 0)
+        ?.join(' · ');
+      pushFuture(
+        items,
+        {
+          id: `${NOTIFICATION_RULES.PLANNER_PREFIX}${day}`,
+          title: i18n.t(NOTIFICATION_CONSTANTS.PLANNER_TITLE),
+          body: i18n.t(NOTIFICATION_CONSTANTS.PLANNER_BODY, {
+            count: open.length,
+            preview: preview ?? '',
+          }),
+          timestamp: timestampFor(day, planner?.reminderHour ?? 21, planner?.reminderMinute ?? 0),
+          channelId: NOTIFICATION_CHANNELS.PLANNER,
           repeatDaily: false,
         },
         now,

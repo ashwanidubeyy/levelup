@@ -14,13 +14,16 @@ import ComingSoonCard from '../../components/ComingSoonCard';
 import { SettingsStyles } from './styles';
 import type { SegmentOption, SupportedApp } from '../../types';
 import { SETTINGS_CONSTANTS } from '../../constants/screens';
+import { TRACKING_SNOOZE_CONSTANTS, TRACKING_SNOOZE_RULES } from '../../constants/trackingSnooze';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { TRACKER_CONSTANTS } from '../../constants/tracker';
 import { SCREEN_IMAGES } from '../../constants/images';
 import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
-import { appLabel } from '../../utils/format';
+import { appLabel, formatDuration } from '../../utils/format';
+import { isTrackingSnoozed, trackingSnoozeLabelMs } from '../../utils/trackingSnooze';
+import { TIME } from '../../constants/common';
 
 type Props = RootScreenProps<'Settings'>;
 
@@ -29,6 +32,9 @@ const Settings = ({ navigation }: Props) => {
   const settings = useAppSelector(state => state?.settings);
   const { capabilities, status } = useTrackerState();
   const actions = useSettingsActions();
+  const now = Date.now();
+  const snoozed = isTrackingSnoozed(settings, now);
+  const snoozeRemaining = trackingSnoozeLabelMs(settings, now);
 
   const isIos = status === 'comingSoon';
   const permissions = capabilities?.permissions;
@@ -84,6 +90,38 @@ const Settings = ({ navigation }: Props) => {
         value={!!settings?.allowLowConfidence}
         onValueChange={actions.changeLowConfidence}
       />
+    </SystemPanel>
+  );
+
+  const handleSnooze = (minutes: number) => {
+    actions.snoozeTracking(now + minutes * TIME.MINUTE_MS);
+  };
+
+  const handleSnoozeUntilMidnight = () => {
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    actions.snoozeTracking(end.getTime());
+  };
+
+  const renderSnooze = () => (
+    <SystemPanel title={t(TRACKING_SNOOZE_CONSTANTS.TITLE)} variant="system">
+      <SettingsStyles.Hint>{t(TRACKING_SNOOZE_CONSTANTS.HINT)}</SettingsStyles.Hint>
+      {snoozed ? (
+        <SettingsStyles.Paragraph>
+          {t(TRACKING_SNOOZE_CONSTANTS.ACTIVE, {
+            time: formatDuration(snoozeRemaining, t),
+          })}
+        </SettingsStyles.Paragraph>
+      ) : null}
+      {TRACKING_SNOOZE_RULES.MINUTES.map((minutes: number) => (
+        <NavRow
+          key={`snooze-${minutes}`}
+          label={t(TRACKING_SNOOZE_CONSTANTS.OPTION, { minutes })}
+          onPress={() => handleSnooze(minutes)}
+        />
+      ))}
+      <NavRow label={t(TRACKING_SNOOZE_CONSTANTS.UNTIL_MIDNIGHT)} onPress={handleSnoozeUntilMidnight} />
+      {snoozed ? <NavRow label={t(TRACKING_SNOOZE_CONSTANTS.CLEAR)} onPress={actions.endSnooze} /> : null}
     </SystemPanel>
   );
 
@@ -155,6 +193,7 @@ const Settings = ({ navigation }: Props) => {
         />
       ) : null}
       {!isIos ? renderTracking() : null}
+      {!isIos ? renderSnooze() : null}
       {!isIos ? renderApps() : null}
       {!isIos ? renderPermissions() : null}
       <SystemPanel title={t(SETTINGS_CONSTANTS.PRIVACY)}>

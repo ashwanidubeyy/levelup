@@ -1,4 +1,5 @@
-import { TIME } from '../constants/common';
+import { COMMON_CONSTANTS, TIME } from '../constants/common';
+import { TRACKER_RULES } from '../constants/tracker';
 
 const pad = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
 
@@ -6,6 +7,14 @@ export const toDayKey = (date: Date): string =>
   `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 export const todayKey = (): string => toDayKey(new Date());
+
+export const trackerDayKey = (date: Date = new Date()): string => {
+  const adjusted = new Date(date);
+  if (adjusted.getHours() < TRACKER_RULES.DAY_START_HOUR) {
+    adjusted.setDate(adjusted.getDate() - 1);
+  }
+  return toDayKey(adjusted);
+};
 
 export const parseDayKey = (key: string): Date => {
   const [year, month, day] = key?.split('-')?.map((part: string) => Number(part)) ?? [];
@@ -32,6 +41,22 @@ export const daysBetween = (from: string, to: string): string[] => {
 
 export const formatDayLabel = (key: string, locale?: string): string =>
   parseDayKey(key).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' });
+
+export const isTomorrow = (key: string, referenceDay: string = todayKey()): boolean => addDays(referenceDay, 1) === key;
+
+export const formatAgendaDay = (
+  key: string,
+  translate: (translationKey: string) => string,
+  referenceDay: string = todayKey(),
+): string => {
+  if (key === referenceDay) {
+    return translate(COMMON_CONSTANTS.TODAY);
+  }
+  if (isTomorrow(key, referenceDay)) {
+    return translate(COMMON_CONSTANTS.TOMORROW);
+  }
+  return formatDayLabel(key);
+};
 
 export const formatShortDay = (key: string): string => `${parseDayKey(key).getDate()}`;
 

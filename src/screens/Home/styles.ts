@@ -68,6 +68,11 @@ const Message = styled.Text<{ $danger: boolean }>`
   color: ${({ $danger }) => ($danger ? COLORS.RED_BRIGHT : COLORS.TEXT)};
 `;
 
+const DayHint = styled.Text`
+  ${mutedText}
+  margin-bottom: ${V_SPACING.SM}px;
+`;
+
 const Live = styled.Text<{ $active: boolean }>`
   ${mutedText}
   margin-top: ${V_SPACING.MD}px;
@@ -92,6 +97,7 @@ export const HomeStyles = {
   Count,
   Limit,
   Message,
+  DayHint,
   Live,
   Tiles,
 };

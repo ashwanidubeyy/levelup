@@ -24,8 +24,10 @@ import Journal from '../screens/Journal';
 import JournalEditor from '../screens/JournalEditor';
 import Settings from '../screens/Settings';
 import Diagnostics from '../screens/Diagnostics';
+import Planner from '../screens/Planner';
 import { useTrackerLive } from '../hooks/useTrackerLive';
 import { useNotificationSync } from '../hooks/useNotificationSync';
+import { useTrackingSnooze } from '../hooks/useTrackingSnooze';
 import { COLORS } from '../theme/colors';
 
 export type RootStackParamList = {
@@ -37,6 +39,7 @@ export type RootStackParamList = {
   Calendar: { day?: string } | undefined;
   Settings: undefined;
   Diagnostics: undefined;
+  Planner: undefined;
 };
 
 export type MainTabParamList = {
@@ -87,6 +90,7 @@ const renderTabBar = (props: BottomTabBarProps) => <TabBar {...props} />;
 const MainTabs = () => {
   useTrackerLive();
   useNotificationSync();
+  useTrackingSnooze();
 
   return (
     <Tab.Navigator screenOptions={TAB_OPTIONS} tabBar={renderTabBar}>
@@ -110,6 +114,7 @@ const AppNavigator = ({ initialRoute }: AppNavigatorProps) => (
       <Stack.Screen name="Calendar" component={Calendar} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="Diagnostics" component={Diagnostics} />
+      <Stack.Screen name="Planner" component={Planner} />
     </Stack.Navigator>
   </NavigationContainer>
 );

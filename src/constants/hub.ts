@@ -13,6 +13,9 @@ export const HUB_CONSTANTS = {
   JOURNAL_HINT: 'hub.journalHint',
   JOURNAL_EMPTY: 'hub.journalEmpty',
   LEVEL_TITLE: 'hub.levelTitle',
+  PLANNER: 'hub.planner',
+  PLANNER_HINT: 'hub.plannerHint',
+  PLANNER_EMPTY: 'hub.plannerEmpty',
 } as const;
 
 export const MORE_CONSTANTS = {
@@ -26,4 +29,6 @@ export const MORE_CONSTANTS = {
   CALENDAR_HINT: 'more.calendarHint',
   SETTINGS: 'more.settings',
   SETTINGS_HINT: 'more.settingsHint',
+  PLANNER: 'more.planner',
+  PLANNER_HINT: 'more.plannerHint',
 } as const;

@@ -24,7 +24,7 @@ import { useAppSelector } from '../../store';
 import { useTrackerState } from '../../hooks/useTrackerState';
 import { useDayStats, useMonthStats } from '../../hooks/useStatsData';
 import { useSettingsActions } from '../../hooks/useSettingsActions';
-import { addDays, formatDayLabel, formatMonthLabel, formatTime, monthOf, shiftMonth, todayKey } from '../../utils/date';
+import { addDays, formatDayLabel, formatMonthLabel, formatTime, monthOf, shiftMonth, trackerDayKey } from '../../utils/date';
 import { isPermissionRequired, resultData } from '../../utils/trackerResult';
 import { appLabel, appShortLabel, formatDuration } from '../../utils/format';
 import { buildMonthChart, isSameOrAfterMonth } from '../../utils/stats';
@@ -35,14 +35,14 @@ const Stats = ({ navigation }: RootScreenProps<'Stats'>) => {
   const { status } = useTrackerState();
   const { openPermission } = useSettingsActions();
   const [mode, setMode] = useState<string>(STATS_CONSTANTS.MODES.DAY);
-  const [day, setDay] = useState<string>(todayKey());
-  const [period, setPeriod] = useState(() => monthOf(todayKey()));
+  const [day, setDay] = useState<string>(trackerDayKey());
+  const [period, setPeriod] = useState(() => monthOf(trackerDayKey()));
 
   const available = status !== 'comingSoon' && status !== 'unsupported';
   const isDay = mode === STATS_CONSTANTS.MODES.DAY;
   const dayStats = useDayStats(day, available && isDay);
   const monthStats = useMonthStats(period.year, period.month, available && !isDay);
-  const currentMonth = monthOf(todayKey());
+  const currentMonth = monthOf(trackerDayKey());
 
   const segments: SegmentOption[] = STATS_CONSTANTS.SEGMENTS.map((segment: (typeof STATS_CONSTANTS.SEGMENTS)[number]) => ({
     label: t(segment.labelKey),
@@ -67,10 +67,10 @@ const Stats = ({ navigation }: RootScreenProps<'Stats'>) => {
   const renderNavigator = () =>
     isDay ? (
       <DateNavigator
-        label={day === todayKey() ? t(COMMON_CONSTANTS.TODAY) : formatDayLabel(day)}
+        label={day === trackerDayKey() ? t(COMMON_CONSTANTS.TODAY) : formatDayLabel(day)}
         onPrevious={() => setDay(addDays(day, -1))}
         onNext={() => setDay(addDays(day, 1))}
-        nextDisabled={day >= todayKey()}
+        nextDisabled={day >= trackerDayKey()}
         previousLabel={t(COMMON_CONSTANTS.ACTIONS.PREVIOUS)}
         nextLabel={t(COMMON_CONSTANTS.ACTIONS.NEXT)}
       />

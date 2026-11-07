@@ -1,7 +1,7 @@
 import trackerService from './tracker.service';
 import { PENALTY_QUEST, QUEST_IDS, QUEST_RULES } from '../constants/quests';
 import type { DailyReelCounts, DayQuestInput, QuestId, QuestProgress, XpLogEntry } from '../types';
-import { addDays, compareDayKeys, daysBetween, todayKey } from '../utils/date';
+import { addDays, compareDayKeys, daysBetween, trackerDayKey } from '../utils/date';
 import { evaluateQuests, isPenaltyDay } from '../utils/questRules';
 import { generateId } from '../utils/helpers';
 import { resultData } from '../utils/trackerResult';
@@ -57,7 +57,7 @@ const finalizeStart = (params: FinalizeParams, yesterday: string): string => {
 };
 
 const finalizePastDays = (params: FinalizeParams): Promise<FinalizeResult> => {
-  const yesterday = addDays(todayKey(), -1);
+  const yesterday = addDays(trackerDayKey(), -1);
   const start = finalizeStart(params, yesterday);
   if (compareDayKeys(start, yesterday) > 0) {
     return Promise.resolve({ entries: [], finalizedThrough: params.finalizedThrough });

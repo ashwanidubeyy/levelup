@@ -19,6 +19,7 @@ import {
 } from 'levelup-tracker';
 import type { AppSettings, TrackedAppId, TrackerStatusKind, TrackingCapabilities } from '../types';
 import { TRACKED_APP_IDS } from '../constants/common';
+import { effectiveTrackingEnabled } from '../utils/trackingSnooze';
 
 const statusFromCapabilities = (caps: TrackingCapabilities | null): TrackerStatusKind => {
   if (!caps) {
@@ -40,8 +41,9 @@ const statusFromCapabilities = (caps: TrackingCapabilities | null): TrackerStatu
 };
 
 const syncSettingsToNative = (settings: AppSettings): Promise<boolean> => {
+  const trackingOn = effectiveTrackingEnabled(settings, Date.now());
   const calls: Promise<unknown>[] = [
-    setTrackingEnabled(settings?.trackingEnabled),
+    setTrackingEnabled(trackingOn),
     setOverlayEnabled(settings?.overlayEnabled),
     setDailyLimit(settings?.dailyLimit),
     setDwellMs(settings?.dwellMs),

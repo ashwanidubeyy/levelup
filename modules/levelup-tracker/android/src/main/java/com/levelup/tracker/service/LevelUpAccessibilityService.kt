@@ -27,6 +27,7 @@ import com.levelup.tracker.data.TrackerPrefs
 import com.levelup.tracker.data.TrackerRepository
 import com.levelup.tracker.detector.DetectorRegistry
 import com.levelup.tracker.overlay.OverlayController
+import com.levelup.tracker.widget.ReelCountWidgetProvider
 import com.levelup.tracker.runtime.TrackerRuntime
 import com.levelup.tracker.runtime.TrackerUpdate
 
@@ -369,6 +370,7 @@ class LevelUpAccessibilityService : AccessibilityService() {
                 at = System.currentTimeMillis(),
             )
         )
+        ReelCountWidgetProvider.refreshAll(this)
     }
 
     private fun ensureToday(now: Long) {

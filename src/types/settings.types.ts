@@ -9,4 +9,6 @@ export interface AppSettings {
   trackingEnabled: boolean;
   allowLowConfidence: boolean;
   appsEnabled: Record<TrackedAppId, boolean>;
+  trackingSnoozeUntil: number | null;
+  trackingSnoozeRestore: boolean;
 }

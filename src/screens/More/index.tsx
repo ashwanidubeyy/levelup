@@ -11,12 +11,13 @@ import { MORE_CONSTANTS } from '../../constants/hub';
 
 type Props = TabScreenProps<'More'>;
 
-type MoreRoute = 'Focus' | 'Stats' | 'Calendar' | 'Settings';
+type MoreRoute = 'Focus' | 'Stats' | 'Calendar' | 'Planner' | 'Settings';
 
 const LINKS: Array<{ route: MoreRoute; labelKey: string; hintKey: string }> = [
   { route: 'Focus', labelKey: MORE_CONSTANTS.FOCUS, hintKey: MORE_CONSTANTS.FOCUS_HINT },
   { route: 'Stats', labelKey: MORE_CONSTANTS.STATS, hintKey: MORE_CONSTANTS.STATS_HINT },
   { route: 'Calendar', labelKey: MORE_CONSTANTS.CALENDAR, hintKey: MORE_CONSTANTS.CALENDAR_HINT },
+  { route: 'Planner', labelKey: MORE_CONSTANTS.PLANNER, hintKey: MORE_CONSTANTS.PLANNER_HINT },
   { route: 'Settings', labelKey: MORE_CONSTANTS.SETTINGS, hintKey: MORE_CONSTANTS.SETTINGS_HINT },
 ];
 

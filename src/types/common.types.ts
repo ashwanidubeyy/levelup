@@ -299,3 +299,7 @@ export interface TabIconProps {
   color: string;
   size: number;
 }
+
+export interface SpendCalculatorProps {
+  onApply: (amount: string) => void;
+}

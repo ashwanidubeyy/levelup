@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Expense } from '../../types';
-import { BUDGET_RULES } from '../../constants/budget';
+import { BUDGET_CATEGORY_DEFAULT, BUDGET_RULES } from '../../constants/budget';
 
 export interface BudgetState {
   monthlyBudget: number;
@@ -25,7 +25,11 @@ const budgetSlice = createSlice({
     hydrateBudget: (state, action: PayloadAction<Partial<BudgetState> | null>) => ({
       ...state,
       ...(action.payload ?? {}),
-      expenses: action.payload?.expenses ?? state.expenses,
+      expenses:
+        action.payload?.expenses?.map((item: Expense) => ({
+          ...item,
+          categoryId: item?.categoryId ?? BUDGET_CATEGORY_DEFAULT,
+        })) ?? state.expenses,
     }),
     setMonthlyBudget: (state, action: PayloadAction<number>) => {
       state.monthlyBudget = action.payload;

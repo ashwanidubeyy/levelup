@@ -231,6 +231,6 @@ class TrackerRepository private constructor(context: Context) {
         fun get(context: Context): TrackerRepository =
             instance ?: synchronized(this) { instance ?: TrackerRepository(context).also { instance = it } }
 
-        fun dayKey(at: Long): String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date(at))
+        fun dayKey(at: Long): String = DayBoundary.dayKey(at)
     }
 }

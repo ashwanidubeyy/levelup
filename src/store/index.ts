@@ -8,6 +8,7 @@ import challengeReducer from './slices/challengeSlice';
 import reminderReducer from './slices/reminderSlice';
 import budgetReducer from './slices/budgetSlice';
 import focusReducer from './slices/focusSlice';
+import todoReducer from './slices/todoSlice';
 import storageService from '../services/storage.service';
 import { STORAGE_KEYS, TIME } from '../constants/common';
 
@@ -21,6 +22,7 @@ export const store = configureStore({
     reminders: reminderReducer,
     budget: budgetReducer,
     focus: focusReducer,
+    todos: todoReducer,
   },
 });
 
@@ -31,8 +33,10 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 let persistTimer: ReturnType<typeof setTimeout> | null = null;
-let lastSnapshot: Pick<RootState, 'settings' | 'journal' | 'quests' | 'challenges' | 'reminders' | 'budget' | 'focus'> | null =
-  null;
+let lastSnapshot: Pick<
+  RootState,
+  'settings' | 'journal' | 'quests' | 'challenges' | 'reminders' | 'budget' | 'focus' | 'todos'
+> | null = null;
 
 const persist = () => {
   const state = store.getState();
@@ -60,6 +64,9 @@ const persist = () => {
   if (lastSnapshot?.focus !== state.focus) {
     storageService.writeJson(STORAGE_KEYS.FOCUS, state.focus);
   }
+  if (lastSnapshot?.todos !== state.todos) {
+    storageService.writeJson(STORAGE_KEYS.TODOS, state.todos);
+  }
   lastSnapshot = {
     settings: state.settings,
     journal: state.journal,
@@ -68,6 +75,7 @@ const persist = () => {
     reminders: state.reminders,
     budget: state.budget,
     focus: state.focus,
+    todos: state.todos,
   };
 };
 

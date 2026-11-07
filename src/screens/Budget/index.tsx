@@ -11,9 +11,10 @@ import StatBar from '../../components/StatBar';
 import Stepper from '../../components/Stepper';
 import ToggleRow from '../../components/ToggleRow';
 import DateNavigator from '../../components/DateNavigator';
+import SpendCalculator from '../../components/SpendCalculator';
 import { BudgetStyles } from './styles';
-import type { Expense } from '../../types';
-import { BUDGET_CONSTANTS, BUDGET_RULES } from '../../constants/budget';
+import type { BudgetCategoryId, Expense } from '../../types';
+import { BUDGET_CATEGORIES, BUDGET_CATEGORY_DEFAULT, BUDGET_CONSTANTS, BUDGET_RULES } from '../../constants/budget';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
 import {
@@ -25,7 +26,15 @@ import {
   updateExpense,
 } from '../../store/slices/budgetSlice';
 import { addDays, formatClock, formatDayLabel, formatMonthLabel, monthOf, todayKey } from '../../utils/date';
-import { expensesForDay, expensesForMonth, formatAmount, monthKeyFromDay, parseAmount, sumExpenses } from '../../utils/money';
+import {
+  expensesForDay,
+  expensesForMonth,
+  formatAmount,
+  monthKeyFromDay,
+  parseAmount,
+  sumExpenses,
+  sumExpensesByCategory,
+} from '../../utils/money';
 import { projectedMonthSpend, safeDailyForRest } from '../../utils/budgetPlan';
 import { generateId, ratio } from '../../utils/helpers';
 
@@ -42,6 +51,8 @@ const Budget = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editAmount, setEditAmount] = useState('');
   const [editNote, setEditNote] = useState('');
+  const [categoryId, setCategoryId] = useState<BudgetCategoryId>(BUDGET_CATEGORY_DEFAULT);
+  const [editCategoryId, setEditCategoryId] = useState<BudgetCategoryId>(BUDGET_CATEGORY_DEFAULT);
   const monthExpenses = useMemo(
     () => expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)),
     [budget?.expenses, day],
@@ -56,6 +67,31 @@ const Budget = () => {
   const { year: budgetYear, month: budgetMonth } = monthOf(day);
   const projected = monthly > 0 ? projectedMonthSpend(spent, day) : 0;
   const dailySafe = monthly > 0 ? safeDailyForRest(Math.max(0, remaining), day) : 0;
+  const categoryBreakdown = useMemo(() => sumExpensesByCategory(monthExpenses), [monthExpenses]);
+
+  const categoryLabel = (id: BudgetCategoryId): string => {
+    const match = BUDGET_CATEGORIES.find((item: (typeof BUDGET_CATEGORIES)[number]) => item.id === id);
+    return t(match?.labelKey ?? BUDGET_CATEGORIES[BUDGET_CATEGORIES.length - 1].labelKey);
+  };
+
+  const renderCategoryPicker = (value: BudgetCategoryId, onChange: (id: BudgetCategoryId) => void) => (
+    <>
+      <BudgetStyles.CategoryMeta>{t(BUDGET_CONSTANTS.CATEGORY)}</BudgetStyles.CategoryMeta>
+      <BudgetStyles.CategoryWrap>
+        {BUDGET_CATEGORIES.map((item: (typeof BUDGET_CATEGORIES)[number]) => (
+          <BudgetStyles.CategoryChip
+            key={item.id}
+            $active={value === item.id}
+            onPress={() => onChange(item.id)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: value === item.id }}
+          >
+            <BudgetStyles.CategoryLabel $active={value === item.id}>{categoryLabel(item.id)}</BudgetStyles.CategoryLabel>
+          </BudgetStyles.CategoryChip>
+        ))}
+      </BudgetStyles.CategoryWrap>
+    </>
+  );
 
   const handleSaveBudget = () => {
     const value = parseAmount(budgetDraft);
@@ -78,6 +114,7 @@ const Budget = () => {
       day,
       amount: value,
       note: note?.trim() ?? '',
+      categoryId,
       createdAt: Date.now(),
     };
     dispatch(addExpense(expense));
@@ -90,6 +127,7 @@ const Budget = () => {
     setEditingId(expense?.id ?? null);
     setEditAmount(formatAmount(expense?.amount ?? 0));
     setEditNote(expense?.note ?? '');
+    setEditCategoryId(expense?.categoryId ?? BUDGET_CATEGORY_DEFAULT);
     setEditError('');
   };
 
@@ -104,6 +142,7 @@ const Budget = () => {
         ...expense,
         amount: value,
         note: editNote?.trim() ?? '',
+        categoryId: editCategoryId,
       }),
     );
     setEditingId(null);
@@ -116,6 +155,7 @@ const Budget = () => {
     setEditingId(null);
     setEditAmount('');
     setEditNote('');
+    setEditCategoryId(BUDGET_CATEGORY_DEFAULT);
     setEditError('');
   };
 
@@ -170,6 +210,16 @@ const Budget = () => {
               : t(BUDGET_CONSTANTS.NO_BUDGET, { spent: formatAmount(spent) })}
           </BudgetStyles.Summary>
           {monthly > 0 ? <StatBar progress={ratio(spent, monthly)} variant={over ? 'danger' : 'monarch'} /> : null}
+          {categoryBreakdown.length > 0 ? (
+            <SystemPanel title={t(BUDGET_CONSTANTS.CATEGORIES_TITLE)} variant="system">
+              {categoryBreakdown.map((row: { categoryId: BudgetCategoryId; amount: number }) => (
+                <BudgetStyles.Row key={row.categoryId}>
+                  <BudgetStyles.Note>{categoryLabel(row.categoryId)}</BudgetStyles.Note>
+                  <BudgetStyles.Amount>{formatAmount(row.amount)}</BudgetStyles.Amount>
+                </BudgetStyles.Row>
+              ))}
+            </SystemPanel>
+          ) : null}
           {monthly > 0 ? (
             <SystemPanel title={t(BUDGET_CONSTANTS.PLAN_TITLE)} variant="system">
               <BudgetStyles.Summary $danger={false}>
@@ -186,7 +236,15 @@ const Budget = () => {
             </BudgetStyles.Block>
           ) : null}
         </SystemPanel>
-        <SystemPanel title={t(BUDGET_CONSTANTS.ADD)}>
+        <SystemPanel title={t(BUDGET_CONSTANTS.EXPENDITURE)}>
+          <SystemPanel title={t(BUDGET_CONSTANTS.CALCULATOR_TITLE)} variant="system">
+            <SpendCalculator
+              onApply={(value: string) => {
+                setAmount(value);
+                setError('');
+              }}
+            />
+          </SystemPanel>
           <DateNavigator
             label={formatDayLabel(day)}
             onPrevious={() => setDay(addDays(day, -1))}
@@ -210,6 +268,7 @@ const Budget = () => {
             placeholder={t(BUDGET_CONSTANTS.NOTE_PLACEHOLDER)}
             maxLength={BUDGET_RULES.NOTE_MAX}
           />
+          {renderCategoryPicker(categoryId, setCategoryId)}
           <BudgetStyles.Block>
             <PrimaryButton label={t(COMMON_CONSTANTS.ACTIONS.ADD)} onPress={handleAddExpense} />
           </BudgetStyles.Block>
@@ -232,6 +291,7 @@ const Budget = () => {
                   placeholder={t(BUDGET_CONSTANTS.NOTE_PLACEHOLDER)}
                   maxLength={BUDGET_RULES.NOTE_MAX}
                 />
+                {renderCategoryPicker(editCategoryId, setEditCategoryId)}
                 <BudgetStyles.Actions>
                   <PrimaryButton label={t(COMMON_CONSTANTS.ACTIONS.CANCEL)} onPress={handleCancelEdit} variant="ghost" compact />
                   <PrimaryButton
@@ -245,7 +305,9 @@ const Budget = () => {
               <BudgetStyles.ExpenseBlock key={expense?.id}>
                 <BudgetStyles.Row>
                   <BudgetStyles.Note numberOfLines={2}>
-                    {expense?.note ? expense.note : t(BUDGET_CONSTANTS.AMOUNT)}
+                    {`${categoryLabel(expense?.categoryId ?? BUDGET_CATEGORY_DEFAULT)} · ${
+                      expense?.note ? expense.note : t(BUDGET_CONSTANTS.AMOUNT)
+                    }`}
                   </BudgetStyles.Note>
                   <BudgetStyles.Amount>{formatAmount(expense?.amount ?? 0)}</BudgetStyles.Amount>
                 </BudgetStyles.Row>

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from '../store';
+import { store, useAppDispatch } from '../store';
 import {
   setAppEnabledSetting,
   setDailyLimitSetting,
@@ -7,6 +7,8 @@ import {
   setLowConfidenceSetting,
   setOverlaySetting,
   setTrackingSetting,
+  startTrackingSnooze,
+  clearTrackingSnooze,
 } from '../store/slices/settingsSlice';
 import { fetchCapabilities, fetchToday } from '../store/slices/trackerSlice';
 import trackerService from '../services/tracker.service';
@@ -74,6 +76,19 @@ export const useSettingsActions = () => {
     [refreshCapabilities],
   );
 
+  const snoozeTracking = useCallback(
+    (until: number) => {
+      dispatch(startTrackingSnooze({ until }));
+      trackerService.syncSettingsToNative(store.getState().settings).catch(() => undefined);
+    },
+    [dispatch],
+  );
+
+  const endSnooze = useCallback(() => {
+    dispatch(clearTrackingSnooze());
+    trackerService.syncSettingsToNative(store.getState().settings).catch(() => undefined);
+  }, [dispatch]);
+
   return {
     changeTracking,
     changeOverlay,
@@ -83,5 +98,7 @@ export const useSettingsActions = () => {
     changeApp,
     openPermission,
     refreshCapabilities,
+    snoozeTracking,
+    endSnooze,
   };
 };

@@ -8,6 +8,7 @@ export const NOTIFICATION_RULES = {
   REMINDER_PREFIX: 'reminder-',
   CHALLENGE_PREFIX: 'challenge-',
   BUDGET_PREFIX: 'budget-',
+  PLANNER_PREFIX: 'planner-',
 } as const;
 
 export const NOTIFICATION_CHANNELS = {
@@ -16,6 +17,7 @@ export const NOTIFICATION_CHANNELS = {
   BUDGET: 'budget',
   FOCUS: 'focus',
   CHALLENGES: 'challenges',
+  PLANNER: 'planner',
 } as const;
 
 export const NOTIFICATION_CONSTANTS = {
@@ -31,4 +33,7 @@ export const NOTIFICATION_CONSTANTS = {
   CHALLENGE_TITLE: 'notifications.challengeTitle',
   CHALLENGE_BODY: 'notifications.challengeBody',
   CHALLENGE_CHANNEL: 'notifications.challengeChannel',
+  PLANNER_TITLE: 'notifications.plannerTitle',
+  PLANNER_BODY: 'notifications.plannerBody',
+  PLANNER_CHANNEL: 'notifications.plannerChannel',
 } as const;

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GradientView from '../GradientView';
 import AnimatedScreenBackdrop from '../AnimatedScreenBackdrop';
@@ -14,6 +15,13 @@ const PageContainer = ({
   animatedBackground = false,
 }: PageContainerProps) => {
   const insets = useSafeAreaInsets();
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { x: scrollX, y: scrollY } } }],
+    { useNativeDriver: false },
+  );
 
   const content = (
     <PageContainerStyles.Content
@@ -28,9 +36,14 @@ const PageContainer = ({
   return (
     <PageContainerStyles.Container>
       <GradientView colors={GRADIENTS.SCREEN} fill />
-      {animatedBackground ? <AnimatedScreenBackdrop /> : null}
+      {animatedBackground ? <AnimatedScreenBackdrop scrollX={scrollX} scrollY={scrollY} /> : null}
       {scrollable ? (
-        <PageContainerStyles.Scroll keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <PageContainerStyles.Scroll
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          onScroll={animatedBackground ? handleScroll : undefined}
+          scrollEventThrottle={16}
+        >
           {content}
         </PageContainerStyles.Scroll>
       ) : (

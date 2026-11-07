@@ -1,3 +1,7 @@
+export const TRACKER_RULES = {
+  DAY_START_HOUR: 6,
+} as const;
+
 export const TRACKER_CONSTANTS = {
   STATUS: {
     ACTIVE: 'tracker.status.active',

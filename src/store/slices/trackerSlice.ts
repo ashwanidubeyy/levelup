@@ -7,7 +7,7 @@ import type {
   TrackerResult,
   TrackingCapabilities,
 } from '../../types';
-import { todayKey } from '../../utils/date';
+import { trackerDayKey } from '../../utils/date';
 
 export interface TrackerState {
   capabilities: TrackingCapabilities | null;
@@ -30,7 +30,7 @@ export const fetchCapabilities = createAsyncThunk('tracker/capabilities', () =>
 );
 
 export const fetchToday = createAsyncThunk('tracker/today', () => {
-  const day = todayKey();
+  const day = trackerDayKey();
   return Promise.all([trackerService.getDayCounts(day), trackerService.getDayUsage(day)]).then(
     ([counts, usage]) => ({ counts, usage }),
   );
