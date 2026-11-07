@@ -31,8 +31,13 @@ export const useNotificationSync = () => {
   }, [hydrated, challenges, reminders, budget, todos]);
 
   useEffect(() => {
-    syncNotifications();
+    const timer = setTimeout(() => {
+      syncNotifications();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [syncNotifications]);
 
-  useAppActive(syncNotifications);
+  useAppActive(() => {
+    syncNotifications();
+  });
 };

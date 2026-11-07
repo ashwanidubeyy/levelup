@@ -6,22 +6,25 @@ import { SystemPanelStyles } from './styles';
 
 const SystemPanel = ({ children, title, rightLabel, variant = 'system' }: SystemPanelProps) => {
   const theme = useTheme() as AppTheme;
-  const showCorners = theme.layout.panelFrame === 'corners';
-  const roundedFrame = theme.layout.panelFrame === 'rounded';
+  const frame = theme.layout.panelFrame;
+  const showCorners = frame === 'corners';
+  const showFlag = frame === 'flag';
+  const showGlow = frame === 'corners' || frame === 'stripe' || frame === 'rounded';
 
   return (
-  <SystemPanelStyles.Container $variant={variant} $rounded={roundedFrame}>
-    <SystemPanelStyles.TopGlow $variant={variant} />
-    {showCorners ? <SystemPanelStyles.CornerTopLeft $variant={variant} /> : null}
-    {showCorners ? <SystemPanelStyles.CornerBottomRight $variant={variant} /> : null}
-    {title ? (
-      <SystemPanelStyles.Header>
-        <SystemPanelStyles.Title $variant={variant}>{title}</SystemPanelStyles.Title>
-        {rightLabel ? <SystemPanelStyles.RightLabel>{rightLabel}</SystemPanelStyles.RightLabel> : null}
-      </SystemPanelStyles.Header>
-    ) : null}
-    {children}
-  </SystemPanelStyles.Container>
+    <SystemPanelStyles.Container $variant={variant} $frame={frame}>
+      {showGlow ? <SystemPanelStyles.TopGlow $variant={variant} $frame={frame} /> : null}
+      {showFlag ? <SystemPanelStyles.FlagRail $variant={variant} /> : null}
+      {showCorners ? <SystemPanelStyles.CornerTopLeft $variant={variant} /> : null}
+      {showCorners ? <SystemPanelStyles.CornerBottomRight $variant={variant} /> : null}
+      {title ? (
+        <SystemPanelStyles.Header>
+          <SystemPanelStyles.Title $variant={variant}>{title}</SystemPanelStyles.Title>
+          {rightLabel ? <SystemPanelStyles.RightLabel>{rightLabel}</SystemPanelStyles.RightLabel> : null}
+        </SystemPanelStyles.Header>
+      ) : null}
+      {children}
+    </SystemPanelStyles.Container>
   );
 };
 

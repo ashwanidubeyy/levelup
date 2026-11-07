@@ -12,9 +12,16 @@ import Stepper from '../../components/Stepper';
 import ToggleRow from '../../components/ToggleRow';
 import DateNavigator from '../../components/DateNavigator';
 import SpendCalculator from '../../components/SpendCalculator';
+import SegmentedControl from '../../components/SegmentedControl';
 import { BudgetStyles } from './styles';
 import type { BudgetCategoryId, Expense } from '../../types';
-import { BUDGET_CATEGORIES, BUDGET_CATEGORY_DEFAULT, BUDGET_CONSTANTS, BUDGET_RULES } from '../../constants/budget';
+import {
+  BUDGET_CATEGORIES,
+  BUDGET_CATEGORY_DEFAULT,
+  BUDGET_CONSTANTS,
+  BUDGET_RULES,
+  BUDGET_SECTIONS,
+} from '../../constants/budget';
 import { COMMON_CONSTANTS } from '../../constants/common';
 import { useAppDispatch, useAppSelector } from '../../store';
 import {
@@ -53,6 +60,7 @@ const Budget = () => {
   const [editNote, setEditNote] = useState('');
   const [categoryId, setCategoryId] = useState<BudgetCategoryId>(BUDGET_CATEGORY_DEFAULT);
   const [editCategoryId, setEditCategoryId] = useState<BudgetCategoryId>(BUDGET_CATEGORY_DEFAULT);
+  const [section, setSection] = useState<string>(BUDGET_SECTIONS.TRACKER);
   const monthExpenses = useMemo(
     () => expensesForMonth(budget?.expenses ?? [], monthKeyFromDay(day)),
     [budget?.expenses, day],
@@ -188,6 +196,29 @@ const Budget = () => {
     <KeybordView>
       <PageContainer animatedBackground>
         <ScreenHeader title={t(BUDGET_CONSTANTS.TITLE)} subtitle={t(BUDGET_CONSTANTS.SUBTITLE)} />
+        <BudgetStyles.SectionSwitch>
+          <SegmentedControl
+            value={section}
+            onChange={setSection}
+            options={[
+              { value: BUDGET_SECTIONS.TRACKER, label: t(BUDGET_CONSTANTS.SECTION_TRACKER) },
+              { value: BUDGET_SECTIONS.CALCULATOR, label: t(BUDGET_CONSTANTS.SECTION_CALCULATOR) },
+            ]}
+          />
+        </BudgetStyles.SectionSwitch>
+        {section === BUDGET_SECTIONS.CALCULATOR ? (
+          <SystemPanel title={t(BUDGET_CONSTANTS.CALCULATOR_TITLE)} variant="system">
+            <SpendCalculator
+              onApply={(value: string) => {
+                setAmount(value);
+                setError('');
+                setSection(BUDGET_SECTIONS.TRACKER);
+              }}
+            />
+          </SystemPanel>
+        ) : null}
+        {section === BUDGET_SECTIONS.TRACKER ? (
+        <BudgetStyles.TrackerWrap>
         <SystemPanel title={t(BUDGET_CONSTANTS.MONTHLY)} variant={over ? 'danger' : 'monarch'}>
           <InputField
             label={t(BUDGET_CONSTANTS.MONTHLY)}
@@ -237,14 +268,6 @@ const Budget = () => {
           ) : null}
         </SystemPanel>
         <SystemPanel title={t(BUDGET_CONSTANTS.EXPENDITURE)}>
-          <SystemPanel title={t(BUDGET_CONSTANTS.CALCULATOR_TITLE)} variant="system">
-            <SpendCalculator
-              onApply={(value: string) => {
-                setAmount(value);
-                setError('');
-              }}
-            />
-          </SystemPanel>
           <DateNavigator
             label={formatDayLabel(day)}
             onPrevious={() => setDay(addDays(day, -1))}
@@ -355,6 +378,8 @@ const Budget = () => {
             </BudgetStyles.Empty>
           </BudgetStyles.Status>
         </SystemPanel>
+        </BudgetStyles.TrackerWrap>
+        ) : null}
       </PageContainer>
     </KeybordView>
   );

@@ -161,7 +161,7 @@ const Onboarding = ({ navigation }: Props) => {
   };
 
   return (
-    <PageContainer withBottomInset>
+    <PageContainer withBottomInset animatedBackground={false}>
       <OnboardingStep
         image={ONBOARDING_IMAGES[step]}
         stepLabel={t(ONBOARDING_CONSTANTS.STEP, { current: stepIndex + 1, total: steps.length })}

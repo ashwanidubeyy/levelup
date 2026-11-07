@@ -28,7 +28,11 @@ import { makeXp, xpSourceKey } from '../../utils/progress';
 
 const RECENT_LIMIT = 4;
 
-const Challenges = () => {
+interface ChallengesProps {
+  embedded?: boolean;
+}
+
+const Challenges = ({ embedded = false }: ChallengesProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const items = useAppSelector(state => state?.challenges?.items);
@@ -86,10 +90,8 @@ const Challenges = () => {
     dispatch(awardXp(makeXp(day, XP_SOURCES.CHECK_IN, CHALLENGE_RULES.CHECK_IN_XP)));
   };
 
-  return (
-    <KeybordView>
-      <PageContainer animatedBackground>
-        <ScreenHeader title={t(CHALLENGE_CONSTANTS.TITLE)} subtitle={t(CHALLENGE_CONSTANTS.SUBTITLE)} />
+  const body = (
+    <>
         <LevelCard
           title={t(CHALLENGE_CONSTANTS.LEVEL_TITLE)}
           levelLabel={t(HOME_CONSTANTS.LEVEL, { level: levelInfo.level })}
@@ -204,6 +206,16 @@ const Challenges = () => {
             ))}
           </SystemPanel>
         ) : null}
+    </>
+  );
+
+  return embedded ? (
+    body
+  ) : (
+    <KeybordView>
+      <PageContainer animatedBackground>
+        <ScreenHeader title={t(CHALLENGE_CONSTANTS.TITLE)} subtitle={t(CHALLENGE_CONSTANTS.SUBTITLE)} />
+        {body}
       </PageContainer>
     </KeybordView>
   );

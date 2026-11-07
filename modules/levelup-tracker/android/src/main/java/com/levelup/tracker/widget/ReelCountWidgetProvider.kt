@@ -18,20 +18,23 @@ class ReelCountWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
         if (intent.action == ACTION_REFRESH) {
             val manager = AppWidgetManager.getInstance(context)
             val component = ComponentName(context, ReelCountWidgetProvider::class.java)
             val ids = manager.getAppWidgetIds(component)
-            onUpdate(context, manager, ids)
+            val total = if (intent.hasExtra(EXTRA_TOTAL)) intent.getIntExtra(EXTRA_TOTAL, 0) else null
+            val limit = if (intent.hasExtra(EXTRA_LIMIT)) intent.getIntExtra(EXTRA_LIMIT, 0) else null
+            ids.forEach { id -> render(context, manager, id, total, limit) }
+            return
         }
+        super.onReceive(context, intent)
     }
 
-    private fun render(context: Context, manager: AppWidgetManager, id: Int) {
-        val total = runCatching { TrackerRepository.get(context).todayTotal() }.getOrDefault(0)
-        val limit = TrackerPrefs.get(context).dailyLimit
+    private fun render(context: Context, manager: AppWidgetManager, id: Int, total: Int? = null, limit: Int? = null) {
+        val shownTotal = total ?: runCatching { TrackerRepository.get(context).todayTotal() }.getOrDefault(0)
+        val shownLimit = limit ?: TrackerPrefs.get(context).dailyLimit
         val views = RemoteViews(context.packageName, R.layout.widget_reel_count)
-        views.setTextViewText(R.id.widget_count, "$total/$limit")
+        views.setTextViewText(R.id.widget_count, "$shownTotal/$shownLimit")
         views.setTextViewText(
             R.id.widget_hint,
             context.getString(R.string.levelup_widget_resets),
@@ -52,8 +55,15 @@ class ReelCountWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_REFRESH = "com.levelup.tracker.widget.REFRESH"
 
-        fun refreshAll(context: Context) {
-            val intent = Intent(context, ReelCountWidgetProvider::class.java).apply { action = ACTION_REFRESH }
+        const val EXTRA_TOTAL = "total"
+        const val EXTRA_LIMIT = "limit"
+
+        fun refreshAll(context: Context, total: Int? = null, limit: Int? = null) {
+            val intent = Intent(context, ReelCountWidgetProvider::class.java).apply {
+                action = ACTION_REFRESH
+                if (total != null) putExtra(EXTRA_TOTAL, total)
+                if (limit != null) putExtra(EXTRA_LIMIT, limit)
+            }
             context.sendBroadcast(intent)
         }
     }

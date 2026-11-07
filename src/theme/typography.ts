@@ -3,15 +3,15 @@ import type { AppTheme } from './types';
 import { THEME_FONT_STACKS } from './themeFonts';
 
 export const BASE_FONT_SIZES = {
-  XXS: 10,
-  XS: 12,
-  SM: 14,
-  MD: 16,
-  LG: 18,
-  XL: 22,
-  XXL: 28,
-  HUGE: 44,
-  GIANT: 64,
+  XXS: 9,
+  XS: 11,
+  SM: 13,
+  MD: 15,
+  LG: 17,
+  XL: 19,
+  XXL: 24,
+  HUGE: 36,
+  GIANT: 48,
 } as const;
 
 export type FontSizeKey = keyof typeof BASE_FONT_SIZES;

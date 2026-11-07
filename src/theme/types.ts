@@ -3,7 +3,7 @@ import type { ButtonVariant, ChipVariant, PanelVariant } from '../types';
 
 export type ThemeId = 'levelup' | 'onePiece' | 'naruto' | 'soloLeveling';
 
-export type ThemePanelFrame = 'corners' | 'minimal' | 'rounded';
+export type ThemePanelFrame = 'corners' | 'minimal' | 'rounded' | 'stripe' | 'flag';
 
 export type ThemeTabIndicator = 'line' | 'pill' | 'glow';
 
@@ -11,6 +11,7 @@ export type ThemeStackAnimation = 'fade_from_bottom' | 'slide_from_right' | 'fad
 
 export interface ThemeLayout {
   scale: number;
+  spacingScale: number;
   contentInset: number;
   hubGap: number;
   panelRadius: number;
@@ -26,6 +27,7 @@ export interface ThemeMotion {
   backdropShimmerMs: number;
   parallaxX: number;
   parallaxY: number;
+  touchParallax: number;
   auraPulseMax: number;
   stackAnimation: ThemeStackAnimation;
   pressScale: number;

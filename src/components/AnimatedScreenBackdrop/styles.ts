@@ -1,8 +1,7 @@
 import styled from 'styled-components/native';
 import { Animated, View } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
-import { COLORS } from '../../theme/colors';
-import { SPACING } from '../../theme/spacing';
+import { themeSpace } from '../../theme/layoutScale';
 
 const Root = styled(View)`
   position: absolute;
@@ -15,45 +14,59 @@ const Root = styled(View)`
 
 const Aura = styled(Animated.View)`
   position: absolute;
-  width: ${moderateScale(420, 0.9)}px;
-  height: ${moderateScale(420, 0.9)}px;
-  border-radius: ${moderateScale(210, 0.9)}px;
+  width: ${moderateScale(360, 0.9)}px;
+  height: ${moderateScale(360, 0.9)}px;
+  border-radius: ${moderateScale(180, 0.9)}px;
   background-color: ${({ theme }) => theme.colors.BLUE_TINT};
 `;
 
 const AuraAlt = styled(Animated.View)`
   position: absolute;
-  width: ${moderateScale(340, 0.9)}px;
-  height: ${moderateScale(340, 0.9)}px;
-  border-radius: ${moderateScale(170, 0.9)}px;
+  width: ${moderateScale(300, 0.9)}px;
+  height: ${moderateScale(300, 0.9)}px;
+  border-radius: ${moderateScale(150, 0.9)}px;
   background-color: ${({ theme }) => theme.colors.VIOLET_TINT};
 `;
 
 const LeftImage = styled(Animated.Image)`
   position: absolute;
-  width: ${moderateScale(220, 0.9)}px;
-  height: ${moderateScale(300, 0.9)}px;
-  top: ${moderateScale(8, 0.9)}px;
-  left: ${SPACING.LG}px;
-  opacity: 0.38;
+  width: ${moderateScale(200, 0.9)}px;
+  height: ${moderateScale(260, 0.9)}px;
+  top: ${moderateScale(6, 0.9)}px;
+  left: ${({ theme }) => themeSpace(theme, 'SM')}px;
+  opacity: 0.34;
 `;
 
 const RightImage = styled(Animated.Image)`
   position: absolute;
-  width: ${moderateScale(240, 0.9)}px;
-  height: ${moderateScale(320, 0.9)}px;
-  bottom: ${moderateScale(40, 0.9)}px;
-  right: ${SPACING.SM}px;
-  opacity: 0.32;
+  width: ${moderateScale(220, 0.9)}px;
+  height: ${moderateScale(280, 0.9)}px;
+  bottom: ${moderateScale(32, 0.9)}px;
+  right: ${({ theme }) => themeSpace(theme, 'XS')}px;
+  opacity: 0.28;
 `;
 
 const Shimmer = styled(Animated.View)`
   position: absolute;
   left: -30%;
   top: 0;
-  width: 45%;
+  width: 40%;
   bottom: 0;
   background-color: ${({ theme }) => theme.colors.SCRIM_TOP};
+`;
+
+const PatternDot = styled(Animated.View)`
+  position: absolute;
+  width: ${moderateScale(6, 0.9)}px;
+  height: ${moderateScale(6, 0.9)}px;
+  border-radius: ${moderateScale(3, 0.9)}px;
+  background-color: ${({ theme }) => theme.colors.YELLOW_TINT};
+`;
+
+const PatternBand = styled(Animated.View)`
+  position: absolute;
+  height: ${moderateScale(1, 0.9)}px;
+  background-color: ${({ theme }) => theme.colors.BLUE_TINT};
 `;
 
 export const AnimatedScreenBackdropStyles = {
@@ -63,4 +76,6 @@ export const AnimatedScreenBackdropStyles = {
   LeftImage,
   RightImage,
   Shimmer,
+  PatternDot,
+  PatternBand,
 };

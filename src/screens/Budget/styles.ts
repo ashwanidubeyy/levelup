@@ -4,6 +4,12 @@ import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText, rowBetween } from '../../utils/commonStyles';
 
+const SectionSwitch = styled.View`
+  margin-bottom: ${V_SPACING.SM}px;
+`;
+
+const TrackerWrap = styled.View``;
+
 const Block = styled.View`
   margin-top: ${V_SPACING.MD}px;
 `;
@@ -91,6 +97,8 @@ const CategoryMeta = styled.Text`
 `;
 
 export const BudgetStyles = {
+  SectionSwitch,
+  TrackerWrap,
   Block,
   Summary,
   ExpenseBlock,

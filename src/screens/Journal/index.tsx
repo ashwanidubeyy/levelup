@@ -18,11 +18,13 @@ import { useAppSelector } from '../../store';
 import { formatDateTime } from '../../utils/date';
 import { previewText } from '../../utils/helpers';
 
-type Props = TabScreenProps<'Journal'>;
+type Props = TabScreenProps<'JournalHub'> & {
+  embedded?: boolean;
+};
 
 const PREVIEW_LENGTH = 180;
 
-const Journal = ({ navigation }: Props) => {
+const Journal = ({ navigation, embedded = false }: Props) => {
   const theme = useTheme() as AppTheme;
   const { t } = useTranslation();
   const entries = useAppSelector(state => state?.journal?.entries) ?? [];
@@ -37,11 +39,13 @@ const Journal = ({ navigation }: Props) => {
 
   const handleNew = () => navigation.navigate('JournalEditor', undefined);
 
-  return (
-    <PageContainer animatedBackground>
-      <AnimeHeroCard image={theme.assets.journalBanner} size="short">
-        <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
-      </AnimeHeroCard>
+  const list = (
+    <>
+      {embedded ? (
+        <AnimeHeroCard image={theme.assets.journalBanner} size="short">
+          <JournalStyles.HeroTitle>{t(JOURNAL_CONSTANTS.TITLE)}</JournalStyles.HeroTitle>
+        </AnimeHeroCard>
+      ) : null}
       <JournalStyles.Actions>
         <PrimaryButton label={t(JOURNAL_CONSTANTS.NEW_TITLE)} onPress={handleNew} />
       </JournalStyles.Actions>
@@ -57,6 +61,17 @@ const Journal = ({ navigation }: Props) => {
           onPress={() => navigation.navigate('JournalEditor', { entryId: entry?.id })}
         />
       ))}
+    </>
+  );
+
+  return embedded ? (
+    list
+  ) : (
+    <PageContainer animatedBackground>
+      <AnimeHeroCard image={theme.assets.journalBanner} size="short">
+        <ScreenHeader title={t(JOURNAL_CONSTANTS.TITLE)} subtitle={t(JOURNAL_CONSTANTS.SUBTITLE)} />
+      </AnimeHeroCard>
+      {list}
     </PageContainer>
   );
 };

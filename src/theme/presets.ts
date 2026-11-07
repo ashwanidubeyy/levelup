@@ -10,6 +10,7 @@ const buildTheme = (
   motion: ThemeMotion,
   icons: ThemeIcons,
   typography: ThemeTypography,
+  screenColors: readonly [string, string, string],
 ): AppTheme => {
   const gradients: ThemeGradients = {
     SYSTEM: [colors.BLUE_DEEP, colors.BACKGROUND_ELEVATED],
@@ -19,7 +20,7 @@ const buildTheme = (
     BUTTON_PRIMARY: [colors.BLUE, colors.BLUE_DEEP],
     BUTTON_DANGER: [colors.RED_BRIGHT, colors.RED_BLOOD],
     BRAND: [colors.BLUE_LIGHT, colors.YELLOW, colors.RED_BRIGHT],
-    SCREEN: [colors.BACKGROUND_ELEVATED, colors.BACKGROUND],
+    SCREEN: screenColors,
   };
   return {
     id,
@@ -61,89 +62,97 @@ const buildTheme = (
 };
 
 const LEVELUP_LAYOUT: ThemeLayout = {
-  scale: 1,
-  contentInset: 16,
-  hubGap: 12,
-  panelRadius: 8,
+  scale: 0.96,
+  spacingScale: 0.9,
+  contentInset: 14,
+  hubGap: 9,
+  panelRadius: 6,
   buttonRadius: 4,
   panelFrame: 'corners',
   tabIndicator: 'line',
-  tabIconScale: 1,
-  letterSpacing: 1,
-};
-
-const ONE_PIECE_LAYOUT: ThemeLayout = {
-  scale: 1.02,
-  contentInset: 18,
-  hubGap: 14,
-  panelRadius: 12,
-  buttonRadius: 8,
-  panelFrame: 'corners',
-  tabIndicator: 'pill',
-  tabIconScale: 1.06,
-  letterSpacing: 1.2,
-};
-
-const NARUTO_LAYOUT: ThemeLayout = {
-  scale: 1,
-  contentInset: 16,
-  hubGap: 10,
-  panelRadius: 6,
-  buttonRadius: 6,
-  panelFrame: 'minimal',
-  tabIndicator: 'line',
-  tabIconScale: 1,
+  tabIconScale: 0.98,
   letterSpacing: 0.8,
 };
 
-const SOLO_LAYOUT: ThemeLayout = {
+const ONE_PIECE_LAYOUT: ThemeLayout = {
   scale: 0.98,
-  contentInset: 20,
-  hubGap: 16,
-  panelRadius: 16,
-  buttonRadius: 12,
+  spacingScale: 0.92,
+  contentInset: 14,
+  hubGap: 10,
+  panelRadius: 10,
+  buttonRadius: 8,
+  panelFrame: 'stripe',
+  tabIndicator: 'pill',
+  tabIconScale: 1.02,
+  letterSpacing: 1,
+};
+
+const NARUTO_LAYOUT: ThemeLayout = {
+  scale: 0.96,
+  spacingScale: 0.88,
+  contentInset: 13,
+  hubGap: 8,
+  panelRadius: 4,
+  buttonRadius: 4,
+  panelFrame: 'flag',
+  tabIndicator: 'line',
+  tabIconScale: 0.96,
+  letterSpacing: 0.5,
+};
+
+const SOLO_LAYOUT: ThemeLayout = {
+  scale: 0.94,
+  spacingScale: 0.9,
+  contentInset: 15,
+  hubGap: 11,
+  panelRadius: 14,
+  buttonRadius: 10,
   panelFrame: 'rounded',
   tabIndicator: 'glow',
-  tabIconScale: 0.96,
-  letterSpacing: 1.5,
+  tabIconScale: 0.94,
+  letterSpacing: 1.2,
 };
 
 const LEVELUP_MOTION: ThemeMotion = {
-  backdropDriftMs: 14000,
-  backdropShimmerMs: 9000,
-  parallaxX: 0.12,
-  parallaxY: 0.1,
-  auraPulseMax: 1.08,
+  backdropDriftMs: 16000,
+  backdropShimmerMs: 11000,
+  parallaxX: 0.14,
+  parallaxY: 0.11,
+  touchParallax: 0.22,
+  auraPulseMax: 1.06,
   stackAnimation: 'fade_from_bottom',
   pressScale: 0.98,
 };
 
 const ONE_PIECE_MOTION: ThemeMotion = {
-  backdropDriftMs: 11000,
-  backdropShimmerMs: 7500,
-  parallaxX: 0.15,
-  parallaxY: 0.12,
-  auraPulseMax: 1.1,
+  backdropDriftMs: 13000,
+  backdropShimmerMs: 9000,
+  parallaxX: 0.18,
+  parallaxY: 0.14,
+  touchParallax: 0.26,
+  auraPulseMax: 1.08,
   stackAnimation: 'slide_from_right',
   pressScale: 0.96,
 };
 
 const NARUTO_MOTION: ThemeMotion = {
-  backdropDriftMs: 12000,
-  backdropShimmerMs: 10000,
-  parallaxX: 0.08,
-  parallaxY: 0.06,
-  auraPulseMax: 1.05,
+  backdropDriftMs: 14000,
+  backdropShimmerMs: 12000,
+  parallaxX: 0.1,
+  parallaxY: 0.08,
+  touchParallax: 0.2,
+  auraPulseMax: 1.04,
   stackAnimation: 'fade',
   pressScale: 0.99,
 };
 
 const SOLO_MOTION: ThemeMotion = {
-  backdropDriftMs: 16000,
-  backdropShimmerMs: 11000,
-  parallaxX: 0.18,
-  parallaxY: 0.14,
-  auraPulseMax: 1.12,
+  backdropDriftMs: 18000,
+  backdropShimmerMs: 13000,
+  parallaxX: 0.2,
+  parallaxY: 0.16,
+  touchParallax: 0.28,
+  auraPulseMax: 1.1,
   stackAnimation: 'fade_from_bottom',
   pressScale: 0.94,
 };
@@ -155,34 +164,34 @@ const SOLO_ICONS: ThemeIcons = { strokeWidth: 1.75, activeStrokeWidth: 2.25, fil
 
 const LEVELUP_TYPOGRAPHY: ThemeTypography = {
   fonts: THEME_FONT_STACKS.levelup,
-  sizeScale: 1,
-  displayLetterSpacing: 1,
+  sizeScale: 0.94,
+  displayLetterSpacing: 0.8,
   bodyLetterSpacing: 0,
-  lineHeightScale: 1.05,
+  lineHeightScale: 1.02,
 };
 
 const ONE_PIECE_TYPOGRAPHY: ThemeTypography = {
   fonts: THEME_FONT_STACKS.onePiece,
-  sizeScale: 1.03,
-  displayLetterSpacing: 1.4,
-  bodyLetterSpacing: 0.2,
-  lineHeightScale: 1.08,
+  sizeScale: 0.96,
+  displayLetterSpacing: 1.1,
+  bodyLetterSpacing: 0.15,
+  lineHeightScale: 1.04,
 };
 
 const NARUTO_TYPOGRAPHY: ThemeTypography = {
   fonts: THEME_FONT_STACKS.naruto,
-  sizeScale: 1.02,
-  displayLetterSpacing: 0.6,
+  sizeScale: 0.93,
+  displayLetterSpacing: 0.4,
   bodyLetterSpacing: 0,
-  lineHeightScale: 1.12,
+  lineHeightScale: 1.06,
 };
 
 const SOLO_TYPOGRAPHY: ThemeTypography = {
   fonts: THEME_FONT_STACKS.soloLeveling,
-  sizeScale: 0.97,
-  displayLetterSpacing: 1.8,
-  bodyLetterSpacing: 0.4,
-  lineHeightScale: 1.1,
+  sizeScale: 0.92,
+  displayLetterSpacing: 1.4,
+  bodyLetterSpacing: 0.25,
+  lineHeightScale: 1.04,
 };
 
 const LEVELUP_COLORS: ThemeColors = {
@@ -224,11 +233,11 @@ const LEVELUP_COLORS: ThemeColors = {
 
 const ONE_PIECE_COLORS: ThemeColors = {
   ...LEVELUP_COLORS,
-  BACKGROUND: '#04060C',
-  BACKGROUND_ELEVATED: '#0A1220',
-  PANEL: '#101A2E',
-  PANEL_ALT: '#0C1524',
-  PANEL_BORDER: '#1E3558',
+  BACKGROUND: '#020814',
+  BACKGROUND_ELEVATED: '#081428',
+  PANEL: '#0C1A32',
+  PANEL_ALT: '#102038',
+  PANEL_BORDER: '#2A4A78',
   BLUE: '#1A6FD4',
   BLUE_LIGHT: '#4DA3FF',
   BLUE_GLOW: '#2E8CFF',
@@ -250,11 +259,11 @@ const ONE_PIECE_COLORS: ThemeColors = {
 
 const NARUTO_COLORS: ThemeColors = {
   ...LEVELUP_COLORS,
-  BACKGROUND: '#060504',
-  BACKGROUND_ELEVATED: '#12100E',
-  PANEL: '#1A1612',
-  PANEL_ALT: '#14110E',
-  PANEL_BORDER: '#3D3024',
+  BACKGROUND: '#120C08',
+  BACKGROUND_ELEVATED: '#1C1410',
+  PANEL: '#241C14',
+  PANEL_ALT: '#2A2016',
+  PANEL_BORDER: '#6B3F1E',
   BLUE: '#1D3557',
   BLUE_LIGHT: '#4A6FA5',
   BLUE_GLOW: '#457B9D',
@@ -280,11 +289,11 @@ const NARUTO_COLORS: ThemeColors = {
 
 const SOLO_LEVELING_COLORS: ThemeColors = {
   ...LEVELUP_COLORS,
-  BACKGROUND: '#030208',
-  BACKGROUND_ELEVATED: '#0B0814',
-  PANEL: '#120E1E',
-  PANEL_ALT: '#0E0B18',
-  PANEL_BORDER: '#2A2240',
+  BACKGROUND: '#020106',
+  BACKGROUND_ELEVATED: '#0A0616',
+  PANEL: '#160F28',
+  PANEL_ALT: '#1A1230',
+  PANEL_BORDER: '#4A2F8C',
   BLUE: '#3A86FF',
   BLUE_LIGHT: '#7EB8FF',
   BLUE_GLOW: '#00E5FF',
@@ -309,6 +318,11 @@ const SOLO_LEVELING_COLORS: ThemeColors = {
   SCRIM_FULL: 'rgba(3, 2, 8, 0.92)',
 };
 
+const LEVELUP_SCREEN = [LEVELUP_COLORS.BLUE_DEEP, LEVELUP_COLORS.BACKGROUND_ELEVATED, LEVELUP_COLORS.BACKGROUND] as const;
+const ONE_PIECE_SCREEN = ['#0E2848', ONE_PIECE_COLORS.BACKGROUND_ELEVATED, ONE_PIECE_COLORS.BACKGROUND] as const;
+const NARUTO_SCREEN = ['#3D2814', NARUTO_COLORS.BACKGROUND_ELEVATED, NARUTO_COLORS.BACKGROUND] as const;
+const SOLO_SCREEN = ['#1A0F38', SOLO_LEVELING_COLORS.BACKGROUND_ELEVATED, SOLO_LEVELING_COLORS.BACKGROUND] as const;
+
 export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
   levelup: buildTheme(
     'levelup',
@@ -322,6 +336,7 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     LEVELUP_MOTION,
     LEVELUP_ICONS,
     LEVELUP_TYPOGRAPHY,
+    LEVELUP_SCREEN,
   ),
   onePiece: buildTheme(
     'onePiece',
@@ -335,19 +350,21 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     ONE_PIECE_MOTION,
     ONE_PIECE_ICONS,
     ONE_PIECE_TYPOGRAPHY,
+    ONE_PIECE_SCREEN,
   ),
   naruto: buildTheme(
     'naruto',
     NARUTO_COLORS,
     {
-      system: NARUTO_COLORS.BLUE_LIGHT,
+      system: NARUTO_COLORS.YELLOW,
       danger: NARUTO_COLORS.RED_BRIGHT,
-      monarch: NARUTO_COLORS.YELLOW,
+      monarch: NARUTO_COLORS.GREEN,
     },
     NARUTO_LAYOUT,
     NARUTO_MOTION,
     NARUTO_ICONS,
     NARUTO_TYPOGRAPHY,
+    NARUTO_SCREEN,
   ),
   soloLeveling: buildTheme(
     'soloLeveling',
@@ -361,6 +378,7 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     SOLO_MOTION,
     SOLO_ICONS,
     SOLO_TYPOGRAPHY,
+    SOLO_SCREEN,
   ),
 };
 

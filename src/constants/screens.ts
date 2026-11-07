@@ -230,8 +230,7 @@ export const DIAGNOSTICS_CONSTANTS = {
 
 export const TAB_CONSTANTS = {
   HOME: 'tabs.home',
-  JOURNAL: 'tabs.journal',
-  CHALLENGES: 'tabs.challenges',
+  JOURNAL_HUB: 'tabs.journalHub',
   BUDGET: 'tabs.budget',
   MORE: 'tabs.more',
 } as const;

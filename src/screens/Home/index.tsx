@@ -206,7 +206,7 @@ const Home = ({ navigation }: Props) => {
           onPress={() =>
             latest?.id
               ? navigation.navigate('JournalEditor', { entryId: latest.id })
-              : navigation.navigate('Journal')
+              : navigation.navigate('JournalHub', { section: 'journal' })
           }
         />
         <HubTile

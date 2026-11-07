@@ -15,12 +15,11 @@ import TabBar from '../components/TabBar';
 import Onboarding from '../screens/Onboarding';
 import Home from '../screens/Home';
 import Focus from '../screens/Focus';
-import Challenges from '../screens/Challenges';
+import JournalHub from '../screens/JournalHub';
 import Budget from '../screens/Budget';
 import More from '../screens/More';
 import Stats from '../screens/Stats';
 import Calendar from '../screens/Calendar';
-import Journal from '../screens/Journal';
 import JournalEditor from '../screens/JournalEditor';
 import Settings from '../screens/Settings';
 import Diagnostics from '../screens/Diagnostics';
@@ -45,8 +44,7 @@ export type RootStackParamList = {
 
 export type MainTabParamList = {
   Home: undefined;
-  Journal: undefined;
-  Challenges: undefined;
+  JournalHub: { section?: 'journal' | 'challenges' } | undefined;
   Budget: undefined;
   More: undefined;
 };
@@ -66,7 +64,16 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 
-const TAB_OPTIONS = { headerShown: false, lazy: true };
+const TAB_OPTIONS = {
+  headerShown: false,
+  lazy: true,
+  tabBarStyle: {
+    position: 'absolute' as const,
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    elevation: 0,
+  },
+};
 
 const renderTabBar = (props: BottomTabBarProps) => <TabBar {...props} />;
 
@@ -78,8 +85,7 @@ const MainTabs = () => {
   return (
     <Tab.Navigator screenOptions={TAB_OPTIONS} tabBar={renderTabBar}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Journal" component={Journal} />
-      <Tab.Screen name="Challenges" component={Challenges} />
+      <Tab.Screen name="JournalHub" component={JournalHub} />
       <Tab.Screen name="Budget" component={Budget} />
       <Tab.Screen name="More" component={More} />
     </Tab.Navigator>

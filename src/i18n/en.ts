@@ -375,10 +375,15 @@ export const en = {
   },
   tabs: {
     home: 'Home',
-    journal: 'Journal',
-    challenges: 'Challenges',
+    journalHub: 'Grow',
     budget: 'Budget',
     more: 'More',
+  },
+  journalHub: {
+    title: 'GROW',
+    subtitle: 'Journal entries and daily challenges',
+    sectionJournal: 'Journal',
+    sectionChallenges: 'Challenges',
   },
   notifications: {
     quoteTitle: 'Today’s quote',
@@ -523,6 +528,8 @@ export const en = {
   budget: {
     title: 'BUDGET',
     subtitle: 'A monthly limit and daily expenses',
+    sectionTracker: 'Tracker',
+    sectionCalculator: 'Calculator',
     monthly: 'Monthly budget',
     monthlyPlaceholder: 'Amount',
     saveBudget: 'Save budget',

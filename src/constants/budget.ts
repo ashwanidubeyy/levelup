@@ -19,9 +19,16 @@ export const BUDGET_RULES = {
   NOTE_MAX: 80,
 } as const;
 
+export const BUDGET_SECTIONS = {
+  TRACKER: 'tracker',
+  CALCULATOR: 'calculator',
+} as const;
+
 export const BUDGET_CONSTANTS = {
   TITLE: 'budget.title',
   SUBTITLE: 'budget.subtitle',
+  SECTION_TRACKER: 'budget.sectionTracker',
+  SECTION_CALCULATOR: 'budget.sectionCalculator',
   MONTHLY: 'budget.monthly',
   MONTHLY_PLACEHOLDER: 'budget.monthlyPlaceholder',
   SAVE_BUDGET: 'budget.saveBudget',

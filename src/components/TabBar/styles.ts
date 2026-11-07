@@ -1,71 +1,62 @@
 import styled from 'styled-components/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import {themeFontSize} from '../../theme/typography';
-import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
 
-const INDICATOR_HEIGHT = moderateVerticalScale(3, 0.9);
-const PILL_INDICATOR_HEIGHT = moderateVerticalScale(4, 0.9);
-const GLOW_INDICATOR_HEIGHT = moderateVerticalScale(5, 0.9);
+const BAR_HEIGHT = moderateVerticalScale(52, 0.9);
+const HALO = moderateScale(40, 0.9);
+const DOT = moderateScale(4, 0.9);
 
-const Container = styled.View<{ $bottom: number }>`
-  flex-direction: row;
-  height: ${({ $bottom }) => V_SPACING.TAB_BAR + $bottom}px;
+const Outer = styled.View<{ $bottom: number }>`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding-bottom: ${({ $bottom }) => $bottom}px;
-  background-color: ${({ theme }) => theme.colors.BACKGROUND_ELEVATED};
-  border-top-width: ${BORDER.HAIRLINE}px;
-  border-top-color: ${({ theme }) => theme.colors.PANEL_BORDER};
+  padding-left: ${moderateScale(14, 0.9)}px;
+  padding-right: ${moderateScale(14, 0.9)}px;
+  align-items: center;
+`;
+
+const Bar = styled.View`
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: ${moderateScale(400, 0.9)}px;
+  height: ${BAR_HEIGHT}px;
+  border-radius: ${moderateScale(26, 0.9)}px;
+  background-color: ${({ theme }) => theme.colors.PANEL};
+  border-width: ${moderateScale(1, 0.9)}px;
+  border-color: ${({ theme }) => theme.colors.PANEL_BORDER};
 `;
 
 const Tab = styled.TouchableOpacity`
   flex: 1;
   align-items: center;
   justify-content: center;
+  height: ${BAR_HEIGHT}px;
 `;
 
-const IndicatorLine = styled.View<{ $active: boolean }>`
+const ActiveHalo = styled.View<{ $accent: string }>`
   position: absolute;
-  top: 0;
-  left: ${SPACING.LG}px;
-  right: ${SPACING.LG}px;
-  height: ${INDICATOR_HEIGHT}px;
-  background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
+  width: ${HALO}px;
+  height: ${HALO}px;
+  border-radius: ${HALO / 2}px;
+  background-color: ${({ $accent }) => $accent};
+  opacity: 0.14;
 `;
 
-const IndicatorPill = styled.View<{ $active: boolean }>`
+const Dot = styled.View<{ $accent: string }>`
   position: absolute;
-  top: ${V_SPACING.XS}px;
-  align-self: center;
-  width: ${moderateScale(36, 0.9)}px;
-  height: ${PILL_INDICATOR_HEIGHT}px;
-  border-radius: ${moderateScale(8, 0.9)}px;
-  background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
-`;
-
-const IndicatorGlow = styled.View<{ $active: boolean }>`
-  position: absolute;
-  top: 0;
-  left: ${SPACING.MD}px;
-  right: ${SPACING.MD}px;
-  height: ${GLOW_INDICATOR_HEIGHT}px;
-  border-bottom-left-radius: ${moderateScale(6, 0.9)}px;
-  border-bottom-right-radius: ${moderateScale(6, 0.9)}px;
-  background-color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TRANSPARENT)};
-  opacity: ${({ $active }) => ($active ? 0.95 : 0)};
-`;
-
-const Label = styled.Text<{ $color: string }>`
-  margin-top: ${V_SPACING.XS}px;
-  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
-  font-size: ${({ theme }) => themeFontSize(theme, 'XXS') * 0.9}px;
-  letter-spacing: ${({ theme }) => theme.layout.letterSpacing}px;
-  color: ${({ $color }) => $color};
+  bottom: ${moderateScale(8, 0.9)}px;
+  width: ${DOT}px;
+  height: ${DOT}px;
+  border-radius: ${DOT / 2}px;
+  background-color: ${({ $accent }) => $accent};
 `;
 
 export const TabBarStyles = {
-  Container,
+  Outer,
+  Bar,
   Tab,
-  IndicatorLine,
-  IndicatorPill,
-  IndicatorGlow,
-  Label,
+  ActiveHalo,
+  Dot,
 };

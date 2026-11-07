@@ -1,5 +1,7 @@
 import React from 'react';
+import { useTheme } from 'styled-components/native';
 import StatusChip from '../StatusChip';
+import type { AppTheme } from '../../theme/types';
 import type { ChipVariant, QuestCardProps, QuestStatus } from '../../types';
 import { QuestCardStyles } from './styles';
 import { chipColorFor } from '../../utils/variant';
@@ -20,10 +22,11 @@ const QuestCard = ({
   image,
   negative = false,
 }: QuestCardProps) => {
+  const theme = useTheme() as AppTheme;
   const variant = STATUS_VARIANTS[status];
 
   return (
-    <QuestCardStyles.Container $accent={chipColorFor(variant)}>
+    <QuestCardStyles.Container $accent={chipColorFor(variant)} $frame={theme.layout.panelFrame}>
       <QuestCardStyles.Thumb source={image} resizeMode="cover" $dim={status === 'locked'} />
       <QuestCardStyles.Body>
         <QuestCardStyles.Title>{title}</QuestCardStyles.Title>

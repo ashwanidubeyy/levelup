@@ -52,12 +52,20 @@ class LevelUpAccessibilityService : AccessibilityService() {
     private var lastSessionTouchAt = 0L
     private var tickRunning = false
     private var receiverRegistered = false
+    private var widgetRefreshQueued = false
+    private var lastPublishedSignature: String? = null
 
     private val tick = object : Runnable {
         override fun run() {
             onTick()
             if (tickRunning) handler.postDelayed(this, TICK_MS)
         }
+    }
+
+    private val widgetRefresh = Runnable {
+        widgetRefreshQueued = false
+        if (!::prefs.isInitialized) return@Runnable
+        ReelCountWidgetProvider.refreshAll(this, todayTotal, prefs.dailyLimit)
     }
 
     private val deferredInspection = Runnable {
@@ -359,18 +367,27 @@ class LevelUpAccessibilityService : AccessibilityService() {
     private fun publish(app: TrackedApp?) {
         ensureToday(System.currentTimeMillis())
         TrackerRuntime.engineSnapshot = engine.snapshot()
-        TrackerRuntime.publish(
-            TrackerUpdate(
-                app = app?.id,
-                inFeed = engine.isInFeed,
-                confidence = engine.currentConfidence.name,
-                sessionCount = sessionCount,
-                todayTotal = todayTotal,
-                dailyLimit = prefs.dailyLimit,
-                at = System.currentTimeMillis(),
-            )
+        val update = TrackerUpdate(
+            app = app?.id,
+            inFeed = engine.isInFeed,
+            confidence = engine.currentConfidence.name,
+            sessionCount = sessionCount,
+            todayTotal = todayTotal,
+            dailyLimit = prefs.dailyLimit,
+            at = System.currentTimeMillis(),
         )
-        ReelCountWidgetProvider.refreshAll(this)
+        val signature = "${update.app}|${update.inFeed}|${update.confidence}|${update.sessionCount}|${update.todayTotal}|${update.dailyLimit}"
+        if (signature != lastPublishedSignature) {
+            lastPublishedSignature = signature
+            TrackerRuntime.publish(update)
+        }
+        scheduleWidgetRefresh()
+    }
+
+    private fun scheduleWidgetRefresh() {
+        if (widgetRefreshQueued) return
+        widgetRefreshQueued = true
+        handler.postDelayed(widgetRefresh, WIDGET_REFRESH_MS)
     }
 
     private fun ensureToday(now: Long) {
@@ -383,10 +400,12 @@ class LevelUpAccessibilityService : AccessibilityService() {
     }
 
     private fun refreshTodayTotal() {
+        if (!::prefs.isInitialized) return
         todayKey = TrackerRepository.dayKey(System.currentTimeMillis())
         Thread {
             val total = runCatching { repository.todayTotal() }.getOrDefault(0)
             handler.post {
+                if (!::prefs.isInitialized || !TrackerRuntime.serviceConnected) return@post
                 todayTotal = maxOf(todayTotal, total)
                 updateOverlay()
                 publish(engine.currentApp)
@@ -430,6 +449,7 @@ class LevelUpAccessibilityService : AccessibilityService() {
     }
 
     companion object {
+        private const val WIDGET_REFRESH_MS = 3_000L
         private const val TICK_MS = 250L
         private const val CONTENT_THROTTLE_MS = 450L
         private const val SCROLL_THROTTLE_MS = 250L

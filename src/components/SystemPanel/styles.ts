@@ -1,28 +1,44 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
-import {themeFontSize} from '../../theme/typography';
-import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
-import { scaleForTheme } from '../../theme/layoutScale';
+import { themeFontSize } from '../../theme/typography';
+import { BORDER } from '../../theme/spacing';
+import { scaleForTheme, themeSpace, themeVSpace } from '../../theme/layoutScale';
 import type { PanelVariant } from '../../types';
+import type { ThemePanelFrame } from '../../theme/types';
 
-const CORNER = moderateScale(14, 0.9);
+const CORNER = moderateScale(12, 0.9);
+const FLAG_WIDTH = moderateScale(4, 0.9);
+const STRIPE_HEIGHT = moderateScale(4, 0.9);
 
-const Container = styled.View<{ $variant: PanelVariant; $rounded: boolean }>`
-  margin-top: ${V_SPACING.LG}px;
-  padding: ${V_SPACING.LG}px ${SPACING.LG}px;
-  background-color: ${({ theme }) => theme.colors.PANEL_ALT};
-  border-width: ${({ $rounded }) => ($rounded ? BORDER.THICK : BORDER.HAIRLINE)}px;
-  border-color: ${({ $variant, $rounded, theme }) => ($rounded ? theme.accents[$variant] : theme.colors.PANEL_BORDER)};
+const Container = styled.View<{ $variant: PanelVariant; $frame: ThemePanelFrame }>`
+  margin-top: ${({ theme }) => themeVSpace(theme, 'MD')}px;
+  padding: ${({ theme }) => themeVSpace(theme, 'MD')}px ${({ theme }) => themeSpace(theme, 'MD')}px;
+  background-color: ${({ $frame, theme }) =>
+    $frame === 'stripe' ? theme.colors.PANEL : theme.colors.PANEL_ALT};
+  border-width: ${({ $frame }) =>
+    $frame === 'rounded' ? BORDER.THICK : $frame === 'minimal' || $frame === 'flag' ? BORDER.HAIRLINE : 0}px;
+  border-color: ${({ $variant, $frame, theme }) =>
+    $frame === 'rounded' ? theme.accents[$variant] : theme.colors.PANEL_BORDER};
   border-radius: ${({ theme }) => scaleForTheme(theme.layout.panelRadius, theme.layout.scale)}px;
   overflow: hidden;
 `;
 
-const TopGlow = styled.View<{ $variant: PanelVariant }>`
+const TopGlow = styled.View<{ $variant: PanelVariant; $frame: ThemePanelFrame }>`
   position: absolute;
   top: 0;
-  left: ${SPACING.XL}px;
-  right: ${SPACING.XL}px;
-  height: ${BORDER.THICK}px;
+  left: ${({ $frame, theme }) => ($frame === 'stripe' ? 0 : themeSpace(theme, 'LG'))}px;
+  right: ${({ $frame, theme }) => ($frame === 'stripe' ? 0 : themeSpace(theme, 'LG'))}px;
+  height: ${({ $frame }) => ($frame === 'stripe' ? STRIPE_HEIGHT : BORDER.THICK)}px;
+  background-color: ${({ $variant, theme }) => theme.accents[$variant]};
+  opacity: ${({ $frame }) => ($frame === 'minimal' ? 0 : 1)};
+`;
+
+const FlagRail = styled.View<{ $variant: PanelVariant }>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: ${FLAG_WIDTH}px;
   background-color: ${({ $variant, theme }) => theme.accents[$variant]};
 `;
 
@@ -54,7 +70,7 @@ const Header = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${V_SPACING.MD}px;
+  margin-bottom: ${({ theme }) => themeVSpace(theme, 'SM')}px;
 `;
 
 const Title = styled.Text<{ $variant: PanelVariant }>`
@@ -73,6 +89,7 @@ const RightLabel = styled.Text`
 export const SystemPanelStyles = {
   Container,
   TopGlow,
+  FlagRail,
   CornerTopLeft,
   CornerBottomRight,
   Header,
