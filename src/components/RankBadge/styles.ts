@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import { themeFontSize } from '../../theme/typography';
 import { BORDER, RADIUS, SPACING } from '../../theme/spacing';
 
 const LARGE = moderateScale(84, 0.9);
@@ -32,8 +32,8 @@ const Letter = styled.Text<{ $large: boolean }>`
   position: absolute;
   bottom: ${SPACING.XXS}px;
   right: ${SPACING.XS}px;
-  font-family: ${FONTS.DISPLAY_BLACK};
-  font-size: ${({ $large }) => ($large ? FONT_SIZES.XL : FONT_SIZES.MD)}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BLACK};
+  font-size: ${({ $large, theme }) => ($large ? themeFontSize(theme, 'XL') : themeFontSize(theme, 'MD'))}px;
   color: ${({ theme }) => theme.colors.WHITE};
   text-shadow-color: ${({ theme }) => theme.colors.BLUE_GLOW};
   text-shadow-radius: ${SPACING.SM}px;

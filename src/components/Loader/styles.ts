@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 
 const FULL_SIZE = moderateScale(220, 0.9);
@@ -26,8 +26,8 @@ const CompactImage = styled.Image`
 
 const Label = styled.Text`
   margin-top: ${V_SPACING.LG}px;
-  font-family: ${FONTS.DISPLAY_MEDIUM};
-  font-size: ${FONT_SIZES.XS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   letter-spacing: ${SPACING.XS}px;
   color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;

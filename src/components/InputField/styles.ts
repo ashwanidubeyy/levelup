@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { sectionTitleText } from '../../utils/commonStyles';
 
@@ -24,15 +24,15 @@ const Input = styled.TextInput<{ $multiline: boolean; $error: boolean }>`
   border-radius: ${RADIUS.MD}px;
   border-width: ${BORDER.HAIRLINE}px;
   border-color: ${({ $error, theme }) => ($error ? theme.colors.RED_BRIGHT : theme.colors.PANEL_BORDER)};
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Error = styled.Text`
   margin-top: ${V_SPACING.XS}px;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.RED_BRIGHT};
 `;
 

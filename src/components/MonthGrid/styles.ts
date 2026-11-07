@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, V_SPACING } from '../../theme/spacing';
 
 const CELL = moderateScale(36, 0.9);
@@ -17,8 +17,8 @@ const Weekdays = styled.View`
 const Weekday = styled.Text`
   width: ${CELL}px;
   text-align: center;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.XS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   color: ${({ theme }) => theme.colors.TEXT_DIM};
 `;
 
@@ -40,8 +40,8 @@ const Cell = styled.TouchableOpacity<{ $selected: boolean; $today: boolean }>`
 `;
 
 const Day = styled.Text<{ $selected: boolean }>`
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ $selected, theme }) => ($selected ? theme.colors.WHITE : theme.colors.TEXT)};
 `;
 

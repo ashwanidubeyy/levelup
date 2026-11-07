@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 
 const Container = styled.View``;
@@ -14,9 +14,9 @@ const Item = styled.View`
 const Text = styled.Text`
   flex: 1;
   margin-left: ${SPACING.SM}px;
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.MD}px;
-  line-height: ${FONT_SIZES.MD * 1.3}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
+  line-height: ${({ theme }) => themeFontSize(theme, 'MD') * 1.3}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

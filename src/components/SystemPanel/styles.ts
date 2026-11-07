@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
 import { scaleForTheme } from '../../theme/layoutScale';
 import type { PanelVariant } from '../../types';
@@ -58,15 +58,15 @@ const Header = styled.View`
 `;
 
 const Title = styled.Text<{ $variant: PanelVariant }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XS}px;
-  letter-spacing: ${SPACING.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
+  letter-spacing: ${({ theme }) => theme.typography.displayLetterSpacing}px;
   color: ${({ $variant, theme }) => theme.accents[$variant]};
 `;
 
 const RightLabel = styled.Text`
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 

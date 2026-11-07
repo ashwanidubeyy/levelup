@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText } from '../../utils/commonStyles';
 
@@ -24,14 +24,14 @@ const Body = styled.View`
 `;
 
 const Title = styled.Text`
-  font-family: ${FONTS.BODY_BOLD};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Status = styled.Text<{ $granted: boolean }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   letter-spacing: ${SPACING.XXS / 2}px;
   margin-top: ${V_SPACING.XS / 2}px;
   color: ${({ $granted, theme }) => ($granted ? theme.colors.GREEN : theme.colors.RED_BRIGHT)};

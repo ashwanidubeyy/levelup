@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText, rowBetween } from '../../utils/commonStyles';
 
@@ -21,8 +21,8 @@ const Header = styled.View`
 `;
 
 const DateLabel = styled.Text`
-  font-family: ${FONTS.DISPLAY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   letter-spacing: ${SPACING.XXS / 2}px;
   color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
@@ -46,15 +46,15 @@ const MoodLabel = styled.Text`
 
 const Title = styled.Text`
   margin-top: ${V_SPACING.SM}px;
-  font-family: ${FONTS.BODY_BOLD};
-  font-size: ${FONT_SIZES.LG}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'LG')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Preview = styled.Text`
   ${mutedText}
   margin-top: ${V_SPACING.XS}px;
-  line-height: ${FONT_SIZES.SM * 1.35}px;
+  line-height: ${({ theme }) => themeFontSize(theme, 'SM') * 1.35}px;
 `;
 
 export const JournalEntryCardStyles = {

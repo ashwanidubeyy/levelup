@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import type { PanelVariant } from '../../types';
 import { accentFor } from '../../utils/variant';
@@ -16,8 +16,8 @@ const Container = styled.View<{ $accent: PanelVariant }>`
 `;
 
 const Value = styled.Text`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.LG}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'LG')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

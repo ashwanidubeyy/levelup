@@ -45,6 +45,24 @@ export interface ThemeAssets {
   questsBanner: ImageSourcePropType;
 }
 
+export interface ThemeFontFamilies {
+  DISPLAY_BLACK: string;
+  DISPLAY_BOLD: string;
+  DISPLAY_MEDIUM: string;
+  BODY_REGULAR: string;
+  BODY_MEDIUM: string;
+  BODY_SEMIBOLD: string;
+  BODY_BOLD: string;
+}
+
+export interface ThemeTypography {
+  fonts: ThemeFontFamilies;
+  sizeScale: number;
+  displayLetterSpacing: number;
+  bodyLetterSpacing: number;
+  lineHeightScale: number;
+}
+
 export interface ThemeColors {
   BACKGROUND: string;
   BACKGROUND_ELEVATED: string;
@@ -106,4 +124,5 @@ export interface AppTheme {
   motion: ThemeMotion;
   icons: ThemeIcons;
   assets: ThemeAssets;
+  typography: ThemeTypography;
 }

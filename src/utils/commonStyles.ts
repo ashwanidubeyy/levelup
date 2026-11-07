@@ -1,23 +1,25 @@
 import { css } from 'styled-components/native';
-import { FONTS, FONT_SIZES } from '../theme/typography';
+import { themeFontSize } from '../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../theme/spacing';
 
 export const sectionTitleText = css`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XS}px;
-  letter-spacing: ${SPACING.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
+  letter-spacing: ${({ theme }) => theme.typography.displayLetterSpacing}px;
   color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 export const bodyText = css`
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
+  letter-spacing: ${({ theme }) => theme.typography.bodyLetterSpacing}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 export const mutedText = css`
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
+  letter-spacing: ${({ theme }) => theme.typography.bodyLetterSpacing}px;
   color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 

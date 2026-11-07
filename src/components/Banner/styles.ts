@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import type { PanelVariant } from '../../types';
 import { accentFor, tintFor } from '../../utils/variant';
@@ -18,8 +18,8 @@ const Container = styled.View<{ $variant: PanelVariant }>`
 
 const Message = styled.Text`
   flex: 1;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

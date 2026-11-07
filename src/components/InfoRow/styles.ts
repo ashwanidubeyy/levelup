@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText } from '../../utils/commonStyles';
 
@@ -22,8 +22,8 @@ const Label = styled.Text`
 const Value = styled.Text<{ $color: string }>`
   flex: 1;
   text-align: right;
-  font-family: ${FONTS.BODY_BOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ $color }) => $color};
 `;
 

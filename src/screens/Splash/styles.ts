@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 
 const GIF_SIZE = moderateScale(240, 0.9);
@@ -20,8 +20,8 @@ const Gif = styled.Image`
 
 const Title = styled.Text`
   margin-top: ${V_SPACING.LG}px;
-  font-family: ${FONTS.DISPLAY_BLACK};
-  font-size: ${FONT_SIZES.XXL}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BLACK};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXL')}px;
   letter-spacing: ${SPACING.SM}px;
   color: ${({ theme }) => theme.colors.WHITE};
   text-shadow-color: ${({ theme }) => theme.colors.BLUE_GLOW};
@@ -30,8 +30,8 @@ const Title = styled.Text`
 
 const Tagline = styled.Text`
   margin-top: ${V_SPACING.SM}px;
-  font-family: ${FONTS.DISPLAY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   letter-spacing: ${SPACING.XS}px;
   color: ${({ theme }) => theme.colors.RED_BRIGHT};
 `;

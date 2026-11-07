@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, V_SPACING } from '../../theme/spacing';
 
 const CHART_HEIGHT = moderateVerticalScale(140, 0.9);
@@ -61,8 +61,8 @@ const LabelSlot = styled.View`
 const Label = styled.Text`
   position: absolute;
   top: 0;
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   color: ${({ theme }) => theme.colors.TEXT_DIM};
 `;
 

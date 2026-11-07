@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import { themeFontSize } from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { sectionTitleText } from '../../utils/commonStyles';
 
@@ -50,24 +50,27 @@ const Title = styled.Text`
 
 const Quote = styled.Text<{ $variant: 'default' | 'hero' }>`
   margin-top: ${V_SPACING.XS}px;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${({ $variant }) => ($variant === 'hero' ? FONT_SIZES.LG : FONT_SIZES.MD)}px;
-  line-height: ${({ $variant }) => ($variant === 'hero' ? FONT_SIZES.LG * 1.35 : FONT_SIZES.MD * 1.3)}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ $variant, theme }) => ($variant === 'hero' ? themeFontSize(theme, 'LG') : themeFontSize(theme, 'MD'))}px;
+  line-height: ${({ $variant, theme }) =>
+    ($variant === 'hero' ? themeFontSize(theme, 'LG') : themeFontSize(theme, 'MD')) *
+    theme.typography.lineHeightScale *
+    ($variant === 'hero' ? 1.25 : 1.2)}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Author = styled.Text`
   margin-top: ${V_SPACING.XS}px;
-  font-family: ${FONTS.DISPLAY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   letter-spacing: ${SPACING.XXS}px;
   color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 
 const Hint = styled.Text`
   margin-top: ${V_SPACING.SM}px;
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   color: ${({ theme }) => theme.colors.TEXT_DIM};
 `;
 

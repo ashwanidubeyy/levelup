@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { moderateScale, moderateVerticalScale } from 'react-native-size-matters';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
 
 const INDICATOR_HEIGHT = moderateVerticalScale(3, 0.9);
@@ -55,8 +55,8 @@ const IndicatorGlow = styled.View<{ $active: boolean }>`
 
 const Label = styled.Text<{ $color: string }>`
   margin-top: ${V_SPACING.XS}px;
-  font-family: ${FONTS.DISPLAY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS * 0.9}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS') * 0.9}px;
   letter-spacing: ${({ theme }) => theme.layout.letterSpacing}px;
   color: ${({ $color }) => $color};
 `;

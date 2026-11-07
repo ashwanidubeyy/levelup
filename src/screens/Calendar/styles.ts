@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { V_SPACING } from '../../theme/spacing';
 import { mutedText, rowBetween } from '../../utils/commonStyles';
 
@@ -15,8 +15,8 @@ const Row = styled.View`
 
 const Title = styled.Text`
   flex: 1;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

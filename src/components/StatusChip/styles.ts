@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 
 const Container = styled.View<{ $color: string }>`
@@ -13,8 +13,8 @@ const Container = styled.View<{ $color: string }>`
 `;
 
 const Label = styled.Text<{ $color: string }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   letter-spacing: ${SPACING.XXS / 2}px;
   color: ${({ $color }) => $color};
 `;

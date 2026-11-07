@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { moderateVerticalScale } from 'react-native-size-matters';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, SPACING } from '../../theme/spacing';
 import { scaleForTheme } from '../../theme/layoutScale';
 import type { ButtonVariant } from '../../types';
@@ -28,9 +28,9 @@ const Gradient = styled(LinearGradient)<{ $variant: ButtonVariant; $compact: boo
 `;
 
 const Label = styled.Text<{ $compact: boolean }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${({ $compact }) => ($compact ? FONT_SIZES.XXS : FONT_SIZES.SM)}px;
-  letter-spacing: ${SPACING.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ $compact, theme }) => ($compact ? themeFontSize(theme, 'XXS') : themeFontSize(theme, 'SM'))}px;
+  letter-spacing: ${({ theme }) => theme.typography.displayLetterSpacing}px;
   color: ${({ theme }) => theme.colors.WHITE};
 `;
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { V_SPACING } from '../../theme/spacing';
 import { bodyText, mutedText, rowBetween } from '../../utils/commonStyles';
 
@@ -18,8 +18,8 @@ const Label = styled.Text`
 `;
 
 const Count = styled.Text`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

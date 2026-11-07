@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 import { scaleForTheme } from '../../theme/layoutScale';
 import { mutedText } from '../../utils/commonStyles';
@@ -28,8 +28,8 @@ const AgendaRow = styled.TouchableOpacity`
 const AgendaTitle = styled.Text`
   flex: 1;
   margin-right: ${SPACING.SM}px;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
@@ -47,25 +47,25 @@ const CountRow = styled.View`
 `;
 
 const Count = styled.Text<{ $danger: boolean }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.GIANT}px;
-  line-height: ${FONT_SIZES.GIANT * 1.05}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'GIANT')}px;
+  line-height: ${({ theme }) => themeFontSize(theme, 'GIANT') * 1.05}px;
   color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.WHITE)};
 `;
 
 const Limit = styled.Text`
   margin-left: ${SPACING.SM}px;
   margin-bottom: ${V_SPACING.SM}px;
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.LG}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'LG')}px;
   color: ${({ theme }) => theme.colors.TEXT_MUTED};
 `;
 
 const Message = styled.Text<{ $danger: boolean }>`
   margin-top: ${V_SPACING.SM}px;
   margin-bottom: ${V_SPACING.MD}px;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
   color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.TEXT)};
 `;
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { V_SPACING } from '../../theme/spacing';
 import { bodyText, mutedText } from '../../utils/commonStyles';
 
@@ -15,7 +15,7 @@ const Hint = styled.Text`
 
 const Paragraph = styled.Text`
   ${mutedText}
-  line-height: ${FONT_SIZES.SM * 1.45}px;
+  line-height: ${({ theme }) => themeFontSize(theme, 'SM') * 1.45}px;
 `;
 
 export const SettingsStyles = {

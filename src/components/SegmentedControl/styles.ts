@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateVerticalScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 
 const HEIGHT = moderateVerticalScale(40, 0.9);
@@ -26,8 +26,8 @@ const Segment = styled.TouchableOpacity<{ $active: boolean }>`
 `;
 
 const Label = styled.Text<{ $active: boolean }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   letter-spacing: ${SPACING.XXS / 2}px;
   color: ${({ $active, theme }) => ($active ? theme.colors.WHITE : theme.colors.TEXT_MUTED)};
 `;

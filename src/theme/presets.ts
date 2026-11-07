@@ -1,5 +1,6 @@
-import type { AppTheme, ThemeColors, ThemeGradients, ThemeIcons, ThemeLayout, ThemeMotion } from './types';
+import type { AppTheme, ThemeColors, ThemeGradients, ThemeIcons, ThemeLayout, ThemeMotion, ThemeTypography } from './types';
 import { THEME_BACKDROP_ART, THEME_SCREEN_ASSETS } from './themeArt';
+import { THEME_FONT_STACKS } from './themeFonts';
 
 const buildTheme = (
   id: AppTheme['id'],
@@ -8,6 +9,7 @@ const buildTheme = (
   layout: ThemeLayout,
   motion: ThemeMotion,
   icons: ThemeIcons,
+  typography: ThemeTypography,
 ): AppTheme => {
   const gradients: ThemeGradients = {
     SYSTEM: [colors.BLUE_DEEP, colors.BACKGROUND_ELEVATED],
@@ -54,6 +56,7 @@ const buildTheme = (
       backdropArt: THEME_BACKDROP_ART[id],
       ...THEME_SCREEN_ASSETS[id],
     },
+    typography,
   };
 };
 
@@ -149,6 +152,38 @@ const LEVELUP_ICONS: ThemeIcons = { strokeWidth: 2, activeStrokeWidth: 2.5, fill
 const ONE_PIECE_ICONS: ThemeIcons = { strokeWidth: 2.5, activeStrokeWidth: 3, filled: false };
 const NARUTO_ICONS: ThemeIcons = { strokeWidth: 2.25, activeStrokeWidth: 2.75, filled: false };
 const SOLO_ICONS: ThemeIcons = { strokeWidth: 1.75, activeStrokeWidth: 2.25, filled: false };
+
+const LEVELUP_TYPOGRAPHY: ThemeTypography = {
+  fonts: THEME_FONT_STACKS.levelup,
+  sizeScale: 1,
+  displayLetterSpacing: 1,
+  bodyLetterSpacing: 0,
+  lineHeightScale: 1.05,
+};
+
+const ONE_PIECE_TYPOGRAPHY: ThemeTypography = {
+  fonts: THEME_FONT_STACKS.onePiece,
+  sizeScale: 1.03,
+  displayLetterSpacing: 1.4,
+  bodyLetterSpacing: 0.2,
+  lineHeightScale: 1.08,
+};
+
+const NARUTO_TYPOGRAPHY: ThemeTypography = {
+  fonts: THEME_FONT_STACKS.naruto,
+  sizeScale: 1.02,
+  displayLetterSpacing: 0.6,
+  bodyLetterSpacing: 0,
+  lineHeightScale: 1.12,
+};
+
+const SOLO_TYPOGRAPHY: ThemeTypography = {
+  fonts: THEME_FONT_STACKS.soloLeveling,
+  sizeScale: 0.97,
+  displayLetterSpacing: 1.8,
+  bodyLetterSpacing: 0.4,
+  lineHeightScale: 1.1,
+};
 
 const LEVELUP_COLORS: ThemeColors = {
   BACKGROUND: '#05060A',
@@ -286,6 +321,7 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     LEVELUP_LAYOUT,
     LEVELUP_MOTION,
     LEVELUP_ICONS,
+    LEVELUP_TYPOGRAPHY,
   ),
   onePiece: buildTheme(
     'onePiece',
@@ -298,6 +334,7 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     ONE_PIECE_LAYOUT,
     ONE_PIECE_MOTION,
     ONE_PIECE_ICONS,
+    ONE_PIECE_TYPOGRAPHY,
   ),
   naruto: buildTheme(
     'naruto',
@@ -310,6 +347,7 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     NARUTO_LAYOUT,
     NARUTO_MOTION,
     NARUTO_ICONS,
+    NARUTO_TYPOGRAPHY,
   ),
   soloLeveling: buildTheme(
     'soloLeveling',
@@ -322,6 +360,7 @@ export const THEME_PRESETS: Record<AppTheme['id'], AppTheme> = {
     SOLO_LAYOUT,
     SOLO_MOTION,
     SOLO_ICONS,
+    SOLO_TYPOGRAPHY,
   ),
 };
 

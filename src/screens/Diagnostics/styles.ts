@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText } from '../../utils/commonStyles';
 
@@ -22,15 +22,15 @@ const LogItem = styled.View`
 `;
 
 const LogHeader = styled.Text`
-  font-family: ${FONTS.DISPLAY_MEDIUM};
-  font-size: ${FONT_SIZES.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XXS')}px;
   color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
 const LogDetail = styled.Text`
   margin-top: ${V_SPACING.XS / 2}px;
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 

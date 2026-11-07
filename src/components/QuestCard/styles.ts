@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText, rowBetween } from '../../utils/commonStyles';
 
@@ -31,8 +31,8 @@ const Body = styled.View`
 `;
 
 const Title = styled.Text`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
@@ -47,8 +47,8 @@ const Footer = styled.View`
 `;
 
 const Xp = styled.Text<{ $negative: boolean }>`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   color: ${({ $negative, theme }) => ($negative ? theme.colors.RED_BRIGHT : theme.colors.GOLD)};
 `;
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText } from '../../utils/commonStyles';
 
@@ -27,9 +27,9 @@ const Texts = styled.View`
 `;
 
 const Title = styled.Text`
-  font-family: ${FONTS.DISPLAY_BLACK};
-  font-size: ${FONT_SIZES.XL}px;
-  letter-spacing: ${SPACING.XXS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BLACK};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XL')}px;
+  letter-spacing: ${({ theme }) => theme.typography.displayLetterSpacing}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
@@ -43,8 +43,8 @@ const RightButton = styled.TouchableOpacity`
 `;
 
 const RightLabel = styled.Text`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.XS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   letter-spacing: ${SPACING.XXS / 2}px;
   color: ${({ theme }) => theme.colors.RED_BRIGHT};
 `;

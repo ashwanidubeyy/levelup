@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { moderateScale } from 'react-native-size-matters';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 
 const DOT = moderateScale(10, 0.9);
@@ -33,8 +33,8 @@ const Dot = styled.View<{ $color: string }>`
 `;
 
 const Label = styled.Text<{ $active: boolean }>`
-  font-family: ${FONTS.BODY_BOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ $active, theme }) => ($active ? theme.colors.TEXT : theme.colors.TEXT_MUTED)};
 `;
 

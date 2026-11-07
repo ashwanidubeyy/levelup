@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { BORDER, RADIUS, SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText, rowBetween } from '../../utils/commonStyles';
 
@@ -11,8 +11,8 @@ const Block = styled.View`
 const Summary = styled.Text<{ $danger: boolean }>`
   margin-top: ${V_SPACING.SM}px;
   margin-bottom: ${V_SPACING.SM}px;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.MD}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'MD')}px;
   color: ${({ $danger, theme }) => ($danger ? theme.colors.RED_BRIGHT : theme.colors.YELLOW)};
 `;
 
@@ -39,14 +39,14 @@ const Actions = styled.View`
 const Note = styled.Text`
   flex: 1;
   margin-right: ${SPACING.SM}px;
-  font-family: ${FONTS.BODY_MEDIUM};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_MEDIUM};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.TEXT};
 `;
 
 const Amount = styled.Text`
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.WHITE};
 `;
 
@@ -79,14 +79,14 @@ const CategoryChip = styled.TouchableOpacity<{ $active: boolean }>`
 `;
 
 const CategoryLabel = styled.Text<{ $active: boolean }>`
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.XS}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   color: ${({ $active, theme }) => ($active ? theme.colors.YELLOW : theme.colors.TEXT_DIM)};
 `;
 
 const CategoryMeta = styled.Text`
   ${mutedText}
-  font-size: ${FONT_SIZES.XS}px;
+  font-size: ${({ theme }) => themeFontSize(theme, 'XS')}px;
   margin-top: ${V_SPACING.XS}px;
 `;
 

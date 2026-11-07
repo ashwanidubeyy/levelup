@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { COLORS } from '../../theme/colors';
-import { FONTS, FONT_SIZES } from '../../theme/typography';
+import {themeFontSize} from '../../theme/typography';
 import { SPACING, V_SPACING } from '../../theme/spacing';
 import { mutedText } from '../../utils/commonStyles';
 
@@ -8,8 +8,8 @@ const Clock = styled.Text`
   margin-top: ${V_SPACING.MD}px;
   margin-bottom: ${V_SPACING.SM}px;
   text-align: center;
-  font-family: ${FONTS.DISPLAY_BOLD};
-  font-size: ${FONT_SIZES.GIANT}px;
+  font-family: ${({ theme }) => theme.typography.fonts.DISPLAY_BOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'GIANT')}px;
   color: ${({ theme }) => theme.colors.YELLOW};
 `;
 
@@ -33,8 +33,8 @@ const Actions = styled.View`
 const Today = styled.Text`
   margin-top: ${V_SPACING.LG}px;
   text-align: center;
-  font-family: ${FONTS.BODY_SEMIBOLD};
-  font-size: ${FONT_SIZES.SM}px;
+  font-family: ${({ theme }) => theme.typography.fonts.BODY_SEMIBOLD};
+  font-size: ${({ theme }) => themeFontSize(theme, 'SM')}px;
   color: ${({ theme }) => theme.colors.BLUE_LIGHT};
 `;
 
